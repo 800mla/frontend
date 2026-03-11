@@ -32,7 +32,7 @@ English
 
 ![][split]
 
-</div>
+</div>        
 
 > **Article 1.**
 > All human beings are born free and equal in dignity and rights.
