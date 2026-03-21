@@ -26,11 +26,14 @@ export default function Main() {
   if (!showLanding) return null;
 
   return (
-    <main className="container space-y-16">
-      <Hero />
-      <Stats />
-      <ProductShowcase />
-      <GlobalMap />
+    <main className="relative overflow-hidden">
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-[36rem] bg-[radial-gradient(circle_at_top_left,rgba(25,193,196,0.18),transparent_38%),radial-gradient(circle_at_top_right,rgba(244,198,122,0.18),transparent_30%)]" />
+      <div className="container relative space-y-16 pb-16">
+        <Hero />
+        <Stats />
+        <ProductShowcase />
+        <GlobalMap />
+      </div>
     </main>
   );
 }

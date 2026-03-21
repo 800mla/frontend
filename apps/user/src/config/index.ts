@@ -4,6 +4,12 @@ export const supportedLngs = ["en-US", "zh-CN"];
 export const BRAND_NAME = import.meta.env.VITE_BRAND_NAME || "BINGKA";
 export const BRAND_DESCRIPTION =
   import.meta.env.VITE_BRAND_DESCRIPTION || "Fast, clean access portal.";
+export const BRAND_TAGLINE =
+  import.meta.env.VITE_BRAND_TAGLINE ||
+  "Clean routes, clear status, and a calmer control surface.";
+export const BRAND_KEYWORDS =
+  import.meta.env.VITE_BRAND_KEYWORDS ||
+  "BINGKA, control panel, dashboard, network, portal";
 
 export const CDN_URL =
   import.meta.env.VITE_CDN_URL || "https://cdn.jsdmirror.com";

@@ -1,7 +1,7 @@
 import { queryUserInfo } from "@workspace/ui/services/user/user";
 import { isBrowser } from "@workspace/ui/utils/index";
 import { create } from "zustand";
-import { BRAND_DESCRIPTION, BRAND_NAME } from "@/config/index";
+import { BRAND_DESCRIPTION, BRAND_KEYWORDS, BRAND_NAME } from "@/config/index";
 
 export interface GlobalStore {
   common: API.GetGlobalConfigResponse;
@@ -44,7 +44,7 @@ export const useGlobalStore = create<GlobalStore>((set, get) => ({
       site_name: BRAND_NAME,
       site_desc: BRAND_DESCRIPTION,
       site_logo: "",
-      keywords: "",
+      keywords: BRAND_KEYWORDS,
       custom_html: "",
       custom_data: "",
     },
