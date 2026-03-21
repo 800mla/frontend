@@ -53,7 +53,7 @@ export default function Main() {
               <div className="mb-4 text-sm font-semibold uppercase tracking-widest text-primary">
                 CONNECTING THE WORLD
               </div>
-              <h1 className="text-4xl font-medium leading-tight text-foreground md:text-5xl">
+              <h1 className="text-4xl font-serif font-medium leading-tight text-foreground md:text-5xl">
                 登录系统，
                 <br />
                 品鉴<span className="italic text-accent">冷萃般</span>的纯粹网络。

@@ -35,34 +35,30 @@ export function Content({ subscriptionData }: ProductShowcaseProps) {
 
   return (
     <motion.section
+      id="menu"
       className="relative"
       initial={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
       viewport={{ once: true }}
       whileInView={{ opacity: 1 }}
     >
-      <div className="mb-8 text-center">
-        <div className="mb-4 inline-flex rounded-full border border-primary/20 bg-background/80 px-4 py-1 font-semibold text-[11px] text-primary uppercase tracking-[0.24em] shadow-sm backdrop-blur-sm">
-          Curated plans
-        </div>
-      </div>
       <motion.h2
-        className="mb-2 text-center font-bold text-3xl tracking-tight sm:text-4xl"
+        className="mb-2 text-center text-3xl font-bold"
         initial={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.5 }}
         whileInView={{ opacity: 1, y: 0 }}
       >
-        {t("product_showcase_title", "Choose a plan that fits your pace")}
+        {t("product_showcase_title", "Choose Your Package")}
       </motion.h2>
       <motion.p
-        className="mx-auto mb-8 max-w-2xl text-center text-lg text-muted-foreground leading-8"
+        className="mb-8 text-center text-lg text-muted-foreground"
         initial={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.5, delay: 0.1 }}
         whileInView={{ opacity: 1, y: 0 }}
       >
         {t(
           "product_showcase_description",
-          "Compare the essentials quickly, then move into the panel with the right balance of speed, coverage, and cost."
+          "Let us help you select the package that best suits you and enjoy exploring it."
         )}
       </motion.p>
       <div className="mx-auto flex flex-wrap justify-center gap-8 overflow-x-auto overflow-y-hidden *:max-w-80 *:flex-auto">
@@ -75,14 +71,9 @@ export function Content({ subscriptionData }: ProductShowcaseProps) {
             viewport={{ once: true, amount: 0.5 }}
             whileInView={{ opacity: 1, y: 0 }}
           >
-            <Card className="hover:-translate-y-1 flex h-full flex-col gap-0 overflow-hidden rounded-[1.5rem] border border-border/70 bg-background/80 py-0 shadow-[0_18px_60px_rgba(18,20,23,0.08)] transition-all duration-300 hover:shadow-[0_24px_80px_rgba(18,20,23,0.12)]">
-              <CardHeader className="bg-linear-to-r from-secondary/80 to-background p-5 font-medium text-xl">
-                <div className="flex items-center justify-between gap-3">
-                  <span>{item.name}</span>
-                  <span className="rounded-full border border-primary/15 bg-primary/8 px-3 py-1 font-semibold text-[10px] text-primary uppercase tracking-[0.2em]">
-                    Recommended
-                  </span>
-                </div>
+            <Card className="flex flex-col overflow-hidden rounded-lg shadow-lg transition-shadow duration-300 hover:shadow-2xl">
+              <CardHeader className="bg-muted/50 p-4 text-xl font-medium">
+                {item.name}
               </CardHeader>
               <CardContent className="flex flex-grow flex-col gap-4 p-6 text-sm">
                 <ul className="flex flex-grow flex-col gap-3">
@@ -178,7 +169,7 @@ export function Content({ subscriptionData }: ProductShowcaseProps) {
                   return (
                     <motion.h2
                       animate={{ opacity: 1 }}
-                      className="pb-4 font-semibold text-2xl tracking-tight sm:text-3xl"
+                      className="pb-4 text-2xl font-semibold sm:text-3xl"
                       initial={{ opacity: 0 }}
                       transition={{ duration: 0.5, delay: 0.2 }}
                     >
@@ -194,7 +185,7 @@ export function Content({ subscriptionData }: ProductShowcaseProps) {
                 <motion.div>
                   <Button
                     asChild
-                    className="absolute bottom-0 left-0 w-full rounded-t-none rounded-b-[1.25rem]"
+                    className="absolute bottom-0 left-0 w-full rounded-b-xl rounded-t-none"
                   >
                     <Link
                       search={user ? undefined : { id: item.id }}

@@ -18,37 +18,37 @@ export function useNavs() {
 
   const navs: NavGroup[] = [
     {
-      title: t("menu.dashboard", "Overview"),
+      title: t("menu.dashboard", "Dashboard"),
       url: "/dashboard",
       icon: "uil:dashboard",
     },
     {
-      title: t("menu.personal", "Account"),
+      title: t("menu.personal", "Personal"),
       items: [
         {
-          title: t("menu.profile", "Profile"),
+          title: t("menu.profile", "User Detail"),
           url: "/profile",
           icon: "uil:user",
         },
       ],
     },
     {
-      title: t("menu.server", "Access"),
+      title: t("menu.server", "Server Management"),
       items: [
         {
           url: "/subscribe",
           icon: "uil:shop",
-          title: t("menu.subscribe", "Plans"),
+          title: t("menu.subscribe", "Subscribe"),
         },
       ],
     },
     {
-      title: t("menu.finance", "Billing"),
+      title: t("menu.finance", "Commerce"),
       items: [
         {
           url: "/order",
           icon: "uil:notes",
-          title: t("menu.order", "Orders"),
+          title: t("menu.order", "Order Management"),
         },
         {
           url: "/wallet",
@@ -58,27 +58,27 @@ export function useNavs() {
         {
           url: "/affiliate",
           icon: "uil:users-alt",
-          title: t("menu.affiliate", "Referrals"),
+          title: t("menu.affiliate", "Commission"),
         },
       ],
     },
     {
-      title: t("menu.help", "Support"),
+      title: t("menu.help", "Users & Support"),
       items: [
         {
           url: "/document",
           icon: "uil:book-alt",
-          title: t("menu.document", "Guides"),
+          title: t("menu.document", "Document Management"),
         },
         {
           url: "/announcement",
           icon: "uil:megaphone",
-          title: t("menu.announcement", "Updates"),
+          title: t("menu.announcement", "Announcement Management"),
         },
         {
           url: "/ticket",
           icon: "uil:message",
-          title: t("menu.ticket", "Tickets"),
+          title: t("menu.ticket", "Ticket Management"),
         },
       ],
     },
@@ -111,17 +111,17 @@ export function useNavItems() {
     {
       url: "/profile",
       icon: "uil:user",
-      title: t("menu.profile", "Profile"),
+      title: t("menu.profile", "User Detail"),
     },
     {
       url: "/subscribe",
       icon: "uil:shop",
-      title: t("menu.subscribe", "Plans"),
+      title: t("menu.subscribe", "Subscribe"),
     },
     {
       url: "/order",
       icon: "uil:notes",
-      title: t("menu.order", "Orders"),
+      title: t("menu.order", "Order Management"),
     },
     {
       url: "/wallet",
