@@ -49,34 +49,39 @@ export function Stats() {
   return (
     <motion.section
       animate={{ opacity: 1, y: 0 }}
-      className="z-10 grid w-full grid-cols-1 divide-y-2 divide-muted rounded-lg sm:grid-cols-3 sm:divide-x-2 sm:divide-y-0"
+      className="relative z-10 overflow-hidden rounded-[2rem] border border-border/70 bg-background/75 shadow-[0_24px_80px_rgba(18,20,23,0.08)] backdrop-blur-md"
       initial={{ opacity: 0, y: 50 }}
       transition={{ duration: 1, ease: "easeOut" }}
       viewport={{ once: true, amount: 0.8 }}
       whileInView={{ opacity: 1, y: 0 }}
     >
-      {list.map((item, index) => (
-        <motion.div
-          className="mx-auto flex w-10/12 items-center justify-start px-4 py-4 sm:w-full sm:justify-center sm:py-6"
-          initial={{ opacity: 0, scale: 0.8 }}
-          key={item.name}
-          transition={{ duration: 0.8, delay: index * 0.3, ease: "easeOut" }}
-          viewport={{ once: true, amount: 0.8 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-        >
-          <div className="flex w-full items-center sm:w-auto">
-            <div className="mr-4 flex h-20 w-20 items-center justify-center rounded-full">
-              {item.icon}
+      <div className="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-primary/50 to-transparent" />
+      <div className="grid w-full grid-cols-1 divide-y divide-border/60 sm:grid-cols-3 sm:divide-x sm:divide-y-0">
+        {list.map((item, index) => (
+          <motion.div
+            className="mx-auto flex w-full items-center justify-start px-6 py-6 sm:justify-center sm:px-5 sm:py-8"
+            initial={{ opacity: 0, scale: 0.8 }}
+            key={item.name}
+            transition={{ duration: 0.8, delay: index * 0.3, ease: "easeOut" }}
+            viewport={{ once: true, amount: 0.8 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+          >
+            <div className="flex w-full items-center gap-4 sm:w-auto">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full border border-border/60 bg-linear-to-br from-background to-secondary/70 shadow-sm">
+                {item.icon}
+              </div>
+              <div className="flex flex-col">
+                <p className="font-semibold text-lg tracking-tight">
+                  {item.name}
+                </p>
+                <p className="max-w-[14rem] text-muted-foreground text-sm leading-6">
+                  {item.description}
+                </p>
+              </div>
             </div>
-            <div className="flex flex-col">
-              <p className="font-semibold text-lg">{item.name}</p>
-              <p className="text-muted-foreground text-sm">
-                {item.description}
-              </p>
-            </div>
-          </div>
-        </motion.div>
-      ))}
+          </motion.div>
+        ))}
+      </div>
     </motion.section>
   );
 }
