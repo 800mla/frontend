@@ -1,6 +1,5 @@
 "use client";
 
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Link } from "@tanstack/react-router";
 import {
   Tabs,
@@ -11,11 +10,7 @@ import {
 import { LanguageSwitch } from "@workspace/ui/composed/language-switch";
 import { ThemeSwitch } from "@workspace/ui/composed/theme-switch";
 import { useTranslation } from "react-i18next";
-import {
-  BRAND_DESCRIPTION,
-  BRAND_NAME,
-  BRAND_TAGLINE,
-} from "@/config/index";
+import { BRAND_DESCRIPTION } from "@/config/index";
 import { useGlobalStore } from "@/stores/global";
 import EmailAuthForm from "./email/auth-form";
 import { OAuthMethods } from "./oauth-methods";
@@ -25,7 +20,6 @@ export default function Main() {
   const { t } = useTranslation("auth");
   const { common } = useGlobalStore();
   const { site, auth } = common;
-  const siteName = site.site_name || BRAND_NAME;
   const siteDescription = site.site_desc || BRAND_DESCRIPTION;
 
   const AUTH_METHODS = [
@@ -42,48 +36,59 @@ export default function Main() {
   ].filter((method) => method.enabled);
 
   return (
-    <main className="flex min-h-screen items-center bg-[radial-gradient(circle_at_top_left,rgba(25,193,196,0.16),transparent_28%),radial-gradient(circle_at_bottom_right,rgba(244,198,122,0.16),transparent_24%)]">
+    <main className="flex h-full min-h-screen items-center bg-background">
       <div className="flex size-full flex-auto flex-col lg:flex-row">
-        <div className="relative flex bg-center bg-cover lg:w-1/2 lg:flex-auto">
-          <div className="absolute inset-0 hidden bg-linear-to-br from-background via-background/70 to-transparent lg:block" />
-          <div className="relative flex w-full flex-col items-center justify-center px-5 py-7 md:px-15 lg:items-start lg:py-15">
-            <Link className="mb-0 flex flex-col items-center lg:mb-10 lg:items-start" to="/">
-              {site.site_logo && (
-                <img alt="logo" height={48} src={site.site_logo} width={48} />
-              )}
-              <span className="mt-3 font-semibold text-2xl">{siteName}</span>
+        <div className="relative hidden w-full flex-col justify-center overflow-hidden bg-muted/30 p-12 lg:flex lg:w-1/2">
+          <div className="absolute -left-1/4 top-0 h-[500px] w-[500px] rounded-full bg-primary/20 blur-[100px]" />
+          <div className="absolute -bottom-1/4 -right-1/4 h-[500px] w-[500px] rounded-full bg-accent/20 blur-[120px]" />
+
+          <div className="relative z-10 flex h-full flex-col justify-between">
+            <Link className="flex items-center gap-2" to="/">
+              <div className="flex items-center text-3xl font-bold tracking-tight text-foreground">
+                冰咖<span className="text-primary">.</span>
+              </div>
             </Link>
-            <div className="mb-5 rounded-full border border-primary/20 bg-background/80 px-4 py-1 text-[11px] font-semibold tracking-[0.24em] text-primary uppercase shadow-sm backdrop-blur-sm">
-              {BRAND_NAME} Access
+
+            <div className="mb-20">
+              <div className="mb-4 text-sm font-semibold uppercase tracking-widest text-primary">
+                CONNECTING THE WORLD
+              </div>
+              <h1 className="text-4xl font-medium leading-tight text-foreground md:text-5xl">
+                登录系统，
+                <br />
+                品鉴<span className="italic text-accent">冷萃般</span>的纯粹网络。
+              </h1>
+              <p className="mt-6 text-lg text-muted-foreground md:w-4/5">
+                {siteDescription ||
+                  "依托高级加密协议与智能链路同步技术，为您提供极致稳定的中转服务。"}
+              </p>
             </div>
-            <h1 className="max-w-xl text-center font-bold text-3xl tracking-tight lg:text-left lg:text-5xl">
-              Move into your panel with a cleaner entry experience.
-            </h1>
-            <p className="mt-4 max-w-xl text-center text-muted-foreground leading-7 lg:text-left">
-              {siteDescription || BRAND_TAGLINE}
-            </p>
-            <DotLottieReact
-              autoplay
-              className="mx-auto hidden w-[275px] lg:mx-0 lg:mt-8 lg:block xl:w-[500px]"
-              loop
-              src="./assets/lotties/login.json"
-            />
-            <p className="hidden w-[275px] text-center text-sm text-muted-foreground/90 leading-7 md:w-1/2 lg:block lg:text-left xl:w-[500px]">
-              {BRAND_TAGLINE}
-            </p>
+
+            <div className="text-sm text-muted-foreground/60">
+              &copy; {new Date().getFullYear()} 冰咖 CLOUD NETWORK. CRAFTED
+              WITH CARE.
+            </div>
           </div>
         </div>
-        <div className="flex flex-initial justify-center p-6 sm:p-10 lg:flex-auto lg:justify-end lg:p-12">
-          <div className="flex w-full flex-col items-center rounded-[2rem] border border-white/40 bg-background/85 p-6 shadow-[0_30px_80px_rgba(18,20,23,0.12)] backdrop-blur-md md:w-[600px] md:p-10 lg:flex-auto">
-            <div className="flex w-full flex-col items-stretch justify-center md:w-[400px] lg:h-full">
-              <div className="flex flex-col justify-center lg:flex-auto">
-                <h1 className="mb-3 text-center font-bold text-2xl tracking-tight">
-                  {t("verifyAccount", "Access your account")}
-                </h1>
-                <div className="mb-6 text-center font-medium text-muted-foreground">
+        <div className="flex flex-auto items-center justify-center p-6 sm:p-12 lg:w-1/2">
+          <div className="flex w-full max-w-[450px] flex-col items-center rounded-2xl border border-border bg-card p-8 shadow-xl sm:p-10">
+            <div className="mb-8 flex w-full justify-center lg:hidden">
+              <Link className="flex items-center gap-2" to="/">
+                <div className="flex items-center text-3xl font-bold tracking-tight text-foreground">
+                  冰咖<span className="text-primary">.</span>
+                </div>
+              </Link>
+            </div>
+
+            <div className="flex h-full w-full flex-col items-stretch justify-center">
+              <div className="flex flex-auto flex-col justify-center">
+                <h2 className="mb-2 text-center text-2xl font-bold">
+                  {t("verifyAccount", "Verify Your Account")}
+                </h2>
+                <div className="mb-8 text-center text-sm font-medium text-muted-foreground">
                   {t(
                     "verifyAccountDesc",
-                    "Sign in or create an account to continue into the panel."
+                    "Please login or register to continue"
                   )}
                 </div>
                 {AUTH_METHODS.length === 1
@@ -108,14 +113,14 @@ export default function Main() {
               <div className="py-8">
                 <OAuthMethods />
               </div>
-              <div className="flex items-center justify-between border-border/60 border-t pt-6">
+              <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
                 <div className="flex items-center gap-5">
                   <LanguageSwitch />
                   <ThemeSwitch />
                 </div>
-                <div className="flex gap-2 font-semibold text-primary text-sm">
+                <div className="flex gap-3 text-xs font-semibold text-muted-foreground transition-colors hover:*:text-primary">
                   <Link to="/tos">{t("tos", "Terms of Service")}</Link>
-                  <span className="text-foreground/30">|</span>
+                  <span>|</span>
                   <Link to="/privacy-policy">
                     {t("privacyPolicy", "Privacy Policy")}
                   </Link>

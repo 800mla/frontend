@@ -1,57 +1,38 @@
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { useTranslation } from "react-i18next";
 
 export function GlobalMap() {
-  const { t } = useTranslation("main");
   return (
-    <motion.section
-      className="relative overflow-hidden rounded-[2rem] border border-border/70 bg-background/70 p-6 shadow-[0_24px_80px_rgba(18,20,23,0.08)] backdrop-blur-md sm:p-8"
-      initial={{ opacity: 0 }}
-      transition={{ duration: 0.5 }}
-      viewport={{ once: true }}
-      whileInView={{ opacity: 1 }}
-    >
-      <div className="mb-4 inline-flex rounded-full border border-primary/20 bg-background/80 px-4 py-1 font-semibold text-[11px] text-primary uppercase tracking-[0.24em] shadow-sm backdrop-blur-sm">
-        Coverage view
+    <section className="py-24">
+      <div className="container">
+        <div className="relative overflow-hidden rounded-2xl bg-secondary/80 px-8 py-20 text-center md:px-16">
+          <div
+            className="pointer-events-none absolute left-1/2 top-0 h-[200px] w-[400px] -translate-x-1/2 rounded-full opacity-30 blur-[100px]"
+            style={{ background: "hsl(27 53.5% 65.9%)" }}
+          />
+
+          <motion.div
+            className="relative z-10"
+            initial={{ opacity: 0, y: 20 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            whileInView={{ opacity: 1, y: 0 }}
+          >
+            <h2 className="mb-6 text-3xl font-bold text-white lg:text-5xl">
+              准备好品尝极致网络了吗？
+            </h2>
+            <p className="mx-auto mb-10 max-w-lg text-lg text-secondary-foreground/80">
+              新用户注册可获得免费体验额度，零门槛感受 BINGKA 匠心调制的连接品质。
+            </p>
+            <Link
+              className="inline-block rounded-md bg-primary px-10 py-4 text-sm font-bold uppercase tracking-widest text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl"
+              to="/auth"
+            >
+              立即注册 · 免费品鉴
+            </Link>
+          </motion.div>
+        </div>
       </div>
-      <motion.h2
-        className="mb-2 text-center font-bold text-3xl tracking-tight sm:text-4xl"
-        initial={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.5 }}
-        whileInView={{ opacity: 1, y: 0 }}
-      >
-        {t("global_map_itle", "Reach further with a calmer global footprint")}
-      </motion.h2>
-      <motion.p
-        className="mx-auto mb-8 max-w-3xl text-center text-lg text-muted-foreground leading-8"
-        initial={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        whileInView={{ opacity: 1, y: 0 }}
-      >
-        {t(
-          "global_map_description",
-          "See the broader route surface at a glance, compare regions faster, and move into the right destination without friction."
-        )}
-      </motion.p>
-      <motion.div
-        animate={{ scale: 1, opacity: 1 }}
-        className="aspect-video w-full overflow-hidden rounded-[1.5rem] border border-border/60 bg-linear-to-br from-slate-950 via-slate-900 to-cyan-950"
-        initial={{ scale: 0.9, opacity: 0 }}
-        transition={{
-          type: "spring",
-          stiffness: 100,
-          damping: 15,
-          delay: 0.4,
-        }}
-      >
-        <DotLottieReact
-          autoplay
-          className="w-full scale-150"
-          loop
-          src="./assets/lotties/global-map.json"
-        />
-      </motion.div>
-    </motion.section>
+    </section>
   );
 }

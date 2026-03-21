@@ -87,43 +87,94 @@ export default function Footer() {
     [customData]
   );
   return (
-    <footer>
-      <Separator className="my-14" />
-      <div className="container mb-14 flex flex-wrap justify-between gap-4 text-muted-foreground text-sm">
-        <nav className="flex flex-wrap items-center gap-2">
-          {links
-            .filter((item) => item.href)
-            .map((item, index) => (
-              <Fragment key={index}>
-                {index !== 0 && <Separator orientation="vertical" />}
-                <a
-                  aria-label={t(
-                    `footer.social.${item.name}`,
-                    `Visit our ${item.name}`
-                  )}
-                  href={item.href}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  <Icon className="size-5 text-foreground" icon={item.icon} />
-                </a>
-              </Fragment>
-            ))}
-        </nav>
-        <div>
-          <strong className="text-foreground">
-            {site.site_name || BRAND_NAME}
-          </strong>{" "}
-          ©{" "}
-          {t("footer.copyright", "All rights reserved")}.
+    <footer className="border-t border-border/30 bg-background">
+      <div className="container py-16">
+        <div className="grid gap-10 md:grid-cols-3">
           <div>
-            <Link className="underline" to="/tos">
-              {t("footer.tos", "Terms of Service")}
+            <Link className="text-xl font-bold tracking-wide" to="/">
+              {site.site_name || BRAND_NAME}
+              <span className="text-primary">.</span>
             </Link>
-            <Link className="ml-2 underline" to="/privacy-policy">
-              {t("footer.privacyPolicy", "Privacy Policy")}
-            </Link>
+            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+              为全球专业人士打造的高级网络连接服务。随时随地，保持在最专注的状态。
+            </p>
           </div>
+          <div>
+            <h4 className="mb-5 text-xs font-bold uppercase tracking-[2px]">探索</h4>
+            <ul className="space-y-3">
+              <li>
+                <a
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                  href="#features"
+                >
+                  工艺哲学
+                </a>
+              </li>
+              <li>
+                <a
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                  href="#menu"
+                >
+                  方案菜单
+                </a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="mb-5 text-xs font-bold uppercase tracking-[2px]">支持</h4>
+            <ul className="space-y-3">
+              <li>
+                <Link
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                  to="/tos"
+                >
+                  {t("footer.tos", "Terms of Service")}
+                </Link>
+              </li>
+              <li>
+                <Link
+                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                  to="/privacy-policy"
+                >
+                  {t("footer.privacyPolicy", "Privacy Policy")}
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <Separator className="my-8 opacity-30" />
+
+        <div className="flex flex-wrap items-center justify-between gap-4 text-sm">
+          <p className="text-muted-foreground">
+            &copy; 2026 {site.site_name || BRAND_NAME} CLOUD NETWORK. CRAFTED
+            WITH CARE.
+          </p>
+          <nav className="flex items-center gap-3">
+            {links
+              .filter((item) => item.href)
+              .map((item, index) => (
+                <Fragment key={index}>
+                  {index !== 0 && (
+                    <Separator className="h-4 opacity-30" orientation="vertical" />
+                  )}
+                  <a
+                    aria-label={t(
+                      `footer.social.${item.name}`,
+                      `Visit our ${item.name}`
+                    )}
+                    href={item.href}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  >
+                    <Icon
+                      className="size-4 text-muted-foreground transition-colors hover:text-primary"
+                      icon={item.icon}
+                    />
+                  </a>
+                </Fragment>
+              ))}
+          </nav>
         </div>
       </div>
     </footer>

@@ -13,20 +13,35 @@ export default function Header() {
   const { common, user } = useGlobalStore();
   const { site } = common;
   const Logo = (
-    <Link className="flex items-center gap-2 font-bold text-lg" to="/">
+    <Link className="flex items-center gap-2 text-xl font-bold tracking-wide" to="/">
       {site.site_logo && (
         <img alt="logo" height={36} src={site.site_logo} width={36} />
       )}
-      <span>{site.site_name || BRAND_NAME}</span>
+      <span>
+        {site.site_name || BRAND_NAME}
+        <span className="text-primary">.</span>
+      </span>
     </Link>
   );
   return (
-    <header className="sticky top-0 z-50 border-b backdrop-blur-md">
+    <header className="sticky top-0 z-50 border-b border-border/30 bg-background/95 backdrop-blur-md">
       <div className="container flex h-16 items-center justify-between">
-        <nav className="flex-col gap-6 font-medium text-lg md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
+        <nav className="flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
           {Logo}
         </nav>
-        <div className="flex flex-1 items-center justify-end gap-2">
+        <div className="flex flex-1 items-center justify-end gap-3">
+          <a
+            className="hidden text-sm text-muted-foreground transition-colors hover:text-primary md:inline-block"
+            href="#features"
+          >
+            Philosophy
+          </a>
+          <a
+            className="hidden text-sm text-muted-foreground transition-colors hover:text-primary md:inline-block"
+            href="#menu"
+          >
+            Our Menu
+          </a>
           <LanguageSwitch />
           <ThemeSwitch />
           <UserNav />
@@ -34,6 +49,7 @@ export default function Header() {
             <Link
               className={buttonVariants({
                 size: "sm",
+                variant: "outline",
               })}
               to="/auth"
             >
