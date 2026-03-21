@@ -50,7 +50,7 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         "/api": {
-          target: env.VITE_API_BASE_URL || "https://api.ppanel.dev",
+          target: env.VITE_API_BASE_URL || "https://api.bingka.net",
           changeOrigin: true,
           secure: false,
         },

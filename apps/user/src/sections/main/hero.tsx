@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
+import { useLandingNavigation } from "@/hooks/use-landing-navigation";
 import { BRAND_TAGLINE } from "@/config/index";
 import { useGlobalStore } from "@/stores/global";
 
@@ -7,6 +8,7 @@ export function Hero() {
   const { common, user } = useGlobalStore();
   const { site } = common;
   const description = site.site_desc || BRAND_TAGLINE;
+  const navigateToLandingSection = useLandingNavigation();
 
   return (
     <section className="relative flex min-h-[85vh] items-center overflow-hidden">
@@ -78,19 +80,21 @@ export function Hero() {
               查看菜单
             </Link>
           ) : (
-            <a
+            <button
               className="inline-block rounded bg-primary px-8 py-4 text-sm font-medium uppercase tracking-wider text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl"
-              href="#menu"
+              onClick={() => navigateToLandingSection("menu")}
+              type="button"
             >
               查看菜单
-            </a>
+            </button>
           )}
-          <a
+          <button
             className="inline-block rounded border border-secondary px-8 py-4 text-sm font-medium uppercase tracking-wider text-foreground transition-all hover:border-primary hover:text-primary"
-            href="#features"
+            onClick={() => navigateToLandingSection("features")}
+            type="button"
           >
             品鉴我们的哲学
-          </a>
+          </button>
         </motion.div>
       </motion.div>
     </section>

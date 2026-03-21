@@ -5,7 +5,7 @@ interface Env {
 export const onRequest: PagesFunction<Env> = async (context) => {
   const { request, env } = context;
 
-  const apiBase = (env.API_BASE_URL || "https://api.ppanel.dev").replace(
+  const apiBase = (env.API_BASE_URL || "https://api.bingka.net").replace(
     /\/$/,
     "",
   );

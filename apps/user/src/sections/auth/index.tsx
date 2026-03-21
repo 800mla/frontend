@@ -109,6 +109,16 @@ export default function Main() {
                         ))}
                       </Tabs>
                     )}
+                {AUTH_METHODS.length === 0 && (
+                  <div className="rounded-2xl border border-border/60 bg-muted/20 px-5 py-6 text-center">
+                    <div className="mb-2 font-semibold text-foreground">
+                      登录方式加载中
+                    </div>
+                    <p className="text-sm leading-6 text-muted-foreground">
+                      如果这里长时间没有出现输入框，通常是 API 未连接，或后台尚未开启邮箱/手机号登录。
+                    </p>
+                  </div>
+                )}
               </div>
               <div className="py-8">
                 <OAuthMethods />

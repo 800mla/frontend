@@ -1,5 +1,6 @@
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
+import { consumeLandingScrollTarget } from "@/hooks/use-landing-navigation";
 import { useGlobalStore } from "@/stores/global";
 import { GlobalMap } from "./global-map";
 import { Hero } from "./hero";
@@ -22,6 +23,10 @@ export default function Main() {
       navigate({ to: "/auth" });
     }
   }, [user, navigate, showLanding]);
+
+  useEffect(() => {
+    consumeLandingScrollTarget();
+  }, []);
 
   if (!showLanding) return null;
 

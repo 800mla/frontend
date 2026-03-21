@@ -5,6 +5,7 @@ import { Separator } from "@workspace/ui/components/separator";
 import { Icon } from "@workspace/ui/composed/icon";
 import { Fragment, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { useLandingNavigation } from "@/hooks/use-landing-navigation";
 import { BRAND_NAME } from "@/config/index";
 import { useGlobalStore } from "@/stores/global";
 
@@ -28,6 +29,7 @@ interface CustomData {
 
 export default function Footer() {
   const { t } = useTranslation("components");
+  const navigateToLandingSection = useLandingNavigation();
   const { common } = useGlobalStore();
   const { site } = common;
 
@@ -103,20 +105,22 @@ export default function Footer() {
             <h4 className="mb-5 text-xs font-bold uppercase tracking-[2px]">探索</h4>
             <ul className="space-y-3">
               <li>
-                <a
+                <button
                   className="text-sm text-muted-foreground transition-colors hover:text-primary"
-                  href="#features"
+                  onClick={() => navigateToLandingSection("features")}
+                  type="button"
                 >
                   工艺哲学
-                </a>
+                </button>
               </li>
               <li>
-                <a
+                <button
                   className="text-sm text-muted-foreground transition-colors hover:text-primary"
-                  href="#menu"
+                  onClick={() => navigateToLandingSection("menu")}
+                  type="button"
                 >
                   方案菜单
-                </a>
+                </button>
               </li>
             </ul>
           </div>

@@ -173,7 +173,7 @@ function handleError(response: {
 }
 
 const request = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: import.meta.env.VITE_API_BASE_URL || "https://api.bingka.net",
 });
 
 request.interceptors.request.use(

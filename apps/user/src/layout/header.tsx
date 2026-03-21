@@ -3,12 +3,14 @@ import { buttonVariants } from "@workspace/ui/components/button";
 import { LanguageSwitch } from "@workspace/ui/composed/language-switch";
 import { ThemeSwitch } from "@workspace/ui/composed/theme-switch";
 import { useTranslation } from "react-i18next";
+import { useLandingNavigation } from "@/hooks/use-landing-navigation";
 import { BRAND_NAME } from "@/config/index";
 import { useGlobalStore } from "@/stores/global";
 import { UserNav } from "./user-nav";
 
 export default function Header() {
   const { t } = useTranslation("components");
+  const navigateToLandingSection = useLandingNavigation();
 
   const { common, user } = useGlobalStore();
   const { site } = common;
@@ -30,18 +32,20 @@ export default function Header() {
           {Logo}
         </nav>
         <div className="flex flex-1 items-center justify-end gap-3">
-          <a
+          <button
             className="hidden text-sm text-muted-foreground transition-colors hover:text-primary md:inline-block"
-            href="#features"
+            onClick={() => navigateToLandingSection("features")}
+            type="button"
           >
-            Philosophy
-          </a>
-          <a
+            连接哲学
+          </button>
+          <button
             className="hidden text-sm text-muted-foreground transition-colors hover:text-primary md:inline-block"
-            href="#menu"
+            onClick={() => navigateToLandingSection("menu")}
+            type="button"
           >
-            Our Menu
-          </a>
+            方案菜单
+          </button>
           <LanguageSwitch />
           <ThemeSwitch />
           <UserNav />
