@@ -142,8 +142,10 @@ export default function Content() {
       {userSubscribe.length ? (
         <>
           <div className="flex items-center justify-between">
-            <h2 className="flex items-center gap-1.5 font-semibold">
-              <Icon className="size-5" icon="uil:servers" />
+            <h2 className="flex items-center gap-2 text-xl font-serif font-medium tracking-wide">
+              <div className="flex items-center justify-center rounded-md bg-primary/20 p-1.5 text-primary">
+                <Icon className="size-5" icon="uil:servers" />
+              </div>
               {t("mySubscriptions", "My Subscriptions")}
             </h2>
             <div className="flex gap-2">
@@ -227,13 +229,17 @@ export default function Content() {
 
             return (
               <Card
-                className={cn("relative", {
+                className={cn(
+                  "relative overflow-hidden border-border/60 bg-gradient-to-br from-card to-card/40 shadow-md backdrop-blur-md transition-all hover:border-primary/30 hover:shadow-lg",
+                  {
                   "relative opacity-80 grayscale": isActuallyExpired,
                   "relative hidden opacity-60 blur-[0.3px] grayscale":
                     item.status === 4,
-                })}
+                  }
+                )}
                 key={item.id}
               >
+                <div className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/5 blur-3xl" />
                 {shouldShowWatermark && (
                   <div
                     className={cn(
@@ -271,15 +277,18 @@ export default function Content() {
                     </div>
                   </div>
                 )}
-                <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-2 space-y-0">
-                  <CardTitle className="font-medium">
-                    {item.subscribe.name}
-                    <p className="mt-1 text-foreground/50 text-sm">
+                <CardHeader className="relative z-10 flex flex-row flex-wrap items-center justify-between gap-2 space-y-0">
+                  <CardTitle className="flex items-center gap-3 font-serif text-2xl font-medium tracking-wide text-foreground">
+                    <Icon className="size-6 text-primary" icon="uil:coffee" />
+                    <div>
+                      {item.subscribe.name}
+                      <p className="mt-1 font-sans text-sm font-normal tracking-normal text-muted-foreground/80">
                       {t("expireAt", "Expires At")}:{" "}
                       {item.expire_time
                         ? formatDate(item.expire_time)
                         : t("noLimit", "No Limit")}
-                    </p>
+                      </p>
+                    </div>
                   </CardTitle>
                   {item.status !== 4 && (
                     <div className="flex flex-wrap gap-2">
