@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@workspace/ui/components/button";
+import type { buttonVariants } from "@workspace/ui/components/button";
 import {
   sendEmailCode,
   sendSmsCode,
@@ -8,6 +9,7 @@ import {
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useGlobalStore } from "@/stores/global";
+import type { VariantProps } from "class-variance-authority";
 
 interface SendCodeProps {
   type: "email" | "phone";
@@ -17,8 +19,17 @@ interface SendCodeProps {
     telephone_area_code?: string;
     telephone?: string;
   };
+  className?: string;
+  size?: VariantProps<typeof buttonVariants>["size"];
+  variant?: VariantProps<typeof buttonVariants>["variant"];
 }
-export default function SendCode({ type, params }: SendCodeProps) {
+export default function SendCode({
+  type,
+  params,
+  className,
+  size = "default",
+  variant = "outline",
+}: SendCodeProps) {
   const { t } = useTranslation("auth");
   const { common } = useGlobalStore();
   const { verify_code_interval } = common.verify_code;
@@ -101,7 +112,14 @@ export default function SendCode({ type, params }: SendCodeProps) {
       : !(params.telephone && params.telephone_area_code));
 
   return (
-    <Button disabled={disabled} onClick={handleSendCode} type="button">
+    <Button
+      className={className}
+      disabled={disabled}
+      onClick={handleSendCode}
+      size={size}
+      type="button"
+      variant={variant}
+    >
       {seconds > 0 ? `${seconds}s` : t("get", "Get Code")}
     </Button>
   );

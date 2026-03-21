@@ -3,8 +3,10 @@ import { Button } from "@workspace/ui/components/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@workspace/ui/components/form";
 import { Input } from "@workspace/ui/components/input";
@@ -19,6 +21,13 @@ import { useGlobalStore } from "@/stores/global";
 import SendCode from "../send-code";
 import type { TurnstileRef } from "../turnstile";
 import CloudFlareTurnstile from "../turnstile";
+import {
+  AuthFieldHeading,
+  authInputClassName,
+  authLinkButtonClassName,
+  authSoftPanelClassName,
+  authSubmitButtonClassName,
+} from "../ui";
 
 export default function ResetForm({
   loading,
@@ -64,14 +73,19 @@ export default function ResetForm({
   return (
     <>
       <Form {...form}>
-        <form className="grid gap-6" onSubmit={handleSubmit}>
+        <form className="grid gap-5" onSubmit={handleSubmit}>
           <FormField
             control={form.control}
             name="telephone"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="gap-2.5">
+                <AuthFieldHeading
+                  description="先确认手机号，再完成验证码与新口令设置。"
+                  icon="uil:mobile-android"
+                  title="手机号"
+                />
                 <FormControl>
-                  <div className="flex">
+                  <div className="flex gap-2">
                     <FormField
                       control={form.control}
                       name="telephone_area_code"
@@ -79,7 +93,7 @@ export default function ResetForm({
                         <FormItem>
                           <FormControl>
                             <AreaCodeSelect
-                              className="w-32 rounded-r-none border-r-0"
+                              className="h-12 w-32 rounded-[20px] border-border/60 bg-background/80 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]"
                               onChange={(value) => {
                                 if (value.phone) {
                                   form.setValue(
@@ -98,14 +112,14 @@ export default function ResetForm({
                       )}
                     />
                     <Input
-                      className="rounded-l-none"
-                      placeholder="Enter your telephone..."
+                      className={authInputClassName}
+                      placeholder="输入手机号"
                       type="tel"
                       {...field}
                     />
                   </div>
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="pl-1 text-xs" />
               </FormItem>
             )}
           />
@@ -113,11 +127,17 @@ export default function ResetForm({
             control={form.control}
             name="code"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="gap-2.5">
+                <AuthFieldHeading
+                  description="短信验证码用于确认当前操作由你本人发起。"
+                  icon="uil:message"
+                  title="短信验证"
+                />
                 <FormControl>
                   <div className="flex items-center gap-2">
                     <Input
-                      placeholder="Enter code..."
+                      className={authInputClassName}
+                      placeholder="输入验证码"
                       type="text"
                       {...field}
                       value={field.value as string}
@@ -128,11 +148,13 @@ export default function ResetForm({
                         telephone_area_code: form.watch("telephone_area_code"),
                         type: 2,
                       }}
+                      className="h-12 rounded-[20px] px-4"
+                      size="default"
                       type="phone"
                     />
                   </div>
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="pl-1 text-xs" />
               </FormItem>
             )}
           />
@@ -140,15 +162,21 @@ export default function ResetForm({
             control={form.control}
             name="password"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="gap-2.5">
+                <AuthFieldHeading
+                  description="新的口令将在修改成功后立刻生效。"
+                  icon="uil:key-skeleton"
+                  title="新口令"
+                />
                 <FormControl>
                   <Input
-                    placeholder="Enter your new password..."
+                    className={authInputClassName}
+                    placeholder="输入新的登录口令"
                     type="password"
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="pl-1 text-xs" />
               </FormItem>
             )}
           />
@@ -157,7 +185,13 @@ export default function ResetForm({
               control={form.control}
               name="cf_token"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className={authSoftPanelClassName}>
+                  <FormLabel className="text-sm font-semibold text-foreground">
+                    安全校验
+                  </FormLabel>
+                  <FormDescription className="text-xs leading-5 text-muted-foreground">
+                    完成校验后即可提交找回请求，保护密码修改流程。
+                  </FormDescription>
                   <FormControl>
                     <CloudFlareTurnstile
                       id="reset"
@@ -165,21 +199,21 @@ export default function ResetForm({
                       ref={turnstile}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="text-xs" />
                 </FormItem>
               )}
             />
           )}
-          <Button disabled={loading} type="submit">
+          <Button className={authSubmitButtonClassName} disabled={loading} type="submit">
             {loading && <Icon className="animate-spin" icon="mdi:loading" />}
             {t("reset.title", "Reset Password")}
           </Button>
         </form>
       </Form>
-      <div className="mt-4 text-right text-sm">
+      <div className="mt-5 flex items-center justify-end rounded-[22px] border border-border/55 bg-muted/12 px-4 py-3 text-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]">
         {t("reset.existingAccount", "Remember your password?")}&nbsp;
         <Button
-          className="p-0"
+          className={authLinkButtonClassName}
           onClick={() => {
             onSwitchForm("login");
           }}

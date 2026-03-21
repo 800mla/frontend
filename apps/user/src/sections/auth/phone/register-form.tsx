@@ -3,8 +3,10 @@ import { Button } from "@workspace/ui/components/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from "@workspace/ui/components/form";
 import { Input } from "@workspace/ui/components/input";
@@ -20,6 +22,13 @@ import { useGlobalStore } from "@/stores/global";
 import SendCode from "../send-code";
 import type { TurnstileRef } from "../turnstile";
 import CloudFlareTurnstile from "../turnstile";
+import {
+  AuthFieldHeading,
+  authInputClassName,
+  authLinkButtonClassName,
+  authSoftPanelClassName,
+  authSubmitButtonClassName,
+} from "../ui";
 
 export default function RegisterForm({
   loading,
@@ -81,30 +90,35 @@ export default function RegisterForm({
   return (
     <>
       {auth.register.stop_register ? (
-        <Markdown>
+        <Markdown className={authSoftPanelClassName}>
           {t("register.message", "Registration is currently disabled")}
         </Markdown>
       ) : (
         <Form {...form}>
-          <form className="grid gap-6" onSubmit={handleSubmit}>
+          <form className="grid gap-5" onSubmit={handleSubmit}>
             <FormField
               control={form.control}
               name="telephone"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="gap-2.5">
+                  <AuthFieldHeading
+                    description="注册时将使用该号码完成验证与后续安全确认。"
+                    icon="uil:mobile-android"
+                    title="手机号"
+                  />
                   <FormControl>
-                    <div className="flex">
+                    <div className="flex gap-2">
                       <FormField
                         control={form.control}
                         name="telephone_area_code"
                         render={({ field }) => (
-                          <FormItem>
-                            <FormControl>
-                              <AreaCodeSelect
-                                className="w-32 rounded-r-none border-r-0"
-                                onChange={(value) => {
-                                  if (value.phone) {
-                                    form.setValue(
+                        <FormItem>
+                          <FormControl>
+                            <AreaCodeSelect
+                              className="h-12 w-32 rounded-[20px] border-border/60 bg-background/80 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]"
+                              onChange={(value) => {
+                                if (value.phone) {
+                                  form.setValue(
                                       "telephone_area_code",
                                       value.phone
                                     );
@@ -116,35 +130,41 @@ export default function RegisterForm({
                                 whitelist={enable_whitelist ? whitelist : []}
                               />
                             </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <Input
-                        className="rounded-l-none"
-                        placeholder="Enter your telephone..."
-                        type="tel"
-                        {...field}
-                      />
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Input
+                      className={authInputClassName}
+                      placeholder="输入手机号"
+                      type="tel"
+                      {...field}
+                    />
+                  </div>
+                </FormControl>
+                <FormMessage className="pl-1 text-xs" />
+              </FormItem>
+            )}
+          />
             <FormField
               control={form.control}
               name="password"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="gap-2.5">
+                  <AuthFieldHeading
+                    description="设置用于登录与设备授权的主口令。"
+                    icon="uil:lock-alt"
+                    title="设置口令"
+                  />
                   <FormControl>
                     <Input
-                      placeholder="Enter your password..."
+                      className={authInputClassName}
+                      placeholder="设置新的登录口令"
                       type="password"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="pl-1 text-xs" />
                 </FormItem>
               )}
             />
@@ -152,16 +172,22 @@ export default function RegisterForm({
               control={form.control}
               name="repeat_password"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="gap-2.5">
+                  <AuthFieldHeading
+                    description="重复一次口令，帮助确认输入无误。"
+                    icon="uil:check-circle"
+                    title="确认口令"
+                  />
                   <FormControl>
                     <Input
+                      className={authInputClassName}
                       disabled={loading}
-                      placeholder="Enter password again..."
+                      placeholder="再次输入口令"
                       type="password"
                       {...field}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="pl-1 text-xs" />
                 </FormItem>
               )}
             />
@@ -169,12 +195,18 @@ export default function RegisterForm({
               control={form.control}
               name="code"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="gap-2.5">
+                  <AuthFieldHeading
+                    description="验证码会发送至当前手机号，用于完成注册验证。"
+                    icon="uil:message"
+                    title="短信验证"
+                  />
                   <FormControl>
                     <div className="flex items-center gap-2">
                       <Input
+                        className={authInputClassName}
                         disabled={loading}
-                        placeholder="Enter code..."
+                        placeholder="输入验证码"
                         type="text"
                         {...field}
                         value={field.value as string}
@@ -188,11 +220,13 @@ export default function RegisterForm({
                           ),
                           type: 1,
                         }}
+                        className="h-12 rounded-[20px] px-4"
+                        size="default"
                         type="phone"
                       />
                     </div>
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="pl-1 text-xs" />
                 </FormItem>
               )}
             />
@@ -200,9 +234,15 @@ export default function RegisterForm({
               control={form.control}
               name="invite"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="gap-2.5">
+                  <AuthFieldHeading
+                    description="如由朋友邀请或活动获取，可在此填写邀请码。"
+                    icon="uil:ticket"
+                    title="邀请码"
+                  />
                   <FormControl>
                     <Input
+                      className={authInputClassName}
                       disabled={loading || !!localStorage.getItem("invite")}
                       placeholder={t(
                         "register.invite",
@@ -212,7 +252,7 @@ export default function RegisterForm({
                       value={field.value || ""}
                     />
                   </FormControl>
-                  <FormMessage />
+                  <FormMessage className="pl-1 text-xs" />
                 </FormItem>
               )}
             />
@@ -221,7 +261,13 @@ export default function RegisterForm({
                 control={form.control}
                 name="cf_token"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className={authSoftPanelClassName}>
+                    <FormLabel className="text-sm font-semibold text-foreground">
+                      安全校验
+                    </FormLabel>
+                    <FormDescription className="text-xs leading-5 text-muted-foreground">
+                      完成校验后即可建立新账户，减少异常注册流量。
+                    </FormDescription>
                     <FormControl>
                       <CloudFlareTurnstile
                         id="register"
@@ -229,22 +275,22 @@ export default function RegisterForm({
                         ref={turnstile}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage className="text-xs" />
                   </FormItem>
                 )}
               />
             )}
-            <Button disabled={loading} type="submit">
+            <Button className={authSubmitButtonClassName} disabled={loading} type="submit">
               {loading && <Icon className="animate-spin" icon="mdi:loading" />}
               {t("register.title", "Register")}
             </Button>
           </form>
         </Form>
       )}
-      <div className="mt-4 text-right text-sm">
+      <div className="mt-5 flex items-center justify-end rounded-[22px] border border-border/55 bg-muted/12 px-4 py-3 text-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]">
         {t("register.existingAccount", "Already have an account?")}&nbsp;
         <Button
-          className="p-0"
+          className={authLinkButtonClassName}
           onClick={() => {
             // setInitialValues(undefined);
             onSwitchForm("login");
