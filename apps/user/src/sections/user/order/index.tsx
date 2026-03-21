@@ -5,7 +5,6 @@ import { Button, buttonVariants } from "@workspace/ui/components/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card";
@@ -42,13 +41,20 @@ export default function Order() {
     <ProList<API.OrderDetail, Record<string, unknown>>
       action={ref}
       renderItem={(item) => (
-        <Card className="overflow-hidden">
-          <CardHeader className="flex flex-row items-center justify-between gap-2 space-y-0">
-            <CardTitle>
-              {t("orderNo", "Order No")}
-              <p className="text-sm">{item.order_no}</p>
+          <Card className="overflow-hidden border-border/60 bg-gradient-to-br from-card to-card/40 shadow-md backdrop-blur-md transition-all hover:border-primary/30 hover:shadow-lg">
+          <CardHeader className="flex flex-row items-center justify-between gap-3 space-y-0">
+            <CardTitle className="flex items-center gap-3 font-serif text-xl font-medium tracking-wide">
+              <div className="flex items-center justify-center rounded-md bg-primary/20 p-1.5 text-primary">
+                <span aria-hidden="true">☕</span>
+              </div>
+              <div>
+                {t("orderNo", "Order No")}
+                <p className="mt-1 font-mono text-sm font-normal tracking-wider text-muted-foreground">
+                  {item.order_no}
+                </p>
+              </div>
             </CardTitle>
-            <CardDescription className="flex gap-2">
+            <div className="flex gap-2">
               {item.status === 1 ? (
                 <>
                   <Link
@@ -73,7 +79,7 @@ export default function Order() {
                 </>
               ) : (
                 <Link
-                  className={buttonVariants({ size: "sm" })}
+                  className={buttonVariants({ size: "sm", variant: "outline" })}
                   key="detail"
                   search={{ order_no: item.order_no }}
                   to="/payment"
@@ -81,11 +87,11 @@ export default function Order() {
                   {t("detail", "Detail")}
                 </Link>
               )}
-            </CardDescription>
+            </div>
           </CardHeader>
           <CardContent className="text-sm">
             <ul className="grid grid-cols-2 gap-3 *:flex *:flex-col lg:grid-cols-4">
-              <li>
+              <li className="rounded-xl bg-muted/30 p-3">
                 <span className="text-muted-foreground">
                   {t("name", "Product Name")}
                 </span>
@@ -95,7 +101,7 @@ export default function Order() {
                     t(`type.${item.type}`, "Unknown Type")}
                 </span>
               </li>
-              <li className="font-semibold">
+              <li className="rounded-xl bg-muted/30 p-3 font-semibold">
                 <span className="text-muted-foreground">
                   {t("paymentAmount", "Amount")}
                 </span>
@@ -103,7 +109,7 @@ export default function Order() {
                   <Display type="currency" value={item.amount} />
                 </span>
               </li>
-              <li className="font-semibold">
+              <li className="rounded-xl bg-muted/30 p-3 font-semibold">
                 <span className="text-muted-foreground">
                   {t("status.0", "Status")}
                 </span>
@@ -112,7 +118,7 @@ export default function Order() {
                     t(`status.${item.status}`, "Unknown Status")}
                 </span>
               </li>
-              <li className="font-semibold">
+              <li className="rounded-xl bg-muted/30 p-3 font-semibold">
                 <span className="text-muted-foreground">
                   {t("createdAt", "Created At")}
                 </span>
@@ -120,8 +126,8 @@ export default function Order() {
               </li>
             </ul>
           </CardContent>
-        </Card>
-      )}
+          </Card>
+        )}
       request={async (pagination, filter) => {
         const response = await queryOrderList({ ...pagination, ...filter });
         return {

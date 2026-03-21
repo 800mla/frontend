@@ -46,18 +46,22 @@ export default function Wallet() {
     (user?.balance || 0) + (user?.commission || 0) + (user?.gift_amount || 0);
   return (
     <>
-      <Card>
-        <CardContent>
-          <h2 className="mb-4 font-bold text-2xl text-foreground">
+      <Card className="overflow-hidden border-border/60 bg-gradient-to-br from-card to-card/40 shadow-md backdrop-blur-md transition-all hover:border-primary/30 hover:shadow-lg">
+        <CardContent className="relative p-6">
+          <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-primary/5 blur-3xl" />
+          <h2 className="mb-6 flex items-center gap-3 font-serif text-2xl font-medium tracking-wide text-foreground">
+            <div className="flex items-center justify-center rounded-md bg-primary/20 p-1.5 text-primary">
+              💼
+            </div>
             {t("assetOverview", "Asset Overview")}
           </h2>
-          <div className="mb-4">
-            <div className="flex items-center justify-between">
+          <div className="mb-6">
+            <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="font-medium text-sm">
+                <p className="font-medium text-sm text-muted-foreground">
                   {t("totalAssets", "Total Assets")}
                 </p>
-                <p className="font-bold text-3xl">
+                <p className="font-bold text-3xl text-foreground">
                   <Display type="currency" value={totalAssets} />
                 </p>
               </div>
@@ -65,7 +69,7 @@ export default function Wallet() {
             </div>
           </div>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            <div className="rounded-lg bg-secondary p-4 shadow-sm transition-all duration-300 hover:shadow-md">
+            <div className="rounded-xl border border-primary/10 bg-secondary/75 p-4 shadow-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md">
               <p className="font-medium text-secondary-foreground text-sm opacity-80">
                 {t("balance", "Balance")}
               </p>
@@ -73,7 +77,7 @@ export default function Wallet() {
                 <Display type="currency" value={user?.balance} />
               </p>
             </div>
-            <div className="rounded-lg bg-secondary p-4 shadow-sm transition-all duration-300 hover:shadow-md">
+            <div className="rounded-xl border border-primary/10 bg-secondary/75 p-4 shadow-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md">
               <p className="font-medium text-secondary-foreground text-sm opacity-80">
                 {t("giftAmount", "Gift Amount")}
               </p>
@@ -81,7 +85,7 @@ export default function Wallet() {
                 <Display type="currency" value={user?.gift_amount} />
               </p>
             </div>
-            <div className="rounded-lg bg-secondary p-4 shadow-sm transition-all duration-300 hover:shadow-md">
+            <div className="rounded-xl border border-primary/10 bg-secondary/75 p-4 shadow-sm transition-all duration-300 hover:border-primary/30 hover:shadow-md">
               <p className="font-medium text-secondary-foreground text-sm opacity-80">
                 {t("commission", "Commission")}
               </p>
@@ -95,16 +99,16 @@ export default function Wallet() {
       <ProList<API.BalanceLog, Record<string, unknown>>
         action={ref}
         renderItem={(item) => (
-          <Card className="overflow-hidden">
+          <Card className="overflow-hidden border-border/60 bg-gradient-to-br from-card to-card/40 shadow-md backdrop-blur-md transition-all hover:border-primary/30 hover:shadow-lg">
             <CardContent className="text-sm">
               <ul className="grid grid-cols-2 gap-3 *:flex *:flex-col lg:grid-cols-4">
-                <li className="font-semibold">
+                <li className="rounded-xl bg-muted/30 p-3 font-semibold">
                   <span className="text-muted-foreground">
                     {t("createdAt", "Created At")}
                   </span>
                   <time>{formatDate(item.timestamp)}</time>
                 </li>
-                <li className="font-semibold">
+                <li className="rounded-xl bg-muted/30 p-3 font-semibold">
                   <span className="text-muted-foreground">
                     {t("type.0", "Type")}
                   </span>
@@ -113,7 +117,7 @@ export default function Wallet() {
                       t(`type.${item.type}`, "Unknown Type")}
                   </span>
                 </li>
-                <li className="font-semibold">
+                <li className="rounded-xl bg-muted/30 p-3 font-semibold">
                   <span className="text-muted-foreground">
                     {t("amount", "Amount")}
                   </span>
@@ -122,7 +126,7 @@ export default function Wallet() {
                   </span>
                 </li>
 
-                <li>
+                <li className="rounded-xl bg-muted/30 p-3">
                   <span className="text-muted-foreground">
                     {t("balance", "Balance")}
                   </span>

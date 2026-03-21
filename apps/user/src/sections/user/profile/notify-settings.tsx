@@ -50,10 +50,20 @@ export default function NotifySettings() {
   }
 
   return (
-    <Card className="min-w-80">
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          {t("notify.notificationSettings", "Notification Settings")}
+    <Card className="min-w-80 border-border/60 bg-gradient-to-br from-card to-card/40 shadow-md backdrop-blur-md transition-all hover:border-primary/30 hover:shadow-lg">
+      <CardHeader className="gap-4">
+        <CardTitle className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 font-serif text-xl font-medium tracking-wide">
+            <div className="flex items-center justify-center rounded-md bg-primary/20 p-1.5 text-primary">
+              🔔
+            </div>
+            <div>
+              {t("notify.notificationSettings", "Notification Settings")}
+              <p className="mt-1 font-sans text-sm font-normal tracking-normal text-muted-foreground">
+                选择你希望 Bingka 主动提醒你的账户变动。
+              </p>
+            </div>
+          </div>
           <Button form="notify-form" size="sm" type="submit">
             {t("notify.save", "Save Changes")}
           </Button>
@@ -90,7 +100,7 @@ export default function NotifySettings() {
                   key={name}
                   name={name as any}
                   render={({ field }) => (
-                    <FormItem className="flex items-center justify-between space-x-4">
+                    <FormItem className="flex items-center justify-between rounded-xl bg-muted/30 px-4 py-3">
                       <FormLabel className="text-muted-foreground">
                         {label}
                       </FormLabel>
