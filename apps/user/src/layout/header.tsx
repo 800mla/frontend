@@ -3,6 +3,7 @@ import { buttonVariants } from "@workspace/ui/components/button";
 import { LanguageSwitch } from "@workspace/ui/composed/language-switch";
 import { ThemeSwitch } from "@workspace/ui/composed/theme-switch";
 import { useTranslation } from "react-i18next";
+import { BRAND_NAME } from "@/config/index";
 import { useGlobalStore } from "@/stores/global";
 import { UserNav } from "./user-nav";
 
@@ -16,7 +17,7 @@ export default function Header() {
       {site.site_logo && (
         <img alt="logo" height={36} src={site.site_logo} width={36} />
       )}
-      <span className="">{site.site_name}</span>
+      <span>{site.site_name || BRAND_NAME}</span>
     </Link>
   );
   return (

@@ -1,6 +1,10 @@
 export const fallbackLng = "en-US";
 export const supportedLngs = ["en-US", "zh-CN"];
 
+export const BRAND_NAME = import.meta.env.VITE_BRAND_NAME || "BINGKA";
+export const BRAND_DESCRIPTION =
+  import.meta.env.VITE_BRAND_DESCRIPTION || "Fast, clean access portal.";
+
 export const CDN_URL =
   import.meta.env.VITE_CDN_URL || "https://cdn.jsdmirror.com";
 export const TUTORIAL_DOCUMENT =

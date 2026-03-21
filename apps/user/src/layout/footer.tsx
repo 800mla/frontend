@@ -5,6 +5,7 @@ import { Separator } from "@workspace/ui/components/separator";
 import { Icon } from "@workspace/ui/composed/icon";
 import { Fragment, useMemo } from "react";
 import { useTranslation } from "react-i18next";
+import { BRAND_NAME } from "@/config/index";
 import { useGlobalStore } from "@/stores/global";
 
 interface CustomData {
@@ -110,7 +111,10 @@ export default function Footer() {
             ))}
         </nav>
         <div>
-          <strong className="text-foreground">{site.site_name}</strong> ©{" "}
+          <strong className="text-foreground">
+            {site.site_name || BRAND_NAME}
+          </strong>{" "}
+          ©{" "}
           {t("footer.copyright", "All rights reserved")}.
           <div>
             <Link className="underline" to="/tos">

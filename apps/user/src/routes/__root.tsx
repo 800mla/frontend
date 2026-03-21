@@ -9,6 +9,7 @@ import { getGlobalConfig } from "@workspace/ui/services/common/common";
 import { isBrowser } from "@workspace/ui/utils/index";
 import { useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import { BRAND_DESCRIPTION, BRAND_NAME } from "@/config/index";
 import { useGlobalStore } from "@/stores/global";
 
 export const Route = createRootRouteWithContext()({
@@ -37,8 +38,8 @@ export const Route = createRootRouteWithContext()({
     }, []);
 
     const { site } = common;
-    const title = site.site_name || "Loading...";
-    const description = site.site_desc || "";
+    const title = site.site_name || BRAND_NAME;
+    const description = site.site_desc || BRAND_DESCRIPTION;
     const keywords = site.keywords || "";
     const logo = site.site_logo || "";
     const url = isBrowser() ? window.location.href : "";
