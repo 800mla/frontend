@@ -48,10 +48,7 @@ export function OAuthMethods() {
               size="icon"
               variant="outline"
             >
-              <Icon
-                icon={icons[method as keyof typeof icons]}
-                title={method}
-              />
+              <Icon icon={icons[method as keyof typeof icons]} />
             </Button>
           ))}
         </div>

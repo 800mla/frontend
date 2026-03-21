@@ -90,9 +90,11 @@ export default function RegisterForm({
   return (
     <>
       {auth.register.stop_register ? (
-        <Markdown className={authSoftPanelClassName}>
-          {t("register.message", "Registration is currently disabled")}
-        </Markdown>
+        <div className={authSoftPanelClassName}>
+          <Markdown>
+            {t("register.message", "Registration is currently disabled")}
+          </Markdown>
+        </div>
       ) : (
         <Form {...form}>
           <form className="grid gap-5" onSubmit={handleSubmit}>
