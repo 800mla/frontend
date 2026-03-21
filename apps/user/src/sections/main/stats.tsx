@@ -1,4 +1,3 @@
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { motion } from "framer-motion";
 
 export function Stats() {
@@ -7,42 +6,21 @@ export function Stats() {
       name: "BGP 精准拼配",
       description:
         "通过多线 BGP 动态路由调度，我们实时融合全球最优线路。犹如咖啡师调配豆子，找到速度与稳定性的完美平衡点。",
-      icon: (
-        <DotLottieReact
-          autoplay
-          className="size-24"
-          loop
-          src="./assets/lotties/users.json"
-        />
-      ),
+      icon: "⚖️",
       accent: false,
     },
     {
       name: "冰滴级传输",
       description:
         "专为极客定制的传输协议。跨国 IPLC 专线能够无视拥堵环境，以超低延迟输送数据，带来 0丢包 的透心凉体验。",
-      icon: (
-        <DotLottieReact
-          autoplay
-          className="size-24"
-          loop
-          src="./assets/lotties/servers.json"
-        />
-      ),
+      icon: "🧊",
       accent: true,
     },
     {
       name: "无痕杯套加密",
       description:
         "采用业界顶级的 AES-256 套接字层加密，您的网络踪迹被完美伪装。我们绝不记录任何访问日志，保护您的数字隐私。",
-      icon: (
-        <DotLottieReact
-          autoplay
-          className="size-24"
-          loop
-          src="./assets/lotties/locations.json"
-        />
-      ),
+      icon: "🛡️",
       accent: false,
     },
   ];

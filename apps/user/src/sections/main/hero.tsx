@@ -70,12 +70,21 @@ export function Hero() {
           initial={{ opacity: 0, y: 30 }}
           transition={{ duration: 0.7, delay: 0.3 }}
         >
-          <Link
-            className="inline-block rounded bg-primary px-8 py-4 text-sm font-medium uppercase tracking-wider text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl"
-            to={user ? "/dashboard" : "/purchasing"}
-          >
-            查看菜单
-          </Link>
+          {user ? (
+            <Link
+              className="inline-block rounded bg-primary px-8 py-4 text-sm font-medium uppercase tracking-wider text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl"
+              to="/dashboard"
+            >
+              查看菜单
+            </Link>
+          ) : (
+            <a
+              className="inline-block rounded bg-primary px-8 py-4 text-sm font-medium uppercase tracking-wider text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl"
+              href="#menu"
+            >
+              查看菜单
+            </a>
+          )}
           <a
             className="inline-block rounded border border-secondary px-8 py-4 text-sm font-medium uppercase tracking-wider text-foreground transition-all hover:border-primary hover:text-primary"
             href="#features"
