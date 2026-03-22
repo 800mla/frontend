@@ -172,8 +172,10 @@ function handleError(response: {
   toast.error(message);
 }
 
+// Prefer same-origin requests so the browser talks to /v1/... on the current site.
+// A direct API origin can still be injected explicitly with VITE_API_BASE_URL when needed.
 const request = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "https://api.bingka.net",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "",
 });
 
 request.interceptors.request.use(
