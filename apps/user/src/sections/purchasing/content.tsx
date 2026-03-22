@@ -12,6 +12,7 @@ import { prePurchaseOrder, purchase } from "@workspace/ui/services/user/portal";
 import { LoaderCircle } from "lucide-react";
 import { useCallback, useEffect, useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
 import { SubscribeBilling } from "@/sections/subscribe/billing";
 import CouponInput from "@/sections/subscribe/coupon-input";
 import { SubscribeDetail } from "@/sections/subscribe/detail";
@@ -49,6 +50,7 @@ export default function Content({
     valid: false,
     message: "",
   });
+  const [paymentMethods, setPaymentMethods] = useState<API.PaymentMethod[]>([]);
 
   const { data: order } = useQuery({
     enabled: !!subscription?.id && !!params.payment,
@@ -88,6 +90,21 @@ export default function Content({
   );
 
   const handleSubmit = useCallback(async () => {
+    if (!params.identifier || !isEmailValid.valid) {
+      toast.error("请先填写有效邮箱后再继续。");
+      return;
+    }
+    if (paymentMethods.length === 0) {
+      toast.error("当前没有可用的在线支付方式，请先在后台启用支付通道。");
+      return;
+    }
+    if (
+      !paymentMethods.some((method) => String(method.id) === String(params.payment))
+    ) {
+      toast.error("请选择有效的支付方式后再提交。");
+      return;
+    }
+
     startTransition(async () => {
       try {
         const { data } = await purchase(params);
@@ -101,12 +118,14 @@ export default function Content({
             })
           );
           navigate({ to: "/purchasing/order", search: { order_no } });
+          return;
         }
+        toast.error("订单已创建，但未返回订单号，请检查支付配置。");
       } catch (error) {
         console.log(error);
       }
     });
-  }, [params, navigate]);
+  }, [params, navigate, isEmailValid.valid, paymentMethods]);
 
   if (!subscription) {
     return (
@@ -166,6 +185,10 @@ export default function Content({
                       });
                       return;
                     }
+                    setIsEmailValid({
+                      valid: true,
+                      message: "",
+                    });
                   } else {
                     setIsEmailValid({
                       valid: true,
@@ -308,6 +331,7 @@ export default function Content({
               <PaymentMethods
                 balance={false}
                 onChange={(value: number) => handleChange("payment", value)}
+                onLoaded={setPaymentMethods}
                 value={params.payment!}
               />
             </div>
@@ -316,7 +340,7 @@ export default function Content({
 
         <Button
           className="w-full"
-          disabled={!isEmailValid.valid || loading}
+          disabled={!isEmailValid.valid || loading || paymentMethods.length === 0}
           onClick={handleSubmit}
           size="lg"
         >
