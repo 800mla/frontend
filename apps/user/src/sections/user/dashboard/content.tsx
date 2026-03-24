@@ -282,49 +282,49 @@ export default function Content() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <Dialog onOpenChange={handlePromoOpenChange} open={promoOpen}>
-        <DialogContent className="max-w-[560px] overflow-hidden border-border/50 bg-[linear-gradient(160deg,rgba(34,24,18,0.98),rgba(20,14,11,0.96))] p-0 text-white shadow-[0_36px_120px_-56px_rgba(0,0,0,0.72)]">
-          <div className="relative overflow-hidden px-7 py-8 sm:px-9">
-            <div className="-left-10 absolute top-8 h-40 w-40 rounded-full bg-[#ffb36b]/20 blur-3xl" />
-            <div className="-right-12 absolute bottom-0 h-48 w-48 rounded-full bg-[#ff6a88]/25 blur-3xl" />
-            <div className="relative space-y-6">
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/8 px-3 py-1 text-white/75 text-xs uppercase tracking-[0.18em]">
-                <Icon className="size-4 text-[#ffcb8f]" icon="uil:bolt-alt" />
+        <DialogContent className="max-w-[540px] overflow-hidden border-border/60 bg-[linear-gradient(160deg,rgba(31,28,25,0.98),rgba(23,21,19,0.98))] p-0 text-white shadow-[0_32px_96px_-56px_rgba(0,0,0,0.68)]">
+          <div className="relative overflow-hidden px-6 py-7 sm:px-8">
+            <div className="-left-12 absolute top-10 h-36 w-36 rounded-full bg-primary/12 blur-3xl" />
+            <div className="-right-10 absolute bottom-2 h-40 w-40 rounded-full bg-white/6 blur-3xl" />
+            <div className="relative space-y-5">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-3 py-1 text-white/68 text-[11px] uppercase tracking-[0.16em]">
+                <Icon className="size-4 text-[#e7c2a0]" icon="uil:bolt-alt" />
                 {t("promoBadge", "限时秒杀")}
               </div>
               <DialogHeader className="space-y-3 text-left">
-                <DialogTitle className="font-semibold text-3xl text-white tracking-tight">
+                <DialogTitle className="font-semibold text-[1.85rem] text-white tracking-tight">
                   {t("promoTitle", "登录专享限时礼券")}
                 </DialogTitle>
-                <DialogDescription className="max-w-md text-base text-white/72 leading-7">
+                <DialogDescription className="max-w-md text-sm text-white/68 leading-7">
                   {t(
                     "promoDescription",
                     "今天先把福利给到位。现在下单更划算，过时就恢复常规价格。"
                   )}
                 </DialogDescription>
               </DialogHeader>
-              <div className="rounded-[28px] border border-white/10 bg-white/8 p-5">
-                <div className="text-sm text-white/68">
+              <div className="rounded-[24px] border border-white/10 bg-white/6 p-5">
+                <div className="text-sm text-white/60">
                   {t("promoCountdown", "剩余领取时间")}
                 </div>
                 <div className="mt-3 flex items-baseline gap-3 font-semibold text-white">
-                  <span className="text-5xl">{countdown.hours}</span>
-                  <span className="text-lg text-white/55">:</span>
-                  <span className="text-5xl">{countdown.minutes}</span>
-                  <span className="text-lg text-white/55">:</span>
-                  <span className="text-5xl">{countdown.seconds}</span>
+                  <span className="text-[2.6rem]">{countdown.hours}</span>
+                  <span className="text-base text-white/45">:</span>
+                  <span className="text-[2.6rem]">{countdown.minutes}</span>
+                  <span className="text-base text-white/45">:</span>
+                  <span className="text-[2.6rem]">{countdown.seconds}</span>
                 </div>
-                <div className="mt-4 flex items-center justify-between rounded-2xl bg-black/20 px-4 py-3">
+                <div className="mt-4 flex items-center justify-between rounded-2xl bg-black/18 px-4 py-3">
                   <div>
-                    <div className="text-white/48 text-xs uppercase tracking-[0.18em]">
+                    <div className="text-white/42 text-[11px] uppercase tracking-[0.16em]">
                       {t("promoRewardLabel", "当前权益")}
                     </div>
-                    <div className="mt-1 font-semibold text-2xl text-[#ffd5a8]">
+                    <div className="mt-1 font-semibold text-xl text-[#e7c2a0]">
                       {promoDiscountText}
                     </div>
                   </div>
-                  <Icon className="size-8 text-[#ffd5a8]" icon="uil:ticket" />
+                  <Icon className="size-7 text-[#e7c2a0]" icon="uil:ticket" />
                 </div>
               </div>
               <DialogFooter className="flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -337,7 +337,7 @@ export default function Content() {
                 </Button>
                 <Button
                   asChild
-                  className="bg-[#ffd5a8] text-[#2c1a0f] hover:bg-[#ffe0be]"
+                  className="bg-[#e7c2a0] text-[#2c1a0f] hover:bg-[#edd0b4]"
                   size="lg"
                 >
                   <Link onClick={handlePromoClaim} to="/subscribe">
@@ -350,32 +350,31 @@ export default function Content() {
         </DialogContent>
       </Dialog>
 
-      <section className="grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_360px]">
-        <Card className="overflow-hidden border-border/50 bg-[linear-gradient(135deg,rgba(233,246,242,0.96),rgba(236,243,249,0.92))] shadow-[0_28px_90px_-56px_rgba(62,98,86,0.42)] dark:bg-[linear-gradient(135deg,rgba(31,35,34,0.96),rgba(25,28,31,0.94))]">
-          <CardContent className="relative p-6 md:p-8">
-            <div className="-right-16 -top-16 absolute h-48 w-48 rounded-full bg-primary/10 blur-3xl" />
-            <div className="absolute bottom-0 left-0 h-32 w-full bg-[linear-gradient(90deg,rgba(214,167,122,0.08),transparent_55%)]" />
-            <div className="relative space-y-8">
+      <section className="grid gap-5 xl:grid-cols-[minmax(0,1.55fr)_340px]">
+        <Card className="overflow-hidden border-border/50 bg-[linear-gradient(180deg,rgba(255,252,248,0.96),rgba(250,248,245,0.94))] shadow-[0_22px_60px_-48px_rgba(59,41,27,0.18)] dark:bg-[linear-gradient(180deg,rgba(26,26,26,0.97),rgba(21,21,21,0.96))]">
+          <CardContent className="relative p-5 md:p-6">
+            <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-primary/35 to-transparent" />
+            <div className="relative space-y-6">
               <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
                 <div className="flex items-start gap-4">
-                  <Avatar className="size-14 rounded-2xl border border-white/60 shadow-sm">
+                  <Avatar className="size-12 rounded-2xl border border-border/50 shadow-sm">
                     <AvatarImage alt={accountIdentifier} src={user?.avatar} />
-                    <AvatarFallback className="rounded-2xl bg-primary/18 text-primary">
+                    <AvatarFallback className="rounded-2xl bg-primary/10 text-primary">
                       {(accountIdentifier || "B").slice(0, 1).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
                   <div className="space-y-2">
-                    <div className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-white/50 px-3 py-1 text-primary text-xs uppercase tracking-[0.18em] dark:bg-white/5">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-primary/12 bg-primary/6 px-3 py-1 text-primary text-[11px] uppercase tracking-[0.16em]">
                       <Icon className="size-3.5" icon="uil:shield-check" />
                       {t("overviewBadge", "我的面板")}
                     </div>
                     <div>
-                      <h1 className="font-semibold text-3xl text-foreground tracking-tight">
+                      <h1 className="font-semibold text-[1.8rem] text-foreground tracking-tight">
                         {t("helloUser", "你好，{{name}}", {
                           name: accountIdentifier,
                         })}
                       </h1>
-                      <p className="mt-2 max-w-xl text-muted-foreground text-sm leading-7">
+                      <p className="mt-2 max-w-xl text-muted-foreground text-[13px] leading-7">
                         {t(
                           "overviewSubtitle",
                           "把账户状态、订阅进度和操作入口都收在这里，登录后先看一眼就够了。"
@@ -407,7 +406,7 @@ export default function Content() {
                 </div>
               </div>
 
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+              <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
                 <MetricCard
                   icon="uil:box"
                   label={t("currentPlan", "当前套餐")}
@@ -443,16 +442,16 @@ export default function Content() {
                 />
               </div>
 
-              <div className="grid gap-4 lg:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.7fr)]">
-                <div className="rounded-[28px] border border-border/50 bg-background/75 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.28)]">
+              <div className="grid gap-3 lg:grid-cols-[minmax(0,1.3fr)_minmax(280px,0.7fr)]">
+                <div className="rounded-[24px] border border-border/50 bg-background/78 p-5">
                   <div className="flex flex-col gap-5">
                     <div className="flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <div className="text-muted-foreground text-sm">
                           {t("trafficOverview", "流量总览")}
                         </div>
-                        <div className="mt-2 flex flex-wrap items-baseline gap-3">
-                          <span className="font-semibold text-3xl text-foreground">
+                        <div className="mt-2 flex flex-wrap items-baseline gap-2">
+                          <span className="font-semibold text-[1.8rem] text-foreground">
                             {activeSubscription?.traffic ? (
                               <Display
                                 type="traffic"
@@ -467,11 +466,11 @@ export default function Content() {
                           </span>
                         </div>
                       </div>
-                      <div className="rounded-2xl bg-primary/8 px-4 py-3 text-right">
-                        <div className="text-muted-foreground text-xs uppercase tracking-[0.14em]">
+                      <div className="rounded-2xl bg-primary/6 px-4 py-3 text-right">
+                        <div className="text-muted-foreground text-[11px] uppercase tracking-[0.14em]">
                           {t("usedTraffic", "已使用流量")}
                         </div>
-                        <div className="mt-1 font-semibold text-foreground text-xl">
+                        <div className="mt-1 font-semibold text-foreground text-lg">
                           <Display
                             type="traffic"
                             unlimited={!activeSubscription?.traffic}
@@ -508,7 +507,7 @@ export default function Content() {
                   </div>
                 </div>
 
-                <div className="rounded-[28px] border border-border/50 bg-background/75 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.24)]">
+                <div className="rounded-[24px] border border-border/50 bg-background/78 p-5">
                   <div className="space-y-3">
                     <div className="flex items-center gap-2 text-muted-foreground text-sm">
                       <Icon
@@ -607,16 +606,16 @@ export default function Content() {
 
         <div className="space-y-6">
           {showPinnedOffer ? (
-            <Card className="overflow-hidden border-[#f3a067]/30 bg-[linear-gradient(180deg,rgba(255,243,231,0.98),rgba(255,251,246,0.96))] shadow-[0_24px_70px_-52px_rgba(249,140,73,0.45)] dark:bg-[linear-gradient(180deg,rgba(58,39,28,0.96),rgba(33,24,18,0.96))]">
+            <Card className="overflow-hidden border-border/50 bg-[linear-gradient(180deg,rgba(255,250,245,0.98),rgba(251,248,244,0.96))] shadow-[0_20px_56px_-46px_rgba(59,41,27,0.16)] dark:bg-[linear-gradient(180deg,rgba(28,27,25,0.96),rgba(22,21,20,0.96))]">
               <CardHeader className="space-y-3">
                 <div className="flex items-center justify-between">
-                  <div className="inline-flex items-center gap-2 rounded-full border border-[#f3a067]/30 bg-[#f7b27e]/12 px-3 py-1 text-[#d57a36] text-xs uppercase tracking-[0.18em]">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-primary/14 bg-primary/6 px-3 py-1 text-primary text-[11px] uppercase tracking-[0.16em]">
                     <Icon className="size-4" icon="uil:bell" />
                     {t("importantNotice", "重要通知")}
                   </div>
-                  <Icon className="size-5 text-[#d57a36]" icon="uil:clock" />
+                  <Icon className="size-5 text-primary/80" icon="uil:clock" />
                 </div>
-                <CardTitle className="font-semibold text-2xl text-foreground">
+                <CardTitle className="font-semibold text-xl text-foreground">
                   {t("promoNoticeTitle", "限时礼遇还在保留")}
                 </CardTitle>
                 <CardDescription className="text-muted-foreground text-sm leading-7">
@@ -642,10 +641,10 @@ export default function Content() {
                   />
                 </div>
                 <div className="rounded-2xl bg-background/70 p-4 text-foreground text-sm leading-7">
-                  <div className="text-muted-foreground text-xs uppercase tracking-[0.18em]">
+                  <div className="text-muted-foreground text-[11px] uppercase tracking-[0.16em]">
                     {t("promoRewardLabel", "当前权益")}
                   </div>
-                  <div className="mt-2 font-semibold text-[#d57a36] text-xl">
+                  <div className="mt-2 font-semibold text-primary text-lg">
                     {promoDiscountText}
                   </div>
                 </div>
@@ -657,13 +656,13 @@ export default function Content() {
               </CardContent>
             </Card>
           ) : (
-            <Card className="border-border/50 bg-background/88 shadow-[0_24px_60px_-48px_rgba(0,0,0,0.2)]">
+            <Card className="border-border/50 bg-background/88 shadow-[0_18px_48px_-42px_rgba(0,0,0,0.16)]">
               <CardHeader>
                 <div className="inline-flex items-center gap-2 text-muted-foreground text-sm">
                   <Icon className="size-4 text-primary" icon="uil:megaphone" />
                   {t("quickStatus", "账户状态")}
                 </div>
-                <CardTitle className="text-2xl">
+                <CardTitle className="text-xl">
                   {activeSubscription
                     ? t("activeStatusTitle", "当前订阅运行正常")
                     : t("inactiveStatusTitle", "还差一步完成开通")}
@@ -692,7 +691,7 @@ export default function Content() {
             </Card>
           )}
 
-          <Card className="border-border/50 bg-background/88">
+          <Card className="border-border/50 bg-background/88 shadow-[0_18px_48px_-42px_rgba(0,0,0,0.14)]">
             <CardHeader>
               <div className="inline-flex items-center gap-2 text-muted-foreground text-sm">
                 <Icon className="size-4 text-primary" icon="uil:bell" />
@@ -725,7 +724,7 @@ export default function Content() {
       <section className="space-y-4">
         <div className="flex items-center justify-between gap-4">
           <div>
-            <h2 className="font-semibold text-2xl text-foreground tracking-tight">
+            <h2 className="font-semibold text-xl text-foreground tracking-tight">
               {t("guideSectionTitle", "使用教程")}
             </h2>
             <p className="mt-1 text-muted-foreground text-sm leading-7">
@@ -762,22 +761,22 @@ export default function Content() {
             {guideCards.map((item, index) => (
               <Card
                 className={cn(
-                  "overflow-hidden border-transparent shadow-[0_24px_56px_-48px_rgba(29,41,57,0.32)]",
+                  "overflow-hidden border-border/40 shadow-[0_16px_44px_-38px_rgba(29,41,57,0.12)]",
                   getGuideCardClassName(index)
                 )}
                 key={item.id}
               >
-                <CardContent className="flex h-full flex-col justify-between p-6">
-                  <div className="space-y-5">
+                <CardContent className="flex h-full flex-col justify-between p-5">
+                  <div className="space-y-4">
                     <div className="flex items-start justify-between gap-4">
-                      <div className="inline-flex items-center gap-2 rounded-full border border-white/45 bg-white/55 px-3 py-1 text-foreground/72 text-xs backdrop-blur dark:border-white/10 dark:bg-white/6 dark:text-white/70">
+                      <div className="inline-flex items-center gap-2 rounded-full border border-border/45 bg-background/75 px-3 py-1 text-foreground/68 text-[11px] backdrop-blur">
                         {index === 0
                           ? t("guideTagHot", "热门")
                           : index === 1
                             ? t("guideTagRecommend", "推荐")
                             : t("guideTagQuickStart", "快速开始")}
                       </div>
-                      <div className="flex size-12 items-center justify-center rounded-2xl bg-white/45 shadow-sm backdrop-blur dark:bg-white/10">
+                      <div className="flex size-11 items-center justify-center rounded-2xl bg-background/80 shadow-sm">
                         {item.icon ? (
                           <img
                             alt={item.name}
@@ -795,10 +794,10 @@ export default function Content() {
                       </div>
                     </div>
                     <div>
-                      <h3 className="font-semibold text-3xl text-foreground tracking-tight">
+                      <h3 className="font-semibold text-[1.65rem] text-foreground tracking-tight">
                         {item.name}
                       </h3>
-                      <p className="mt-3 text-base text-foreground/72 leading-7">
+                      <p className="mt-2.5 text-sm text-muted-foreground leading-7">
                         {item.description ||
                           t(
                             "guideCardFallback",
@@ -807,8 +806,8 @@ export default function Content() {
                       </p>
                     </div>
                   </div>
-                  <div className="mt-8 flex items-center justify-between">
-                    <Button asChild className="rounded-full" size="sm">
+                  <div className="mt-6 flex items-center justify-between">
+                    <Button asChild size="sm" variant="outline">
                       <a
                         href={item.downloadUrl}
                         rel="noopener noreferrer"
@@ -817,7 +816,7 @@ export default function Content() {
                         {t("downloadOrViewGuide", "下载/查看教程")}
                       </a>
                     </Button>
-                    <Button asChild size="icon" variant="secondary">
+                    <Button asChild size="icon" variant="ghost">
                       <Link to="/document">
                         <Icon className="size-4" icon="uil:arrow-up-right" />
                       </Link>
@@ -851,7 +850,7 @@ export default function Content() {
 
       <section className="space-y-4">
         <div>
-          <h2 className="font-semibold text-2xl text-foreground tracking-tight">
+            <h2 className="font-semibold text-xl text-foreground tracking-tight">
             {t("subscriptionAccessTitle", "订阅链接")}
           </h2>
           <p className="mt-1 text-muted-foreground text-sm leading-7">
@@ -862,8 +861,8 @@ export default function Content() {
           </p>
         </div>
         {activeSubscription ? (
-          <Card className="border-border/50 bg-background/92 shadow-[0_30px_90px_-70px_rgba(0,0,0,0.35)]">
-            <CardContent className="grid gap-6 p-6 xl:grid-cols-[minmax(0,1.2fr)_320px]">
+          <Card className="border-border/50 bg-background/92 shadow-[0_20px_56px_-46px_rgba(0,0,0,0.18)]">
+            <CardContent className="grid gap-5 p-5 xl:grid-cols-[minmax(0,1.2fr)_300px]">
               <div className="space-y-5">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                   <div className="space-y-1">
@@ -894,7 +893,7 @@ export default function Content() {
                     </Tabs>
                   )}
                 </div>
-                <div className="rounded-[24px] border border-border/55 bg-muted/10 p-4">
+                <div className="rounded-[22px] border border-border/55 bg-muted/10 p-4">
                   <div className="flex items-center gap-3">
                     <div className="min-w-0 flex-1 break-all font-mono text-foreground text-sm leading-7">
                       {primarySubscriptionLink}
@@ -979,18 +978,18 @@ export default function Content() {
                 </div>
               </div>
 
-              <div className="flex flex-col items-center justify-between rounded-[28px] border border-border/55 bg-[linear-gradient(180deg,rgba(255,255,255,0.92),rgba(248,245,240,0.86))] p-6 text-center shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] dark:bg-[linear-gradient(180deg,rgba(31,31,31,0.96),rgba(24,24,24,0.92))]">
+              <div className="flex flex-col items-center justify-between rounded-[24px] border border-border/55 bg-background/78 p-5 text-center">
                 <div className="space-y-3">
-                  <div className="inline-flex items-center gap-2 rounded-full bg-primary/8 px-3 py-1 text-primary text-xs uppercase tracking-[0.18em]">
+                  <div className="inline-flex items-center gap-2 rounded-full bg-primary/8 px-3 py-1 text-primary text-[11px] uppercase tracking-[0.16em]">
                     <Icon className="size-4" icon="uil:qrcode-scan" />
                     {t("qrCode", "二维码")}
                   </div>
-                  <div className="font-medium text-foreground text-lg">
+                  <div className="font-medium text-foreground text-base">
                     {t("scanToSubscribe", "扫码快速导入")}
                   </div>
                 </div>
-                <div className="rounded-[28px] bg-white p-4 shadow-sm dark:bg-white">
-                  <QRCodeCanvas size={180} value={primarySubscriptionLink} />
+                <div className="rounded-[24px] bg-white p-4 shadow-sm dark:bg-white">
+                  <QRCodeCanvas size={168} value={primarySubscriptionLink} />
                 </div>
                 <div className="text-muted-foreground text-sm leading-7">
                   {t(
@@ -1027,7 +1026,7 @@ export default function Content() {
 
       <section className="space-y-4">
         <div>
-          <h2 className="font-semibold text-2xl text-foreground tracking-tight">
+          <h2 className="font-semibold text-xl text-foreground tracking-tight">
             {t("inviteSectionTitle", "邀请拉新")}
           </h2>
           <p className="mt-1 text-muted-foreground text-sm leading-7">
@@ -1037,18 +1036,18 @@ export default function Content() {
             )}
           </p>
         </div>
-        <Card className="overflow-hidden border-[#f0c37f]/25 bg-[linear-gradient(135deg,rgba(255,238,213,0.92),rgba(255,192,88,0.94))] shadow-[0_28px_90px_-64px_rgba(255,164,55,0.55)] dark:bg-[linear-gradient(135deg,rgba(73,46,21,0.95),rgba(54,35,18,0.96))]">
-          <CardContent className="grid gap-6 p-6 lg:grid-cols-[minmax(0,1fr)_300px]">
+        <Card className="overflow-hidden border-border/50 bg-[linear-gradient(180deg,rgba(255,249,242,0.94),rgba(251,248,245,0.92))] shadow-[0_20px_54px_-46px_rgba(59,41,27,0.14)] dark:bg-[linear-gradient(180deg,rgba(28,27,25,0.96),rgba(22,21,20,0.96))]">
+          <CardContent className="grid gap-5 p-5 lg:grid-cols-[minmax(0,1fr)_280px]">
             <div className="space-y-5">
               <div className="space-y-3">
-                <div className="inline-flex items-center gap-2 rounded-full border border-white/35 bg-white/45 px-3 py-1 text-[#6a3d14] text-xs uppercase tracking-[0.18em] dark:border-white/10 dark:bg-white/6 dark:text-[#ffcb8f]">
+                <div className="inline-flex items-center gap-2 rounded-full border border-primary/12 bg-primary/6 px-3 py-1 text-primary text-[11px] uppercase tracking-[0.16em]">
                   <Icon className="size-4" icon="uil:users-alt" />
                   {t("inviteBadge", "邀请返佣")}
                 </div>
-                <div className="font-semibold text-3xl text-foreground tracking-tight">
+                <div className="font-semibold text-[1.7rem] text-foreground tracking-tight">
                   {t("inviteMainTitle", "邀请好友，一起把返佣拿满")}
                 </div>
-                <p className="max-w-2xl text-foreground/72 text-sm leading-7">
+                <p className="max-w-2xl text-muted-foreground text-sm leading-7">
                   {t(
                     "inviteMainDesc",
                     "把你的专属入口分享出去，成功注册并购买后，会按照返佣比例回到你的账户。"
@@ -1083,8 +1082,8 @@ export default function Content() {
                 />
               </div>
 
-              <div className="rounded-[24px] border border-white/35 bg-white/48 p-4 shadow-sm dark:border-white/10 dark:bg-white/5">
-                <div className="text-foreground/75 text-sm">
+              <div className="rounded-[22px] border border-border/55 bg-background/72 p-4 shadow-sm">
+                <div className="text-muted-foreground text-sm">
                   {t("inviteLink", "邀请链接")}
                 </div>
                 <div className="mt-3 flex items-center gap-3">
@@ -1107,7 +1106,7 @@ export default function Content() {
               </div>
             </div>
 
-            <div className="flex flex-col justify-between rounded-[28px] border border-white/35 bg-white/45 p-5 shadow-sm dark:border-white/10 dark:bg-white/5">
+            <div className="flex flex-col justify-between rounded-[24px] border border-border/55 bg-background/74 p-5 shadow-sm">
               <div className="space-y-3">
                 <div className="text-foreground/62 text-sm uppercase tracking-[0.18em]">
                   {t("inviteQuickAction", "快速操作")}
@@ -1152,21 +1151,21 @@ function MetricCard({
   value: React.ReactNode;
 }) {
   return (
-    <div className="rounded-[24px] border border-border/45 bg-background/72 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.24)]">
+    <div className="rounded-[20px] border border-border/45 bg-background/72 p-4">
       <div className="flex items-center gap-2 text-muted-foreground text-sm">
         <Icon className="size-4 text-primary" icon={icon} />
         {label}
       </div>
-      <div className="mt-3 font-semibold text-foreground text-xl">{value}</div>
+      <div className="mt-2.5 font-semibold text-foreground text-lg">{value}</div>
     </div>
   );
 }
 
 function CountdownTile({ value, label }: { value: string; label: string }) {
   return (
-    <div className="rounded-2xl bg-background/72 px-3 py-4">
-      <div className="font-semibold text-3xl text-foreground">{value}</div>
-      <div className="mt-1 text-muted-foreground text-xs uppercase tracking-[0.18em]">
+    <div className="rounded-2xl border border-border/45 bg-background/72 px-3 py-4">
+      <div className="font-semibold text-[1.65rem] text-foreground">{value}</div>
+      <div className="mt-1 text-muted-foreground text-[11px] uppercase tracking-[0.16em]">
         {label}
       </div>
     </div>
@@ -1214,10 +1213,10 @@ function getAnnouncementExcerpt(content: string) {
 
 function getGuideCardClassName(index: number) {
   if (index === 0) {
-    return "bg-[linear-gradient(180deg,rgba(214,206,255,0.96),rgba(244,241,255,0.9))] dark:bg-[linear-gradient(180deg,rgba(60,52,96,0.96),rgba(34,30,52,0.94))]";
+    return "bg-[linear-gradient(180deg,rgba(249,249,251,0.98),rgba(245,245,248,0.95))] dark:bg-[linear-gradient(180deg,rgba(29,29,31,0.98),rgba(24,24,26,0.96))]";
   }
   if (index === 1) {
-    return "bg-[linear-gradient(180deg,rgba(196,226,255,0.96),rgba(241,249,255,0.9))] dark:bg-[linear-gradient(180deg,rgba(35,69,102,0.96),rgba(24,37,52,0.94))]";
+    return "bg-[linear-gradient(180deg,rgba(248,250,251,0.98),rgba(243,246,248,0.95))] dark:bg-[linear-gradient(180deg,rgba(30,32,34,0.98),rgba(24,26,28,0.96))]";
   }
-  return "bg-[linear-gradient(180deg,rgba(205,244,220,0.96),rgba(241,252,246,0.9))] dark:bg-[linear-gradient(180deg,rgba(43,90,68,0.96),rgba(24,43,34,0.94))]";
+  return "bg-[linear-gradient(180deg,rgba(249,250,249,0.98),rgba(244,247,245,0.95))] dark:bg-[linear-gradient(180deg,rgba(30,33,31,0.98),rgba(24,27,25,0.96))]";
 }
