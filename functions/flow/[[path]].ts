@@ -2,6 +2,8 @@ interface Env {
   API_BASE_URL: string;
 }
 
+const FLOW_PREFIX = "/flow";
+
 export const onRequest: PagesFunction<Env> = async (context) => {
   const { request, env } = context;
 
@@ -11,7 +13,10 @@ export const onRequest: PagesFunction<Env> = async (context) => {
   );
 
   const url = new URL(request.url);
-  const targetUrl = `${apiBase}${url.pathname}${url.search}`;
+  const targetPath = url.pathname.startsWith(FLOW_PREFIX)
+    ? url.pathname.slice(FLOW_PREFIX.length) || "/"
+    : url.pathname;
+  const targetUrl = `${apiBase}${targetPath}${url.search}`;
 
   const headers = new Headers(request.headers);
   headers.set("Host", new URL(apiBase).host);

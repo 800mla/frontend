@@ -36,6 +36,7 @@ export default function Order() {
   const [orderNo, setOrderNo] = useState<string>();
   const [enabled, setEnabled] = useState<boolean>(false);
   const search = useSearch({ from: "/(main)/purchasing/order/" });
+  const plansLink = "/purchasing";
 
   const { data } = useQuery({
     enabled,
@@ -196,11 +197,11 @@ export default function Order() {
                 />
                 <div className="flex gap-4">
                   <Button asChild>
-                    <Link to="/dashboard">
+                    <Link to="/auth">
                       {t("subscribeNow", "Subscribe Now")}
                     </Link>
                   </Button>
-                  <Button variant="outline">
+                  <Button asChild variant="outline">
                     <Link to="/document">
                       {t("viewDocument", "View Document")}
                     </Link>
@@ -230,8 +231,8 @@ export default function Order() {
                   >
                     {t("goToPayment", "Go to Payment")}
                   </Button>
-                  <Button variant="outline">
-                    <Link search={{ id: 0 }} to="/">
+                  <Button asChild variant="outline">
+                    <Link to={plansLink}>
                       {t("productList", "Product List")}
                     </Link>
                   </Button>
@@ -259,12 +260,12 @@ export default function Order() {
                 />
                 <div className="flex gap-4">
                   <Button asChild>
-                    <Link to="/subscribe">
+                    <Link to={plansLink}>
                       {t("productList", "Product List")}
                     </Link>
                   </Button>
                   <Button asChild variant="outline">
-                    <Link to="/order">{t("orderList", "Order List")}</Link>
+                    <Link to="/auth">{t("subscribeNow", "Subscribe Now")}</Link>
                   </Button>
                 </div>
               </div>
@@ -298,12 +299,12 @@ export default function Order() {
                 <Icon className="text-7xl text-red-500" icon="mdi:cancel" />
                 <div className="flex gap-4">
                   <Button asChild>
-                    <Link to="/subscribe">
+                    <Link to={plansLink}>
                       {t("productList", "Product List")}
                     </Link>
                   </Button>
                   <Button asChild variant="outline">
-                    <Link to="/order">{t("orderList", "Order List")}</Link>
+                    <Link to="/auth">{t("subscribeNow", "Subscribe Now")}</Link>
                   </Button>
                 </div>
               </div>

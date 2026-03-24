@@ -14,6 +14,8 @@
   "buy": "购买",
   "buyNow": "立即购买",
   "buySubscription": "购买订阅",
+  "choosePlanFirst": "请先选择一个套餐，再继续完成购买。",
+  "choosePlan": "选择套餐",
   "coupon": "优惠券",
   "Day": "天",
   "detail": {
@@ -29,6 +31,8 @@
   "emailRequired": "请输入您的邮箱地址。",
   "enterAmount": "输入充值金额",
   "enterCoupon": "输入优惠券代码",
+  "guestPurchaseDescription": "先选择适合你的套餐，再在下方直接完成购买。",
+  "guestPurchaseTitle": "购买套餐",
   "Hour": "小时",
   "invalidEmail": "请输入有效的邮箱地址",
   "Minute": "分钟",
@@ -36,6 +40,7 @@
   "NoLimit": "无限制",
   "passwordHint": "如果您不输入密码，我们将自动生成一个并发送到您的邮箱。",
   "paymentMethod": "支付方式",
+  "paymentMethodUnavailable": "当前没有可用的在线支付方式。请先在后台启用至少一种外部支付通道，否则公开购买无法完成。",
   "productDescription": "商品描述",
   "purchaseDuration": "购买时长",
   "recharge": "充值",
@@ -48,6 +53,7 @@
   "resetTraffic": "重置流量",
   "resetTrafficDescription": "将流量重置为零，并开始新的计费周期",
   "resetTrafficTitle": "重置流量",
+  "selected": "已选择",
   "subscriptionNotFound": "未找到订阅",
   "unsubscribe": {
     "cancel": "取消",

@@ -57,6 +57,24 @@
     "privacyPolicy": "Privacy Policy",
     "tos": "Terms of Service"
   },
+  "header": {
+    "announcement": "Announcements",
+    "allMenu": "All Menu",
+    "appearance": "Appearance & Language",
+    "buyNow": "Renew Now",
+    "document": "Documents",
+    "loginRequired": "Please log in first",
+    "menu": "Plan Menu",
+    "mobileDescription": "Quick access to your account and core actions",
+    "more": "More",
+    "myDashboard": "My Dashboard",
+    "myInvite": "My Invites",
+    "philosophy": "Connection Philosophy",
+    "profile": "Account Settings",
+    "purchasePlans": "Purchase Plans",
+    "startNow": "Buy Now",
+    "support": "Support"
+  },
   "language": "Language",
   "loginRegister": "Login / Register",
   "menu": {

@@ -172,7 +172,7 @@ function handleError(response: {
   toast.error(message);
 }
 
-// Prefer same-origin requests so the browser talks to /v1/... on the current site.
+// Prefer same-origin requests through the configured browser API prefix.
 // A direct API origin can still be injected explicitly with VITE_API_BASE_URL when needed.
 const request = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL || "",

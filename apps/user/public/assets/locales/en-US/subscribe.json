@@ -14,6 +14,8 @@
   "buy": "Buy",
   "buyNow": "Buy Now",
   "buySubscription": "Buy Subscription",
+  "choosePlanFirst": "Choose a plan first, then continue to complete the purchase.",
+  "choosePlan": "Choose Plan",
   "coupon": "Coupon",
   "Day": "Day",
   "detail": {
@@ -29,6 +31,8 @@
   "emailRequired": "Please enter your email address.",
   "enterAmount": "Enter recharge amount",
   "enterCoupon": "Enter Coupon Code",
+  "guestPurchaseDescription": "Choose the plan that fits you, then complete the purchase directly below.",
+  "guestPurchaseTitle": "Purchase Plans",
   "Hour": "Hour",
   "invalidEmail": "Please enter a valid email address",
   "Minute": "Minute",
@@ -36,6 +40,7 @@
   "NoLimit": "No Limit",
   "passwordHint": "If you do not enter a password, we will automatically generate one and send it to your email.",
   "paymentMethod": "Payment Method",
+  "paymentMethodUnavailable": "No online payment method is currently available. Enable at least one external payment channel in the backend before public purchase can complete.",
   "productDescription": "productDescription",
   "purchaseDuration": "Purchase Duration",
   "recharge": "Recharge",
@@ -48,6 +53,7 @@
   "resetTraffic": "Reset Traffic",
   "resetTrafficDescription": "Reset traffic to zero, and start a new billing cycle",
   "resetTrafficTitle": "Reset Traffic",
+  "selected": "Selected",
   "subscriptionNotFound": "Subscription not found",
   "unsubscribe": {
     "cancel": "Cancel",

@@ -57,6 +57,24 @@
     "privacyPolicy": "隐私政策",
     "tos": "服务条款"
   },
+  "header": {
+    "announcement": "公告通知",
+    "allMenu": "全部菜单",
+    "appearance": "外观与语言",
+    "buyNow": "立即续费",
+    "document": "文档中心",
+    "loginRequired": "请先登录后再继续",
+    "menu": "方案菜单",
+    "mobileDescription": "快速进入核心功能与账户操作",
+    "more": "更多",
+    "myDashboard": "我的面板",
+    "myInvite": "我的邀请",
+    "philosophy": "连接哲学",
+    "profile": "账户设置",
+    "purchasePlans": "购买套餐",
+    "startNow": "立即购买",
+    "support": "支持"
+  },
   "language": "语言",
   "loginRegister": "登录 / 注册",
   "menu": {
