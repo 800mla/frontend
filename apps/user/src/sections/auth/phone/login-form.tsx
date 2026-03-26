@@ -165,6 +165,7 @@ export default function LoginForm({
                     />
                     {mode === "code" && (
                       <SendCode
+                        className="h-12 rounded-[20px] px-4"
                         params={{
                           telephone: form.watch("telephone"),
                           telephone_area_code: form.watch(
@@ -172,7 +173,6 @@ export default function LoginForm({
                           ),
                           type: 2,
                         }}
-                        className="h-12 rounded-[20px] px-4"
                         size="default"
                         type="phone"
                       />
@@ -189,10 +189,10 @@ export default function LoginForm({
               name="cf_token"
               render={({ field }) => (
                 <FormItem className={authSoftPanelClassName}>
-                  <FormLabel className="text-sm font-semibold text-foreground">
+                  <FormLabel className="font-semibold text-foreground text-sm">
                     安全校验
                   </FormLabel>
-                  <FormDescription className="text-xs leading-5 text-muted-foreground">
+                  <FormDescription className="text-muted-foreground text-xs leading-5">
                     完成安全验证后即可继续手机号登录。
                   </FormDescription>
                   <FormControl>
@@ -207,7 +207,11 @@ export default function LoginForm({
               )}
             />
           )}
-          <Button className={authSubmitButtonClassName} disabled={loading} type="submit">
+          <Button
+            className={authSubmitButtonClassName}
+            disabled={loading}
+            type="submit"
+          >
             {loading && <Icon className="animate-spin" icon="mdi:loading" />}
             {t("login.title", "Login")}
           </Button>

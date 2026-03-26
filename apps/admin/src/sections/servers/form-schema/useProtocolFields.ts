@@ -1206,10 +1206,7 @@ export function useProtocolFields() {
           name: "reality_public_key",
           type: "input",
           label: t("security_public_key", "Reality Public Key"),
-          placeholder: t(
-            "security_public_key_placeholder",
-            "Enter public key"
-          ),
+          placeholder: t("security_public_key_placeholder", "Enter public key"),
           group: "reality",
           condition: (p) => p.security === "reality",
         },

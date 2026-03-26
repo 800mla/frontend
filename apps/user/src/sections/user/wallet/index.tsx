@@ -48,8 +48,8 @@ export default function Wallet() {
     <>
       <Card className="overflow-hidden border-border/60 bg-gradient-to-br from-card to-card/40 shadow-md backdrop-blur-md transition-all hover:border-primary/30 hover:shadow-lg">
         <CardContent className="relative p-6">
-          <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-primary/5 blur-3xl" />
-          <h2 className="mb-6 flex items-center gap-3 font-serif text-2xl font-medium tracking-wide text-foreground">
+          <div className="-right-20 -top-20 pointer-events-none absolute h-56 w-56 rounded-full bg-primary/5 blur-3xl" />
+          <h2 className="mb-6 flex items-center gap-3 font-medium font-serif text-2xl text-foreground tracking-wide">
             <div className="flex items-center justify-center rounded-md bg-primary/20 p-1.5 text-primary">
               💼
             </div>
@@ -58,7 +58,7 @@ export default function Wallet() {
           <div className="mb-6">
             <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="font-medium text-sm text-muted-foreground">
+                <p className="font-medium text-muted-foreground text-sm">
                   {t("totalAssets", "Total Assets")}
                 </p>
                 <p className="font-bold text-3xl text-foreground">

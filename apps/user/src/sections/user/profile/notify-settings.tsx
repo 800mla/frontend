@@ -5,6 +5,7 @@ import { Button } from "@workspace/ui/components/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card";
@@ -17,6 +18,7 @@ import {
 } from "@workspace/ui/components/form";
 import { Switch } from "@workspace/ui/components/switch";
 import { updateUserNotify } from "@workspace/ui/services/user/user";
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -43,6 +45,15 @@ export default function NotifySettings() {
     },
   });
 
+  useEffect(() => {
+    form.reset({
+      enable_balance_notify: user?.enable_balance_notify ?? false,
+      enable_login_notify: user?.enable_login_notify ?? false,
+      enable_subscribe_notify: user?.enable_subscribe_notify ?? false,
+      enable_trade_notify: user?.enable_trade_notify ?? false,
+    });
+  }, [form, user]);
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     await updateUserNotify(data);
     toast.success(t("notify.updateSuccess", "Update Successful"));
@@ -50,24 +61,17 @@ export default function NotifySettings() {
   }
 
   return (
-    <Card className="min-w-80 border-border/60 bg-gradient-to-br from-card to-card/40 shadow-md backdrop-blur-md transition-all hover:border-primary/30 hover:shadow-lg">
-      <CardHeader className="gap-4">
-        <CardTitle className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 font-serif text-xl font-medium tracking-wide">
-            <div className="flex items-center justify-center rounded-md bg-primary/20 p-1.5 text-primary">
-              🔔
-            </div>
-            <div>
-              {t("notify.notificationSettings", "Notification Settings")}
-              <p className="mt-1 font-sans text-sm font-normal tracking-normal text-muted-foreground">
-                选择你希望 Bingka 主动提醒你的账户变动。
-              </p>
-            </div>
-          </div>
-          <Button form="notify-form" size="sm" type="submit">
-            {t("notify.save", "Save Changes")}
-          </Button>
+    <Card className="border-border/60 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(248,246,243,0.93))] shadow-[0_22px_56px_-48px_rgba(45,35,27,0.16)] dark:border-[#2f2620] dark:bg-[linear-gradient(180deg,rgba(28,23,20,0.98),rgba(21,18,16,0.96))]">
+      <CardHeader className="space-y-3">
+        <div className="inline-flex w-fit items-center rounded-full border border-primary/15 bg-primary/6 px-3 py-1 text-primary text-xs uppercase tracking-[0.16em]">
+          Notification
+        </div>
+        <CardTitle className="text-xl tracking-tight">
+          {t("notify.notificationSettings", "Notification Settings")}
         </CardTitle>
+        <CardDescription className="text-sm leading-7">
+          选择希望接收的提醒类型。我们把选项做得更平铺，让你一眼能看清每个开关。
+        </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
         <Form {...form}>
@@ -98,10 +102,10 @@ export default function NotifySettings() {
                 <FormField
                   control={form.control}
                   key={name}
-                  name={name as any}
+                  name={name as keyof z.infer<typeof FormSchema>}
                   render={({ field }) => (
-                    <FormItem className="flex items-center justify-between rounded-xl bg-muted/30 px-4 py-3">
-                      <FormLabel className="text-muted-foreground">
+                    <FormItem className="flex items-center justify-between rounded-[20px] border border-border/45 bg-background/75 px-4 py-4">
+                      <FormLabel className="text-foreground text-sm">
                         {label}
                       </FormLabel>
                       <FormControl>
@@ -115,6 +119,9 @@ export default function NotifySettings() {
                 />
               ))}
             </div>
+            <Button className="w-full sm:w-auto" type="submit">
+              {t("notify.save", "Save Changes")}
+            </Button>
           </form>
         </Form>
       </CardContent>

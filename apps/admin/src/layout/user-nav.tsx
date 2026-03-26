@@ -25,10 +25,14 @@ export function UserNav() {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="icon" variant="default">
+          <Button
+            className="size-10 rounded-2xl border border-[#e8d8c8] bg-white text-[#6f4e37] shadow-none hover:bg-[#f6ede3] hover:text-[#5f4330] dark:border-white/10 dark:bg-white/8 dark:text-[#e7c09a] dark:hover:bg-white/12"
+            size="icon"
+            variant="ghost"
+          >
             <Avatar className="size-8">
               <AvatarImage alt={user?.avatar ?? ""} src={user?.avatar ?? ""} />
-              <AvatarFallback className="rounded-none bg-transparent">
+              <AvatarFallback className="rounded-xl bg-[#f4e7da] text-[#6f4e37] dark:bg-white/10 dark:text-[#e7c09a]">
                 {user?.auth_methods?.[0]?.auth_identifier
                   .toUpperCase()
                   .charAt(0)}
@@ -36,7 +40,11 @@ export function UserNav() {
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-56" forceMount>
+        <DropdownMenuContent
+          align="end"
+          className="w-56 rounded-2xl border border-[#eadfd3] bg-white/95 shadow-[0_20px_44px_-30px_rgba(121,93,67,0.28)] dark:border-white/10 dark:bg-[#1d1714]/96"
+          forceMount
+        >
           <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
               <p className="font-medium text-sm leading-none">

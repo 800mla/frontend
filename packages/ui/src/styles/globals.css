@@ -8,6 +8,11 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --font-family-sans:
+    Inter, "SF Pro Display", "SF Pro Text", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei UI", "Microsoft YaHei",
+    "Noto Sans CJK SC", "Source Han Sans SC", system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
   --background: hsl(35 30% 90%);
   --foreground: hsl(25 20% 20%);
   --card: hsl(35 30% 96%);
@@ -44,41 +49,42 @@
 }
 
 .dark {
-  --background: hsl(0 0% 11%);
-  --foreground: hsl(30 20% 96%);
-  --card: hsl(0 0% 14%);
-  --card-foreground: hsl(30 20% 96%);
-  --popover: hsl(0 0% 14%);
-  --popover-foreground: hsl(30 20% 96%);
-  --primary: hsl(27 53.5% 65.9%);
+  --background: hsl(24 18% 8%);
+  --foreground: hsl(32 23% 91%);
+  --card: hsl(24 16% 11%);
+  --card-foreground: hsl(32 23% 91%);
+  --popover: hsl(24 16% 11%);
+  --popover-foreground: hsl(32 23% 91%);
+  --primary: hsl(28 44% 66%);
   --primary-foreground: hsl(0 0% 10%);
-  --secondary: hsl(27 29.3% 32.5%);
-  --secondary-foreground: hsl(30 20% 96%);
-  --muted: hsl(0 0% 20%);
-  --muted-foreground: hsl(30 10% 60%);
+  --secondary: hsl(24 16% 20%);
+  --secondary-foreground: hsl(32 23% 91%);
+  --muted: hsl(24 13% 15%);
+  --muted-foreground: hsl(28 14% 67%);
   --accent: hsl(198 72.7% 78.2%);
   --accent-foreground: hsl(0 0% 10%);
   --destructive: hsl(0 62.8% 30.6%);
   --destructive-foreground: hsl(210 40% 98%);
-  --border: hsl(0 0% 20%);
-  --input: hsl(0 0% 20%);
-  --ring: hsl(27 53.5% 65.9%);
-  --chart-1: hsl(27 53.5% 65.9%);
+  --border: hsl(24 14% 20%);
+  --input: hsl(24 14% 20%);
+  --ring: hsl(28 44% 66%);
+  --chart-1: hsl(28 44% 66%);
   --chart-2: hsl(198 72.7% 78.2%);
   --chart-3: hsl(27 29.3% 32.5%);
   --chart-4: hsl(0 0% 45%);
   --chart-5: hsl(30 30% 50%);
-  --sidebar: hsl(0 0% 9%);
-  --sidebar-foreground: hsl(30 20% 96%);
-  --sidebar-primary: hsl(27 53.5% 65.9%);
+  --sidebar: hsl(24 17% 9%);
+  --sidebar-foreground: hsl(32 23% 91%);
+  --sidebar-primary: hsl(28 44% 66%);
   --sidebar-primary-foreground: hsl(0 0% 10%);
-  --sidebar-accent: hsl(27 53.5% 65.9%);
+  --sidebar-accent: hsl(28 44% 66%);
   --sidebar-accent-foreground: hsl(0 0% 10%);
-  --sidebar-border: hsl(0 0% 20%);
-  --sidebar-ring: hsl(27 53.5% 65.9%);
+  --sidebar-border: hsl(24 14% 18%);
+  --sidebar-ring: hsl(28 44% 66%);
 }
 
 @theme inline {
+  --font-sans: var(--font-family-sans);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -121,8 +127,17 @@
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    font-family: var(--font-family-sans);
+    background-color: var(--background);
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
   body {
     @apply bg-background text-foreground;
+    font-family: var(--font-family-sans);
+    letter-spacing: -0.01em;
   }
   .container {
     @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
@@ -130,5 +145,14 @@
   a,
   button {
     @apply cursor-pointer;
+  }
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--primary) 28%, transparent);
+    color: var(--foreground);
   }
 }

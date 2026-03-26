@@ -72,9 +72,14 @@ export default function SubscribeTable() {
               fetchSubscribes();
             }}
             title={t("confirmDelete")}
-            trigger={<Button variant="destructive">{t("delete")}</Button>}
+            trigger={
+              <Button className="rounded-2xl" variant="destructive">
+                {t("delete")}
+              </Button>
+            }
           />,
           <Button
+            className="rounded-2xl border-[#e2d2c2] bg-white text-[#6e5442] hover:bg-[#f7eee5] dark:border-white/10 dark:bg-white/6 dark:text-white/75 dark:hover:bg-white/10"
             key="copy"
             onClick={async () => {
               setLoading(true);
@@ -123,7 +128,11 @@ export default function SubscribeTable() {
               fetchSubscribes();
             }}
             title={t("confirmDelete")}
-            trigger={<Button variant="destructive">{t("delete")}</Button>}
+            trigger={
+              <Button className="rounded-2xl" variant="destructive">
+                {t("delete")}
+              </Button>
+            }
           />,
         ],
       }}

@@ -270,6 +270,7 @@ export default function SubscribeForm<T extends Record<string, any>>({
     <Sheet onOpenChange={setOpen} open={open}>
       <SheetTrigger asChild>
         <Button
+          className="rounded-2xl bg-[#6f4e37] text-white hover:bg-[#5d4330] dark:bg-[#8f6442] dark:text-[#1a130f] dark:hover:bg-[#a6754f]"
           onClick={() => {
             form.reset();
             setOpen(true);
@@ -278,7 +279,7 @@ export default function SubscribeForm<T extends Record<string, any>>({
           {trigger}
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-[800px] max-w-full gap-0 md:max-w-3xl">
+      <SheetContent className="w-[800px] max-w-full gap-0 border-[#eadfd3] bg-[linear-gradient(180deg,#fffaf5_0%,#f8efe6_100%)] md:max-w-3xl dark:border-white/10 dark:bg-[linear-gradient(180deg,#211a16_0%,#171311_100%)]">
         <SheetHeader>
           <SheetTitle>{title}</SheetTitle>
         </SheetHeader>
@@ -286,23 +287,23 @@ export default function SubscribeForm<T extends Record<string, any>>({
           <Form {...form}>
             <form className="pt-4" onSubmit={form.handleSubmit(handleSubmit)}>
               <Tabs className="w-full" defaultValue="basic">
-                <TabsList className="mb-6 grid w-full grid-cols-3">
+                <TabsList className="mb-6 grid w-full grid-cols-3 rounded-2xl border border-[#eadfd3] bg-white/75 p-1 dark:border-white/10 dark:bg-white/6">
                   <TabsTrigger
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 rounded-xl data-[state=active]:bg-[#f3e4d5] data-[state=active]:text-[#5b4230] dark:data-[state=active]:bg-white/10 dark:data-[state=active]:text-white"
                     value="basic"
                   >
                     <Settings className="h-4 w-4" />
                     {t("form.basic")}
                   </TabsTrigger>
                   <TabsTrigger
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 rounded-xl data-[state=active]:bg-[#f3e4d5] data-[state=active]:text-[#5b4230] dark:data-[state=active]:bg-white/10 dark:data-[state=active]:text-white"
                     value="pricing"
                   >
                     <CreditCard className="h-4 w-4" />
                     {t("form.pricing")}
                   </TabsTrigger>
                   <TabsTrigger
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-2 rounded-xl data-[state=active]:bg-[#f3e4d5] data-[state=active]:text-[#5b4230] dark:data-[state=active]:bg-white/10 dark:data-[state=active]:text-white"
                     value="servers"
                   >
                     <Server className="h-4 w-4" />
@@ -1068,6 +1069,7 @@ export default function SubscribeForm<T extends Record<string, any>>({
         </ScrollArea>
         <SheetFooter className="flex-row justify-end gap-2 pt-3">
           <Button
+            className="rounded-2xl border-[#e2d2c2] bg-white/80 text-[#6e5442] hover:bg-[#f7eee5] dark:border-white/10 dark:bg-white/6 dark:text-white/75 dark:hover:bg-white/10"
             disabled={loading}
             onClick={() => {
               setOpen(false);
@@ -1077,6 +1079,7 @@ export default function SubscribeForm<T extends Record<string, any>>({
             {t("form.cancel")}
           </Button>
           <Button
+            className="rounded-2xl bg-[#6f4e37] text-white hover:bg-[#5d4330] dark:bg-[#8f6442] dark:text-[#1a130f] dark:hover:bg-[#a6754f]"
             disabled={loading}
             onClick={form.handleSubmit(handleSubmit, (errors) => {
               const keys = Object.keys(errors);

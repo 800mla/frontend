@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { useLandingNavigation } from "@/hooks/use-landing-navigation";
 import { BRAND_TAGLINE } from "@/config/index";
+import { useLandingNavigation } from "@/hooks/use-landing-navigation";
 import { useGlobalStore } from "@/stores/global";
 
 export function Hero() {
@@ -14,7 +14,7 @@ export function Hero() {
     <section className="relative flex min-h-[85vh] items-center overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
         <div
-          className="absolute right-[10%] top-[15%] h-[350px] w-[350px] rounded-full opacity-20 blur-[80px]"
+          className="absolute top-[15%] right-[10%] h-[350px] w-[350px] rounded-full opacity-20 blur-[80px]"
           style={{ background: "hsl(27 29.3% 32.5%)" }}
         />
         <div
@@ -22,7 +22,7 @@ export function Hero() {
           style={{ background: "hsl(27 53.5% 65.9%)" }}
         />
         <div
-          className="absolute right-[35%] top-[40%] h-[180px] w-[180px] rounded-full opacity-10 blur-[60px]"
+          className="absolute top-[40%] right-[35%] h-[180px] w-[180px] rounded-full opacity-10 blur-[60px]"
           style={{ background: "hsl(198 72.7% 78.2%)" }}
         />
       </div>
@@ -40,14 +40,14 @@ export function Hero() {
           transition={{ duration: 0.6 }}
         >
           <span className="h-px w-10 bg-primary" />
-          <span className="text-xs font-bold uppercase tracking-[3px] text-primary">
+          <span className="font-bold text-primary text-xs uppercase tracking-[3px]">
             Premium Cloud Network
           </span>
         </motion.div>
 
         <motion.h1
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 text-4xl font-bold leading-tight lg:text-6xl"
+          className="mb-6 font-bold text-4xl leading-tight lg:text-6xl"
           initial={{ opacity: 0, y: 30 }}
           transition={{ duration: 0.7, delay: 0.1 }}
         >
@@ -58,7 +58,7 @@ export function Hero() {
 
         <motion.p
           animate={{ opacity: 1, y: 0 }}
-          className="mb-10 max-w-xl text-lg leading-relaxed text-muted-foreground"
+          className="mb-10 max-w-xl text-lg text-muted-foreground leading-relaxed"
           initial={{ opacity: 0, y: 30 }}
           transition={{ duration: 0.7, delay: 0.2 }}
         >
@@ -74,14 +74,14 @@ export function Hero() {
         >
           {user ? (
             <Link
-              className="inline-block rounded bg-primary px-8 py-4 text-sm font-medium uppercase tracking-wider text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl"
+              className="inline-block rounded bg-primary px-8 py-4 font-medium text-primary-foreground text-sm uppercase tracking-wider shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl"
               to="/dashboard"
             >
               查看菜单
             </Link>
           ) : (
             <button
-              className="inline-block rounded bg-primary px-8 py-4 text-sm font-medium uppercase tracking-wider text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl"
+              className="inline-block rounded bg-primary px-8 py-4 font-medium text-primary-foreground text-sm uppercase tracking-wider shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl"
               onClick={() => navigateToLandingSection("menu")}
               type="button"
             >
@@ -89,7 +89,7 @@ export function Hero() {
             </button>
           )}
           <button
-            className="inline-block rounded border border-secondary px-8 py-4 text-sm font-medium uppercase tracking-wider text-foreground transition-all hover:border-primary hover:text-primary"
+            className="inline-block rounded border border-secondary px-8 py-4 font-medium text-foreground text-sm uppercase tracking-wider transition-all hover:border-primary hover:text-primary"
             onClick={() => navigateToLandingSection("features")}
             type="button"
           >

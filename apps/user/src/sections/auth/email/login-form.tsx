@@ -120,10 +120,10 @@ export default function LoginForm({
               name="cf_token"
               render={({ field }) => (
                 <FormItem className={authSoftPanelClassName}>
-                  <FormLabel className="text-sm font-semibold text-foreground">
+                  <FormLabel className="font-semibold text-foreground text-sm">
                     安全校验
                   </FormLabel>
-                  <FormDescription className="text-xs leading-5 text-muted-foreground">
+                  <FormDescription className="text-muted-foreground text-xs leading-5">
                     完成验证后再继续登录，可减少异常请求干扰。
                   </FormDescription>
                   <FormControl>
@@ -138,7 +138,11 @@ export default function LoginForm({
               )}
             />
           )}
-          <Button className={authSubmitButtonClassName} disabled={loading} type="submit">
+          <Button
+            className={authSubmitButtonClassName}
+            disabled={loading}
+            type="submit"
+          >
             {loading && <Icon className="animate-spin" icon="mdi:loading" />}
             {t("login.title", "Login")}
           </Button>

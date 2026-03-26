@@ -9,11 +9,7 @@ import { getGlobalConfig } from "@workspace/ui/services/common/common";
 import { isBrowser } from "@workspace/ui/utils/index";
 import { useEffect } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import {
-  BRAND_DESCRIPTION,
-  BRAND_KEYWORDS,
-  BRAND_NAME,
-} from "@/config/index";
+import { BRAND_DESCRIPTION, BRAND_KEYWORDS, BRAND_NAME } from "@/config/index";
 import { useGlobalStore } from "@/stores/global";
 
 export const Route = createRootRouteWithContext()({

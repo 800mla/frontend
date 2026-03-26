@@ -24,7 +24,7 @@ export function SidebarRight({
       value: <Display type="currency" value={user?.balance} />,
       action: (
         <Recharge
-          className="h-auto p-0 text-xs font-medium text-primary hover:no-underline"
+          className="h-auto p-0 font-medium text-primary text-xs hover:no-underline"
           variant="link"
         />
       ),
@@ -46,10 +46,10 @@ export function SidebarRight({
       <SidebarContent className="gap-4 px-0">
         <div className="rounded-[24px] border border-border/45 bg-background/72 p-4 shadow-[0_18px_48px_-42px_rgba(76,54,38,0.18)] backdrop-blur-xl">
           <div className="mb-4">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary/85">
+            <div className="font-semibold text-[11px] text-primary/85 uppercase tracking-[0.18em]">
               BINGKA SUMMARY
             </div>
-            <div className="mt-2 text-sm leading-6 text-muted-foreground">
+            <div className="mt-2 text-muted-foreground text-sm leading-6">
               账户状态一眼看清，不让侧栏抢走主内容注意力。
             </div>
           </div>
@@ -58,7 +58,7 @@ export function SidebarRight({
               <div
                 className={cn(
                   "flex items-start justify-between gap-3 rounded-2xl px-3 py-3 transition-colors hover:bg-muted/10",
-                  index !== 0 && "border-t border-border/35"
+                  index !== 0 && "border-border/35 border-t"
                 )}
                 key={item.title}
               >
@@ -67,10 +67,10 @@ export function SidebarRight({
                     <Icon className="size-4" icon={item.icon} />
                   </div>
                   <div>
-                    <div className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
+                    <div className="font-medium text-muted-foreground text-xs uppercase tracking-[0.12em]">
                       {item.title}
                     </div>
-                    <div className="mt-1 text-lg font-semibold text-foreground">
+                    <div className="mt-1 font-semibold text-foreground text-lg">
                       {item.value}
                     </div>
                   </div>
@@ -88,10 +88,10 @@ export function SidebarRight({
                   <Icon className="size-4" icon="uil:users-alt" />
                 </div>
                 <div>
-                  <div className="text-xs font-medium uppercase tracking-[0.12em] text-muted-foreground">
+                  <div className="font-medium text-muted-foreground text-xs uppercase tracking-[0.12em]">
                     {t("inviteCode", "Invite Code")}
                   </div>
-                  <div className="mt-1 text-sm text-foreground/85">
+                  <div className="mt-1 text-foreground/85 text-sm">
                     分享给朋友时使用
                   </div>
                 </div>
@@ -104,15 +104,15 @@ export function SidebarRight({
                 }}
                 text={`${isBrowser() && location?.origin}/#/auth?invite=${user?.refer_code}`}
               >
-                  <Button className="size-6 p-0 text-muted-foreground transition-colors hover:bg-accent/10 hover:text-accent" variant="ghost">
-                    <Icon
-                      className="text-sm"
-                      icon="mdi:content-copy"
-                    />
-                  </Button>
+                <Button
+                  className="size-6 p-0 text-muted-foreground transition-colors hover:bg-accent/10 hover:text-accent"
+                  variant="ghost"
+                >
+                  <Icon className="text-sm" icon="mdi:content-copy" />
+                </Button>
               </CopyToClipboard>
             </div>
-            <div className="mt-4 truncate rounded-2xl border border-border/40 bg-muted/10 px-4 py-3 font-mono font-semibold tracking-wider text-foreground">
+            <div className="mt-4 truncate rounded-2xl border border-border/40 bg-muted/10 px-4 py-3 font-mono font-semibold text-foreground tracking-wider">
               {user?.refer_code}
             </div>
           </div>

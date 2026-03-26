@@ -207,11 +207,11 @@ export default function RegisterForm({
                           value={field.value as string}
                         />
                         <SendCode
+                          className="h-12 rounded-[20px] px-4"
                           params={{
                             email: form.watch("email"),
                             type: 1,
                           }}
-                          className="h-12 rounded-[20px] px-4"
                           size="default"
                           type="email"
                         />
@@ -254,10 +254,10 @@ export default function RegisterForm({
                 name="cf_token"
                 render={({ field }) => (
                   <FormItem className={authSoftPanelClassName}>
-                    <FormLabel className="text-sm font-semibold text-foreground">
+                    <FormLabel className="font-semibold text-foreground text-sm">
                       安全校验
                     </FormLabel>
-                    <FormDescription className="text-xs leading-5 text-muted-foreground">
+                    <FormDescription className="text-muted-foreground text-xs leading-5">
                       完成验证后即可创建账户，帮助降低异常注册请求。
                     </FormDescription>
                     <FormControl>
@@ -272,7 +272,11 @@ export default function RegisterForm({
                 )}
               />
             )}
-            <Button className={authSubmitButtonClassName} disabled={loading} type="submit">
+            <Button
+              className={authSubmitButtonClassName}
+              disabled={loading}
+              type="submit"
+            >
               {loading && <Icon className="animate-spin" icon="mdi:loading" />}
               {t("register.title", "Register")}
             </Button>

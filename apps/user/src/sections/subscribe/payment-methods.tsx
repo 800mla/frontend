@@ -58,7 +58,7 @@ const PaymentMethods: React.FC<PaymentMethodsProps> = ({
         {t("paymentMethod", "Payment Method")}
       </div>
       {data && data.length === 0 && (
-        <div className="rounded-xl border border-amber-500/20 bg-amber-500/8 px-4 py-3 text-sm text-amber-700 dark:text-amber-300">
+        <div className="rounded-xl border border-amber-500/20 bg-amber-500/8 px-4 py-3 text-amber-700 text-sm dark:text-amber-300">
           {t(
             "paymentMethodUnavailable",
             "当前没有可用的在线支付方式。请先在后台启用至少一种外部支付通道，否则公开购买无法完成。"

@@ -197,9 +197,7 @@ export default function Order() {
                 />
                 <div className="flex gap-4">
                   <Button asChild>
-                    <Link to="/auth">
-                      {t("subscribeNow", "Subscribe Now")}
-                    </Link>
+                    <Link to="/auth">{t("subscribeNow", "Subscribe Now")}</Link>
                   </Button>
                   <Button asChild variant="outline">
                     <Link to="/document">

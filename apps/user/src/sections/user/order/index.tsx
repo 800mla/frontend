@@ -41,15 +41,15 @@ export default function Order() {
     <ProList<API.OrderDetail, Record<string, unknown>>
       action={ref}
       renderItem={(item) => (
-          <Card className="overflow-hidden border-border/60 bg-gradient-to-br from-card to-card/40 shadow-md backdrop-blur-md transition-all hover:border-primary/30 hover:shadow-lg">
+        <Card className="overflow-hidden border-border/60 bg-gradient-to-br from-card to-card/40 shadow-md backdrop-blur-md transition-all hover:border-primary/30 hover:shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between gap-3 space-y-0">
-            <CardTitle className="flex items-center gap-3 font-serif text-xl font-medium tracking-wide">
+            <CardTitle className="flex items-center gap-3 font-medium font-serif text-xl tracking-wide">
               <div className="flex items-center justify-center rounded-md bg-primary/20 p-1.5 text-primary">
                 <span aria-hidden="true">☕</span>
               </div>
               <div>
                 {t("orderNo", "Order No")}
-                <p className="mt-1 font-mono text-sm font-normal tracking-wider text-muted-foreground">
+                <p className="mt-1 font-mono font-normal text-muted-foreground text-sm tracking-wider">
                   {item.order_no}
                 </p>
               </div>
@@ -126,8 +126,8 @@ export default function Order() {
               </li>
             </ul>
           </CardContent>
-          </Card>
-        )}
+        </Card>
+      )}
       request={async (pagination, filter) => {
         const response = await queryOrderList({ ...pagination, ...filter });
         return {

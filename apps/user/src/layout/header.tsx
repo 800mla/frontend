@@ -20,8 +20,8 @@ import { cn } from "@workspace/ui/lib/utils";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { useLandingNavigation } from "@/hooks/use-landing-navigation";
 import { BRAND_NAME } from "@/config/index";
+import { useLandingNavigation } from "@/hooks/use-landing-navigation";
 import { useGlobalStore } from "@/stores/global";
 import { UserNav } from "./user-nav";
 
@@ -49,7 +49,7 @@ export default function Header() {
         {
           label: t("header.myDashboard", "我的面板"),
           icon: "uil:apps",
-          to: "/profile",
+          to: "/dashboard",
         },
         {
           label: t("header.purchasePlans", "购买套餐"),
@@ -60,6 +60,11 @@ export default function Header() {
           label: t("header.myInvite", "我的邀请"),
           icon: "uil:share-alt",
           to: "/affiliate",
+        },
+        {
+          label: t("header.profile", "账号设置"),
+          icon: "uil:user-circle",
+          to: "/profile",
         },
       ]
     : [
@@ -77,6 +82,12 @@ export default function Header() {
         {
           label: t("header.myInvite", "我的邀请"),
           icon: "uil:share-alt",
+          to: "/auth",
+          requiresAuth: true,
+        },
+        {
+          label: t("header.profile", "账号设置"),
+          icon: "uil:user-circle",
           to: "/auth",
           requiresAuth: true,
         },
@@ -232,7 +243,7 @@ export default function Header() {
 
   const Logo = (
     <Link className="group flex items-center gap-3" to="/">
-      <div className="flex size-10 items-center justify-center overflow-hidden rounded-2xl border border-border/60 bg-background/90 shadow-sm shadow-black/5 transition-transform duration-300 group-hover:scale-[1.02]">
+      <div className="flex size-10 items-center justify-center overflow-hidden rounded-2xl border border-border/60 bg-background/90 shadow-black/5 shadow-sm transition-transform duration-300 group-hover:scale-[1.02]">
         {site.site_logo ? (
           <img
             alt="logo"
@@ -242,12 +253,12 @@ export default function Header() {
             width={40}
           />
         ) : (
-          <span className="text-sm font-semibold tracking-[0.18em] text-primary">
+          <span className="font-semibold text-primary text-sm tracking-[0.18em]">
             {brandName.slice(0, 1).toUpperCase()}
           </span>
         )}
       </div>
-      <span className="font-semibold text-[0.95rem] tracking-[0.18em] text-foreground">
+      <span className="font-semibold text-[0.95rem] text-foreground tracking-[0.18em]">
         {brandName}
       </span>
     </Link>
@@ -257,7 +268,7 @@ export default function Header() {
     cn(
       "rounded-full px-4 py-2 text-sm transition-all duration-200",
       active
-        ? "bg-primary/12 text-primary shadow-sm shadow-primary/10"
+        ? "bg-primary/12 text-primary shadow-primary/10 shadow-sm"
         : "text-muted-foreground hover:bg-background hover:text-foreground"
     );
 
@@ -270,32 +281,28 @@ export default function Header() {
     );
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border/30 bg-background/80 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-border/30 border-b bg-background/80 backdrop-blur-xl">
       <div className="container flex min-h-[4.5rem] items-center gap-3 py-3 md:gap-6">
-        <nav className="min-w-0 flex items-center gap-6">
-          {Logo}
-        </nav>
+        <nav className="flex min-w-0 items-center gap-6">{Logo}</nav>
         <div className="hidden flex-1 items-center justify-center md:flex">
-          <div className="flex items-center gap-1 rounded-full border border-border/50 bg-muted/35 px-2 py-1 shadow-sm shadow-black/5">
-            {primaryItems.map((item) => {
-              return (
-                <button
-                  className={navButtonClassName(isItemActive(item))}
-                  key={item.label}
-                  onClick={() => handleNavAction(item)}
-                  type="button"
-                >
-                  {item.label}
-                </button>
-              );
-            })}
+          <div className="flex items-center gap-1 rounded-full border border-border/50 bg-muted/35 px-2 py-1 shadow-black/5 shadow-sm">
+            {primaryItems.map((item) => (
+              <button
+                className={navButtonClassName(isItemActive(item))}
+                key={item.label}
+                onClick={() => handleNavAction(item)}
+                type="button"
+              >
+                {item.label}
+              </button>
+            ))}
           </div>
         </div>
         <div className="ml-auto hidden items-center gap-2 md:flex">
           <Popover>
             <PopoverTrigger asChild>
               <button
-                className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-background/80 px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
+                className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-background/80 px-4 py-2 text-muted-foreground text-sm transition-colors hover:text-foreground"
                 type="button"
               >
                 <Icon className="size-4" icon="lucide:menu" />
@@ -309,11 +316,14 @@ export default function Header() {
             >
               <div className="mb-4 flex items-center justify-between">
                 <div>
-                  <div className="text-sm font-semibold text-foreground">
+                  <div className="font-semibold text-foreground text-sm">
                     {t("header.allMenu", "全部菜单")}
                   </div>
-                  <div className="text-xs text-muted-foreground">
-                    {t("header.mobileDescription", "快速进入核心功能与账户操作")}
+                  <div className="text-muted-foreground text-xs">
+                    {t(
+                      "header.mobileDescription",
+                      "快速进入核心功能与账户操作"
+                    )}
                   </div>
                 </div>
                 <div className="hidden items-center gap-2 lg:flex">
@@ -332,7 +342,7 @@ export default function Header() {
                     <div className="flex size-11 items-center justify-center rounded-2xl bg-background text-foreground shadow-sm">
                       <Icon className="size-5" icon={item.icon} />
                     </div>
-                    <span className="text-sm font-medium text-foreground">
+                    <span className="font-medium text-foreground text-sm">
                       {item.label}
                     </span>
                   </button>
@@ -374,9 +384,7 @@ export default function Header() {
             onClick={handlePrimaryAction}
             type="button"
           >
-            {user
-              ? t("header.buyNow", "续费")
-              : t("header.startNow", "购买")}
+            {user ? t("header.buyNow", "续费") : t("header.startNow", "购买")}
           </button>
           <Sheet onOpenChange={setMobileOpen} open={mobileOpen}>
             <SheetTrigger asChild>
@@ -387,8 +395,8 @@ export default function Header() {
                 <Icon className="size-5" icon="lucide:menu" />
               </button>
             </SheetTrigger>
-            <SheetContent className="w-[88vw] max-w-sm border-l border-border/60 bg-background/95 px-0">
-              <SheetHeader className="border-b border-border/40 px-5 pb-4">
+            <SheetContent className="w-[88vw] max-w-sm border-border/60 border-l bg-background/95 px-0">
+              <SheetHeader className="border-border/40 border-b px-5 pb-4">
                 <SheetTitle className="text-left">{brandName}</SheetTitle>
                 <SheetDescription className="text-left">
                   {t("header.mobileDescription", "快速进入核心功能与账户操作")}
@@ -404,10 +412,15 @@ export default function Header() {
                       type="button"
                     >
                       <div className="flex size-10 items-center justify-center rounded-2xl bg-muted/60">
-                        <Icon className="size-5 text-muted-foreground" icon={item.icon} />
+                        <Icon
+                          className="size-5 text-muted-foreground"
+                          icon={item.icon}
+                        />
                       </div>
                       <div className="flex flex-col">
-                        <span className="font-medium text-sm">{item.label}</span>
+                        <span className="font-medium text-sm">
+                          {item.label}
+                        </span>
                       </div>
                     </button>
                   ))}
@@ -421,14 +434,17 @@ export default function Header() {
                       type="button"
                     >
                       <div className="flex size-10 items-center justify-center rounded-2xl bg-muted/60">
-                        <Icon className="size-5 text-muted-foreground" icon={item.icon} />
+                        <Icon
+                          className="size-5 text-muted-foreground"
+                          icon={item.icon}
+                        />
                       </div>
                       <span className="font-medium text-sm">{item.label}</span>
                     </button>
                   ))}
                 </div>
                 <div className="flex items-center justify-between rounded-2xl border border-border/60 bg-muted/25 px-4 py-3">
-                  <span className="text-sm text-muted-foreground">
+                  <span className="text-muted-foreground text-sm">
                     {t("header.appearance", "外观与语言")}
                   </span>
                   <div className="flex items-center gap-2">

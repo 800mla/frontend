@@ -114,13 +114,13 @@ export default function RegisterForm({
                         control={form.control}
                         name="telephone_area_code"
                         render={({ field }) => (
-                        <FormItem>
-                          <FormControl>
-                            <AreaCodeSelect
-                              className="h-12 w-32 rounded-[20px] border-border/60 bg-background/80 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]"
-                              onChange={(value) => {
-                                if (value.phone) {
-                                  form.setValue(
+                          <FormItem>
+                            <FormControl>
+                              <AreaCodeSelect
+                                className="h-12 w-32 rounded-[20px] border-border/60 bg-background/80 px-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]"
+                                onChange={(value) => {
+                                  if (value.phone) {
+                                    form.setValue(
                                       "telephone_area_code",
                                       value.phone
                                     );
@@ -132,22 +132,22 @@ export default function RegisterForm({
                                 whitelist={enable_whitelist ? whitelist : []}
                               />
                             </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <Input
-                      className={authInputClassName}
-                      placeholder="输入手机号"
-                      type="tel"
-                      {...field}
-                    />
-                  </div>
-                </FormControl>
-                <FormMessage className="pl-1 text-xs" />
-              </FormItem>
-            )}
-          />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <Input
+                        className={authInputClassName}
+                        placeholder="输入手机号"
+                        type="tel"
+                        {...field}
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage className="pl-1 text-xs" />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="password"
@@ -215,6 +215,7 @@ export default function RegisterForm({
                       />
 
                       <SendCode
+                        className="h-12 rounded-[20px] px-4"
                         params={{
                           telephone: form.watch("telephone"),
                           telephone_area_code: form.watch(
@@ -222,7 +223,6 @@ export default function RegisterForm({
                           ),
                           type: 1,
                         }}
-                        className="h-12 rounded-[20px] px-4"
                         size="default"
                         type="phone"
                       />
@@ -264,10 +264,10 @@ export default function RegisterForm({
                 name="cf_token"
                 render={({ field }) => (
                   <FormItem className={authSoftPanelClassName}>
-                    <FormLabel className="text-sm font-semibold text-foreground">
+                    <FormLabel className="font-semibold text-foreground text-sm">
                       安全校验
                     </FormLabel>
-                    <FormDescription className="text-xs leading-5 text-muted-foreground">
+                    <FormDescription className="text-muted-foreground text-xs leading-5">
                       完成校验后即可建立新账户，减少异常注册流量。
                     </FormDescription>
                     <FormControl>
@@ -282,7 +282,11 @@ export default function RegisterForm({
                 )}
               />
             )}
-            <Button className={authSubmitButtonClassName} disabled={loading} type="submit">
+            <Button
+              className={authSubmitButtonClassName}
+              disabled={loading}
+              type="submit"
+            >
               {loading && <Icon className="animate-spin" icon="mdi:loading" />}
               {t("register.title", "Register")}
             </Button>

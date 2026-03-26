@@ -1,15 +1,15 @@
 "use client";
 
-import { Button } from "@workspace/ui/components/button";
 import type { buttonVariants } from "@workspace/ui/components/button";
+import { Button } from "@workspace/ui/components/button";
 import {
   sendEmailCode,
   sendSmsCode,
 } from "@workspace/ui/services/common/common";
+import type { VariantProps } from "class-variance-authority";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useGlobalStore } from "@/stores/global";
-import type { VariantProps } from "class-variance-authority";
 
 interface SendCodeProps {
   type: "email" | "phone";

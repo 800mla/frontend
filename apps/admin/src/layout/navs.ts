@@ -17,81 +17,81 @@ export function useNavs() {
       {
         title: t("Dashboard", "Dashboard"),
         url: "/dashboard",
-        icon: "flat-color-icons:globe",
+        icon: "uil:estate",
       },
 
       {
         title: t("Maintenance", "Maintenance"),
-        icon: "flat-color-icons:data-protection",
+        icon: "uil:server-network",
         items: [
           {
             title: t("Server Management", "Server Management"),
             url: "/dashboard/servers",
-            icon: "flat-color-icons:data-protection",
+            icon: "uil:server-network",
           },
           {
             title: t("Node Management", "Node Management"),
             url: "/dashboard/nodes",
-            icon: "flat-color-icons:mind-map",
+            icon: "uil:git-merge",
           },
           {
             title: t("Subscribe Config", "Subscribe Config"),
             url: "/dashboard/subscribe",
-            icon: "flat-color-icons:ruler",
+            icon: "uil:link",
           },
           {
             title: t("Product Management", "Product Management"),
             url: "/dashboard/product",
-            icon: "flat-color-icons:shop",
+            icon: "uil:box",
           },
         ],
       },
 
       {
         title: t("Commerce", "Commerce"),
-        icon: "flat-color-icons:sales-performance",
+        icon: "uil:wallet",
         items: [
           {
             title: t("Order Management", "Order Management"),
             url: "/dashboard/order",
-            icon: "flat-color-icons:todo-list",
+            icon: "uil:receipt",
           },
           {
             title: t("Coupon Management", "Coupon Management"),
             url: "/dashboard/coupon",
-            icon: "flat-color-icons:bookmark",
+            icon: "uil:ticket",
           },
           {
             title: t("Marketing Management", "Marketing Management"),
             url: "/dashboard/marketing",
-            icon: "flat-color-icons:bullish",
+            icon: "uil:megaphone",
           },
           {
             title: t("Announcement Management", "Announcement Management"),
             url: "/dashboard/announcement",
-            icon: "flat-color-icons:advertising",
+            icon: "uil:comment-alt-notes",
           },
         ],
       },
 
       {
         title: t("Users & Support", "Users & Support"),
-        icon: "flat-color-icons:collaboration",
+        icon: "uil:users-alt",
         items: [
           {
             title: t("User Management", "User Management"),
             url: "/dashboard/user",
-            icon: "flat-color-icons:conference-call",
+            icon: "uil:user-square",
           },
           {
             title: t("Ticket Management", "Ticket Management"),
             url: "/dashboard/ticket",
-            icon: "flat-color-icons:collaboration",
+            icon: "uil:comment-question",
           },
           {
             title: t("Document Management", "Document Management"),
             url: "/dashboard/document",
-            icon: "flat-color-icons:document",
+            icon: "uil:file-alt",
           },
         ],
       },
@@ -99,27 +99,27 @@ export function useNavs() {
       {
         defaultOpen: false,
         title: t("System", "System"),
-        icon: "flat-color-icons:services",
+        icon: "uil:setting",
         items: [
           {
             title: t("System Config", "System Config"),
             url: "/dashboard/system",
-            icon: "flat-color-icons:services",
+            icon: "uil:sliders-v-alt",
           },
           {
             title: t("Auth Control", "Auth Control"),
             url: "/dashboard/auth-control",
-            icon: "flat-color-icons:lock-portrait",
+            icon: "uil:lock-access",
           },
           {
             title: t("Payment Config", "Payment Config"),
             url: "/dashboard/payment",
-            icon: "flat-color-icons:currency-exchange",
+            icon: "uil:credit-card",
           },
           {
             title: t("ADS Config", "ADS Config"),
             url: "/dashboard/ads",
-            icon: "flat-color-icons:electrical-sensor",
+            icon: "uil:chart-growth-alt",
           },
         ],
       },
@@ -127,67 +127,67 @@ export function useNavs() {
       {
         defaultOpen: false,
         title: t("Logs & Analytics", "Logs & Analytics"),
-        icon: "flat-color-icons:statistics",
+        icon: "uil:chart",
         items: [
           {
             title: t("Login", "Login"),
             url: "/dashboard/log/login",
-            icon: "flat-color-icons:unlock",
+            icon: "uil:sign-in-alt",
           },
           {
             title: t("Register", "Register"),
             url: "/dashboard/log/register",
-            icon: "flat-color-icons:contacts",
+            icon: "uil:user-plus",
           },
           {
             title: t("Email", "Email"),
             url: "/dashboard/log/email",
-            icon: "flat-color-icons:feedback",
+            icon: "uil:envelope",
           },
           {
             title: t("Mobile", "Mobile"),
             url: "/dashboard/log/mobile",
-            icon: "flat-color-icons:sms",
+            icon: "uil:mobile-android",
           },
           {
             title: t("Subscribe", "Subscribe"),
             url: "/dashboard/log/subscribe",
-            icon: "flat-color-icons:workflow",
+            icon: "uil:repeat",
           },
           {
             title: t("Reset Subscribe", "Reset Subscribe"),
             url: "/dashboard/log/reset-subscribe",
-            icon: "flat-color-icons:refresh",
+            icon: "uil:refresh",
           },
           {
             title: t("Subscribe Traffic", "Subscribe Traffic"),
             url: "/dashboard/log/subscribe-traffic",
-            icon: "flat-color-icons:statistics",
+            icon: "uil:signal-alt-3",
           },
           {
             title: t("Server Traffic", "Server Traffic"),
             url: "/dashboard/log/server-traffic",
-            icon: "flat-color-icons:statistics",
+            icon: "uil:chart-line",
           },
           {
             title: t("Traffic Details", "Traffic Details"),
             url: "/dashboard/log/traffic-details",
-            icon: "flat-color-icons:combo-chart",
+            icon: "uil:analytics",
           },
           {
             title: t("Balance", "Balance"),
             url: "/dashboard/log/balance",
-            icon: "flat-color-icons:sales-performance",
+            icon: "uil:wallet",
           },
           {
             title: t("Commission", "Commission"),
             url: "/dashboard/log/commission",
-            icon: "flat-color-icons:debt",
+            icon: "uil:money-withdrawal",
           },
           {
             title: t("Gift", "Gift"),
             url: "/dashboard/log/gift",
-            icon: "flat-color-icons:donate",
+            icon: "uil:gift",
           },
         ],
       },

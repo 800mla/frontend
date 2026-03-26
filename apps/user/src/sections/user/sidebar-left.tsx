@@ -23,14 +23,14 @@ export function SidebarLeft({
   const navs = useNavs();
   return (
     <Sidebar collapsible="none" side="left" {...props}>
-      <SidebarHeader className="px-2 pb-4 pt-1">
-        <div className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary/85">
+      <SidebarHeader className="px-2 pt-1 pb-4">
+        <div className="font-semibold text-[11px] text-primary/85 uppercase tracking-[0.22em]">
           BINGKA PANEL
         </div>
-        <div className="mt-2 text-lg font-serif font-medium text-foreground">
+        <div className="mt-2 font-medium font-serif text-foreground text-lg">
           用户控制台
         </div>
-        <p className="mt-1 text-sm leading-6 text-muted-foreground">
+        <p className="mt-1 text-muted-foreground text-sm leading-6">
           以更少的干扰完成主要操作。
         </p>
       </SidebarHeader>
@@ -39,7 +39,7 @@ export function SidebarLeft({
           {navs.map((nav) => (
             <SidebarGroup key={nav.title}>
               {nav.items && (
-                <SidebarGroupLabel className="px-2 text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground/78">
+                <SidebarGroupLabel className="px-2 font-medium text-[11px] text-muted-foreground/78 uppercase tracking-[0.16em]">
                   {t(nav.title)}
                 </SidebarGroupLabel>
               )}
@@ -49,7 +49,7 @@ export function SidebarLeft({
                     <SidebarMenuItem key={item.title}>
                       <SidebarMenuButton
                         asChild
-                        className="h-10 rounded-2xl px-3 font-medium text-foreground/76 transition-all data-[active=true]:bg-background data-[active=true]:text-foreground data-[active=true]:shadow-[0_10px_24px_-20px_rgba(76,54,38,0.28)] hover:bg-background/65 hover:text-foreground"
+                        className="h-10 rounded-2xl px-3 font-medium text-foreground/76 transition-all hover:bg-background/65 hover:text-foreground data-[active=true]:bg-background data-[active=true]:text-foreground data-[active=true]:shadow-[0_10px_24px_-20px_rgba(76,54,38,0.28)]"
                         isActive={item.url === location.pathname}
                         size="default"
                         tooltip={t(item.title)}

@@ -5,8 +5,8 @@ import { Separator } from "@workspace/ui/components/separator";
 import { Icon } from "@workspace/ui/composed/icon";
 import { Fragment, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import { useLandingNavigation } from "@/hooks/use-landing-navigation";
 import { BRAND_NAME } from "@/config/index";
+import { useLandingNavigation } from "@/hooks/use-landing-navigation";
 import { useGlobalStore } from "@/stores/global";
 
 interface CustomData {
@@ -89,24 +89,26 @@ export default function Footer() {
     [customData]
   );
   return (
-    <footer className="border-t border-border/30 bg-background">
+    <footer className="border-border/30 border-t bg-background">
       <div className="container py-16">
         <div className="grid gap-10 md:grid-cols-3">
           <div>
-            <Link className="text-xl font-bold tracking-wide" to="/">
+            <Link className="font-bold text-xl tracking-wide" to="/">
               {site.site_name || BRAND_NAME}
               <span className="text-primary">.</span>
             </Link>
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+            <p className="mt-4 max-w-xs text-muted-foreground text-sm leading-relaxed">
               为全球专业人士打造的高级网络连接服务。随时随地，保持在最专注的状态。
             </p>
           </div>
           <div>
-            <h4 className="mb-5 text-xs font-bold uppercase tracking-[2px]">探索</h4>
+            <h4 className="mb-5 font-bold text-xs uppercase tracking-[2px]">
+              探索
+            </h4>
             <ul className="space-y-3">
               <li>
                 <button
-                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                  className="text-muted-foreground text-sm transition-colors hover:text-primary"
                   onClick={() => navigateToLandingSection("features")}
                   type="button"
                 >
@@ -115,7 +117,7 @@ export default function Footer() {
               </li>
               <li>
                 <button
-                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                  className="text-muted-foreground text-sm transition-colors hover:text-primary"
                   onClick={() => navigateToLandingSection("menu")}
                   type="button"
                 >
@@ -125,11 +127,13 @@ export default function Footer() {
             </ul>
           </div>
           <div>
-            <h4 className="mb-5 text-xs font-bold uppercase tracking-[2px]">支持</h4>
+            <h4 className="mb-5 font-bold text-xs uppercase tracking-[2px]">
+              支持
+            </h4>
             <ul className="space-y-3">
               <li>
                 <Link
-                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                  className="text-muted-foreground text-sm transition-colors hover:text-primary"
                   to="/tos"
                 >
                   {t("footer.tos", "Terms of Service")}
@@ -137,7 +141,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link
-                  className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                  className="text-muted-foreground text-sm transition-colors hover:text-primary"
                   to="/privacy-policy"
                 >
                   {t("footer.privacyPolicy", "Privacy Policy")}
@@ -160,7 +164,10 @@ export default function Footer() {
               .map((item, index) => (
                 <Fragment key={index}>
                   {index !== 0 && (
-                    <Separator className="h-4 opacity-30" orientation="vertical" />
+                    <Separator
+                      className="h-4 opacity-30"
+                      orientation="vertical"
+                    />
                   )}
                   <a
                     aria-label={t(

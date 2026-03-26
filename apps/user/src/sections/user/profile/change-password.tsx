@@ -5,6 +5,7 @@ import { Button } from "@workspace/ui/components/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card";
@@ -45,24 +46,17 @@ export default function ChangePassword() {
   }
 
   return (
-    <Card className="min-w-80 border-border/60 bg-gradient-to-br from-card to-card/40 shadow-md backdrop-blur-md transition-all hover:border-primary/30 hover:shadow-lg">
-      <CardHeader className="gap-4">
-        <CardTitle className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-3 font-serif text-xl font-medium tracking-wide">
-            <div className="flex items-center justify-center rounded-md bg-primary/20 p-1.5 text-primary">
-              🔐
-            </div>
-            <div>
-              {t("accountSettings.accountSettings", "Password Settings")}
-              <p className="mt-1 font-sans text-sm font-normal tracking-normal text-muted-foreground">
-                更新你的登录凭证，保持 Bingka 账户安全。
-              </p>
-            </div>
-          </div>
-          <Button form="password-form" size="sm" type="submit">
-            {t("accountSettings.updatePassword", "Update Password")}
-          </Button>
+    <Card className="border-border/60 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(248,246,243,0.93))] shadow-[0_22px_56px_-48px_rgba(45,35,27,0.16)] dark:border-[#2f2620] dark:bg-[linear-gradient(180deg,rgba(28,23,20,0.98),rgba(21,18,16,0.96))]">
+      <CardHeader className="space-y-3">
+        <div className="inline-flex w-fit items-center rounded-full border border-primary/15 bg-primary/6 px-3 py-1 text-primary text-xs uppercase tracking-[0.16em]">
+          Security
+        </div>
+        <CardTitle className="text-xl tracking-tight">
+          {t("accountSettings.accountSettings", "Password Settings")}
         </CardTitle>
+        <CardDescription className="text-sm leading-7">
+          更新登录密码，保持账户安全。这里不做花哨装饰，只保留最直接的操作。
+        </CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>
@@ -78,7 +72,7 @@ export default function ChangePassword() {
                 <FormItem>
                   <FormControl>
                     <Input
-                      className="bg-background/70"
+                      className="h-11 rounded-2xl bg-background/75"
                       placeholder={t(
                         "accountSettings.newPassword",
                         "New Password"
@@ -98,7 +92,7 @@ export default function ChangePassword() {
                 <FormItem>
                   <FormControl>
                     <Input
-                      className="bg-background/70"
+                      className="h-11 rounded-2xl bg-background/75"
                       placeholder={t(
                         "accountSettings.repeatNewPassword",
                         "Repeat New Password"
@@ -111,6 +105,9 @@ export default function ChangePassword() {
                 </FormItem>
               )}
             />
+            <Button className="w-full sm:w-auto" type="submit">
+              {t("accountSettings.updatePassword", "Update Password")}
+            </Button>
           </form>
         </Form>
       </CardContent>

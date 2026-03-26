@@ -32,7 +32,7 @@ export function AuthFieldHeading({
   return (
     <div className={cn("flex items-start justify-between gap-3", className)}>
       <div className="min-w-0">
-        <div className="flex items-center gap-2 text-[13px] font-medium tracking-[0.02em] text-foreground/92">
+        <div className="flex items-center gap-2 font-medium text-[13px] text-foreground/92 tracking-[0.02em]">
           <span className="flex size-6 items-center justify-center rounded-full bg-primary/10 text-primary">
             <Icon className="size-3.5" icon={icon} />
           </span>

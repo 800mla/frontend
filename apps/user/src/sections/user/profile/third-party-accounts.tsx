@@ -5,6 +5,7 @@ import { Button } from "@workspace/ui/components/button";
 import {
   Card,
   CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
 } from "@workspace/ui/components/card";
@@ -25,6 +26,7 @@ import {
 import { Input } from "@workspace/ui/components/input";
 import { AreaCodeSelect } from "@workspace/ui/composed/area-code-select";
 import { Icon } from "@workspace/ui/composed/icon";
+import { cn } from "@workspace/ui/lib/utils";
 import {
   bindOAuth,
   unbindOAuth,
@@ -232,7 +234,11 @@ export default function ThirdPartyAccounts() {
       type: "OAuth",
       descriptionDefault: "Sign in with Device ID",
     },
-  ].filter((account) => oauth_methods?.includes(account.id));
+  ].filter((account) => {
+    if (account.id === "email") return common.auth.email.enable;
+    if (account.id === "mobile") return common.auth.mobile.enable;
+    return oauth_methods?.includes(account.id);
+  });
 
   const [editValues, setEditValues] = useState<Record<string, any>>({});
 
@@ -266,19 +272,32 @@ export default function ThirdPartyAccounts() {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t("thirdParty.title", "Connected Accounts")}</CardTitle>
+    <Card className="border-border/60 bg-[linear-gradient(180deg,rgba(255,255,255,0.96),rgba(248,246,243,0.93))] shadow-[0_22px_56px_-48px_rgba(45,35,27,0.16)] dark:border-[#2f2620] dark:bg-[linear-gradient(180deg,rgba(28,23,20,0.98),rgba(21,18,16,0.96))]">
+      <CardHeader className="space-y-3">
+        <div className="inline-flex w-fit items-center rounded-full border border-primary/15 bg-primary/6 px-3 py-1 text-primary text-xs uppercase tracking-[0.16em]">
+          Connected
+        </div>
+        <CardTitle className="text-xl tracking-tight">
+          {t("thirdParty.title", "Connected Accounts")}
+        </CardTitle>
+        <CardDescription className="max-w-2xl text-sm leading-7">
+          把登录方式集中管理。邮箱和手机号适合做基础绑定，第三方账号更适合补充快捷登录。
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
+        <div className="space-y-3">
+          {accounts.length === 0 && (
+            <div className="rounded-[24px] border border-border/55 border-dashed bg-background/70 px-5 py-8 text-center text-muted-foreground text-sm leading-7">
+              当前没有可配置的绑定方式，等后端开放对应登录方式后会自动显示在这里。
+            </div>
+          )}
           {accounts.map((account) => {
             const method = user?.auth_methods?.find(
               (auth) => auth.auth_type === account.id
             );
             const isEditing = account.id === "email";
             const currentValue =
-              method?.auth_identifier || editValues[account.id];
+              editValues[account.id] ?? method?.auth_identifier ?? "";
             let displayValue = "";
 
             switch (account.id) {
@@ -297,69 +316,104 @@ export default function ThirdPartyAccounts() {
             }
 
             return (
-              <div className="flex w-full flex-col gap-2" key={account.id}>
-                <span className="flex gap-3 font-medium">
-                  <Icon className="size-6" icon={account.icon} />
-                  {account.name}
-                </span>
-                <div className="flex items-center gap-2">
-                  <Input
-                    className="flex-1 truncate bg-muted"
-                    disabled={!isEditing}
-                    onChange={(e) =>
-                      isEditing &&
-                      setEditValues((prev) => ({
-                        ...prev,
-                        [account.id]: e.target.value,
-                      }))
-                    }
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && isEditing) {
-                        handleBasicAccountUpdate(account, currentValue);
+              <div
+                className="rounded-[24px] border border-border/55 bg-background/78 p-4 shadow-[0_18px_44px_-40px_rgba(42,32,24,0.12)]"
+                key={account.id}
+              >
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
+                  <div className="flex min-w-0 flex-1 items-start gap-3">
+                    <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-background shadow-sm">
+                      <Icon className="size-6" icon={account.icon} />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-medium text-foreground">
+                          {account.name}
+                        </span>
+                        <span className="rounded-full border border-border/50 bg-background/75 px-2.5 py-0.5 text-[11px] text-muted-foreground uppercase tracking-[0.14em]">
+                          {account.type}
+                        </span>
+                        <span
+                          className={cn(
+                            "rounded-full px-2.5 py-0.5 text-[11px]",
+                            method?.auth_identifier
+                              ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400"
+                              : "bg-muted text-muted-foreground"
+                          )}
+                        >
+                          {method?.auth_identifier ? "已连接" : "未连接"}
+                        </span>
+                      </div>
+                      <div className="mt-1 text-muted-foreground text-sm leading-7">
+                        {t(
+                          `thirdParty.${account.id}.description`,
+                          account.descriptionDefault
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex w-full flex-col gap-2 lg:max-w-[360px]">
+                    <Input
+                      className="h-11 rounded-2xl bg-background/80"
+                      disabled={!isEditing}
+                      onChange={(e) =>
+                        isEditing &&
+                        setEditValues((prev) => ({
+                          ...prev,
+                          [account.id]: e.target.value,
+                        }))
                       }
-                    }}
-                    value={displayValue}
-                  />
-                  {account.id === "mobile" ? (
-                    <MobileBindDialog onSuccess={getUserInfo}>
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && isEditing) {
+                          handleBasicAccountUpdate(account, currentValue);
+                        }
+                      }}
+                      value={displayValue}
+                    />
+                    {account.id === "mobile" ? (
+                      <MobileBindDialog onSuccess={getUserInfo}>
+                        <Button
+                          className="w-full whitespace-nowrap"
+                          variant={
+                            method?.auth_identifier ? "outline" : "default"
+                          }
+                        >
+                          {t(
+                            method?.auth_identifier
+                              ? "thirdParty.update"
+                              : "thirdParty.bind",
+                            method?.auth_identifier ? "Update" : "Connect"
+                          )}
+                        </Button>
+                      </MobileBindDialog>
+                    ) : (
                       <Button
-                        className="whitespace-nowrap"
+                        className="w-full whitespace-nowrap"
+                        onClick={() =>
+                          isEditing
+                            ? handleBasicAccountUpdate(account, currentValue)
+                            : handleAccountAction(account)
+                        }
                         variant={
                           method?.auth_identifier ? "outline" : "default"
                         }
                       >
                         {t(
-                          method?.auth_identifier
-                            ? "thirdParty.update"
-                            : "thirdParty.bind",
-                          method?.auth_identifier ? "Update" : "Connect"
+                          isEditing
+                            ? "thirdParty.save"
+                            : method?.auth_identifier
+                              ? "thirdParty.unbind"
+                              : "thirdParty.bind",
+                          isEditing
+                            ? "Save"
+                            : method?.auth_identifier
+                              ? "Disconnect"
+                              : "Connect"
                         )}
                       </Button>
-                    </MobileBindDialog>
-                  ) : (
-                    <Button
-                      className="whitespace-nowrap"
-                      onClick={() =>
-                        isEditing
-                          ? handleBasicAccountUpdate(account, currentValue)
-                          : handleAccountAction(account)
-                      }
-                      variant={method?.auth_identifier ? "outline" : "default"}
-                    >
-                      {t(
-                        isEditing
-                          ? "thirdParty.save"
-                          : method?.auth_identifier
-                            ? "thirdParty.unbind"
-                            : "thirdParty.bind",
-                        isEditing
-                          ? "Save"
-                          : method?.auth_identifier
-                            ? "Disconnect"
-                            : "Connect"
-                      )}
-                    </Button>
-                  )}
+                    )}
+                  </div>
                 </div>
               </div>
             );

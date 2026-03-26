@@ -118,11 +118,11 @@ export default function ResetForm({
                       value={field.value as string}
                     />
                     <SendCode
+                      className="h-12 rounded-[20px] px-4"
                       params={{
                         email: form.watch("email"),
                         type: 2,
                       }}
-                      className="h-12 rounded-[20px] px-4"
                       size="default"
                       type="email"
                     />
@@ -160,10 +160,10 @@ export default function ResetForm({
               name="cf_token"
               render={({ field }) => (
                 <FormItem className={authSoftPanelClassName}>
-                  <FormLabel className="text-sm font-semibold text-foreground">
+                  <FormLabel className="font-semibold text-foreground text-sm">
                     安全校验
                   </FormLabel>
-                  <FormDescription className="text-xs leading-5 text-muted-foreground">
+                  <FormDescription className="text-muted-foreground text-xs leading-5">
                     再做一次校验，避免密码找回入口被异常滥用。
                   </FormDescription>
                   <FormControl>
@@ -178,7 +178,11 @@ export default function ResetForm({
               )}
             />
           )}
-          <Button className={authSubmitButtonClassName} disabled={loading} type="submit">
+          <Button
+            className={authSubmitButtonClassName}
+            disabled={loading}
+            type="submit"
+          >
             {loading && <Icon className="animate-spin" icon="mdi:loading" />}
             {t("reset.title", "Reset Password")}
           </Button>

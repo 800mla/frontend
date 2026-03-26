@@ -35,15 +35,15 @@ export function Content({ subscriptionData }: ProductShowcaseProps) {
 
   return (
     <motion.section
-      id="menu"
       className="relative"
+      id="menu"
       initial={{ opacity: 0 }}
       transition={{ duration: 0.5 }}
       viewport={{ once: true }}
       whileInView={{ opacity: 1 }}
     >
       <motion.h2
-        className="mb-2 text-center text-3xl font-bold"
+        className="mb-2 text-center font-bold text-3xl"
         initial={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.5 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -72,7 +72,7 @@ export function Content({ subscriptionData }: ProductShowcaseProps) {
             whileInView={{ opacity: 1, y: 0 }}
           >
             <Card className="flex flex-col overflow-hidden rounded-lg shadow-lg transition-shadow duration-300 hover:shadow-2xl">
-              <CardHeader className="bg-muted/50 p-4 text-xl font-medium">
+              <CardHeader className="bg-muted/50 p-4 font-medium text-xl">
                 {item.name}
               </CardHeader>
               <CardContent className="flex flex-grow flex-col gap-4 p-6 text-sm">
@@ -169,7 +169,7 @@ export function Content({ subscriptionData }: ProductShowcaseProps) {
                   return (
                     <motion.h2
                       animate={{ opacity: 1 }}
-                      className="pb-4 text-2xl font-semibold sm:text-3xl"
+                      className="pb-4 font-semibold text-2xl sm:text-3xl"
                       initial={{ opacity: 0 }}
                       transition={{ duration: 0.5, delay: 0.2 }}
                     >
@@ -185,7 +185,7 @@ export function Content({ subscriptionData }: ProductShowcaseProps) {
                 <motion.div>
                   <Button
                     asChild
-                    className="absolute bottom-0 left-0 w-full rounded-b-xl rounded-t-none"
+                    className="absolute bottom-0 left-0 w-full rounded-t-none rounded-b-xl"
                   >
                     <Link
                       search={user ? undefined : { id: item.id }}
