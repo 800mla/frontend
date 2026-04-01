@@ -19,6 +19,12 @@ This document records all notable changes to ShadCN Admin.
 ---
 
 
+## [1.4.1](https://github.com/perfect-panel/frontend/compare/v1.4.0...v1.4.1) (2026-03-30)
+
+### 🐛 Bug Fixes / 问题修复
+
+* **ui:** improve text contrast on renew and purchasing pages ([#30](https://github.com/perfect-panel/frontend/issues/30)) ([2f9eac2](https://github.com/perfect-panel/frontend/commit/2f9eac27606a61cbd0e3f53b23023aad93d6c073))
+
 ## [1.4.0](https://github.com/perfect-panel/frontend/compare/v1.3.15...v1.4.0) (2026-03-13)
 
 ### ✨ Features / 新功能
