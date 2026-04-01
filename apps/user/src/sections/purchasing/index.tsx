@@ -89,137 +89,78 @@ export default function Purchasing() {
   };
 
   return (
-    <main className="container space-y-10 pb-16">
-      <section className="overflow-hidden rounded-[34px] border border-[#eadfd3] bg-[linear-gradient(135deg,#fff8f2_0%,#f6eee6_48%,#f2e4d6_100%)] shadow-[0_28px_70px_-52px_rgba(121,93,67,0.24)] dark:border-white/10 dark:bg-[linear-gradient(135deg,#352720,#433026_48%,#52392c_100%)]">
-        <div className="grid gap-8 px-7 py-8 lg:px-9 lg:py-10 xl:grid-cols-[minmax(0,1.1fr)_420px] xl:items-end">
-          <div className="space-y-5">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[#dcc9b7] bg-white/80 px-3 py-1 text-[#8d6748] text-xs uppercase tracking-[0.16em] dark:border-white/10 dark:bg-white/8 dark:text-[#e2bc96]">
+    <main className="container space-y-12 pb-20">
+      <section className="group relative overflow-hidden rounded-[32px] border border-[#e6d7c9] bg-[linear-gradient(135deg,#fffaf6_0%,#f8f0e7_54%,#fdf9f5_100%)] shadow-[0_26px_70px_-52px_rgba(111,78,55,0.28)] transition-all duration-500 hover:shadow-[0_34px_88px_-54px_rgba(111,78,55,0.34)] dark:border-[#4c3a2f] dark:bg-[linear-gradient(135deg,#261d18_0%,#1f1814_54%,#18120f_100%)]">
+        <div className="-left-12 absolute top-0 h-48 w-48 rounded-full bg-[#f3dfcd]/70 blur-3xl transition-transform duration-700 group-hover:scale-110 dark:bg-[#6c4f3b]/28" />
+        <div className="absolute right-[-3rem] bottom-[-3rem] h-56 w-56 rounded-full bg-[#d9c0ab]/40 blur-3xl transition-transform duration-700 group-hover:scale-110 dark:bg-[#8e6a4c]/18" />
+        <div className="relative grid items-center gap-10 px-7 py-10 lg:px-10 lg:py-12 xl:grid-cols-[minmax(0,1.08fr)_380px]">
+          <div className="space-y-6">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[#dcc9b7] bg-white/80 px-3 py-1 text-[#8b6447] text-xs uppercase tracking-[0.16em] shadow-[0_10px_30px_-24px_rgba(111,78,55,0.4)] dark:border-[#5a4537] dark:bg-[#2b211b]/88 dark:text-[#f0ceb0]">
               <Icon className="size-4" icon="uil:shopping-bag" />
-              Guest Purchase
+              Purchase Access
             </div>
             <div className="space-y-3">
-              <h1 className="font-semibold text-[#2f241d] text-[2rem] tracking-tight lg:text-[2.45rem] dark:text-white">
-                {t("guestPurchaseTitle", "购买套餐")}
+              <h1 className="font-semibold text-[#2f241d] text-[2rem] tracking-tight lg:text-[2.7rem] dark:text-[#fff4ea]">
+                冰咖风格的简洁购买流程，从选套餐到支付一步完成
               </h1>
-              <p className="max-w-2xl text-[#766558] text-[0.98rem] leading-7 dark:text-white/65">
-                {t(
-                  "guestPurchaseDescription",
-                  "先选择适合你的套餐，再创建账户并直接完成支付。整个流程保持匿名购买场景的清晰感，不堆无关信息。"
-                )}
+              <p className="max-w-2xl text-[#6f6156] text-[0.98rem] leading-7 dark:text-[#cdb8a7]">
+                覆盖主流视频站点、社交平台与 AI
+                应用，支持多系统快速接入。先选择套餐，再创建账户并完成支付，页面会同步展示平台手续费和最终试算金额。
               </p>
             </div>
-            <div className="grid gap-3 sm:grid-cols-3">
-              <HeroPill
-                icon="uil:layer-group"
-                label="可选套餐"
-                value={`${filteredData.length} 项`}
-              />
-              <HeroPill
-                icon="uil:bolt-alt"
-                label="购买流程"
-                value="选套餐 / 填邮箱 / 完成支付"
-              />
-              <HeroPill
-                icon="uil:shield-check"
-                label="交付方式"
-                value="支付成功后自动生成订阅"
-              />
+            <div className="flex flex-wrap gap-2">
+              <FlowPill index="01" text="选择套餐" />
+              <FlowPill index="02" text="创建账户" />
+              <FlowPill index="03" text="确认支付" />
+            </div>
+            <div className="grid gap-3 sm:grid-cols-2">
+              <HeroListItem text="解除对 YouTube、Google、Telegram、X 等站点的访问限制" />
+              <HeroListItem text="iOS、macOS、Android、Windows、Linux 全面支持" />
+              <HeroListItem text="支付成功后自动生成订阅，可直接在客户端导入使用" />
+              <HeroListItem text="支付宝与微信通道手续费透明公示，实际金额实时试算" />
             </div>
           </div>
 
-          <div className="rounded-[30px] border border-[#eadccf] bg-white/78 p-5 shadow-[0_18px_52px_-40px_rgba(121,93,67,0.18)] backdrop-blur dark:border-white/10 dark:bg-white/6">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <div className="text-[#9b8a7b] text-xs uppercase tracking-[0.16em] dark:text-white/40">
-                  Current Selection
-                </div>
-                <div className="mt-2 font-semibold text-[#2f241d] text-xl dark:text-white">
-                  {subscription?.name || t("choosePlanFirst", "请先选择套餐")}
-                </div>
-              </div>
-              <div className="flex size-12 items-center justify-center rounded-2xl bg-[#f8efe6] text-[#8f6442] dark:bg-white/8 dark:text-[#e2bc96]">
-                <Icon className="size-6" icon="uil:box" />
-              </div>
+          <div className="flex items-center justify-center">
+            <div className="relative flex aspect-square w-full max-w-[340px] items-center justify-center">
+              <div className="absolute inset-[8%] rounded-full bg-[radial-gradient(circle_at_35%_35%,rgba(255,255,255,0.98),rgba(247,229,211,0.74)_34%,rgba(202,166,134,0.48)_64%,rgba(202,166,134,0.1)_100%)] blur-[2px] transition-transform duration-700 group-hover:scale-105" />
+              <div className="absolute inset-[17%] rounded-full border border-white/70 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.98),rgba(249,239,231,0.72)_38%,rgba(180,140,106,0.14)_100%)] shadow-[0_30px_90px_-44px_rgba(111,78,55,0.3)] dark:border-[#7b5e49]/40 dark:bg-[radial-gradient(circle_at_30%_30%,rgba(92,68,52,0.62),rgba(58,42,32,0.4)_38%,rgba(25,18,15,0.05)_100%)] dark:shadow-[0_30px_90px_-44px_rgba(0,0,0,0.55)]" />
+              <div className="absolute inset-[25%] rounded-full border border-white/70 bg-white/25 backdrop-blur-md dark:border-[#6a5140]/45 dark:bg-[#2d231c]/42" />
+              <Icon
+                className="relative z-10 size-28 text-[#9b6c44] transition-transform duration-700 group-hover:scale-105 dark:text-[#f0c9a4]"
+                icon="uil:globe"
+              />
+              <FloatingChip
+                className="top-[24%] left-[6%]"
+                text="iOS / macOS"
+              />
+              <FloatingChip
+                className="top-[18%] right-[4%]"
+                text="AI / 社交 / 视频"
+              />
+              <FloatingChip
+                className="right-[12%] bottom-[18%]"
+                text="支付后自动开通"
+              />
             </div>
-
-            {subscription ? (
-              <div className="mt-5 space-y-4">
-                <div className="flex items-end justify-between gap-4">
-                  <div>
-                    <div className="font-semibold text-[#2f241d] text-[2rem] tracking-tight dark:text-white">
-                      <Display
-                        type="currency"
-                        value={subscription.unit_price}
-                      />
-                    </div>
-                    <div className="text-[#7d6b5e] text-sm dark:text-white/60">
-                      /
-                      {unitTimeMap[subscription.unit_time || "Month"] ||
-                        subscription.unit_time}
-                    </div>
-                  </div>
-                  <div className="rounded-full border border-[#e8d7c7] bg-[#fffaf5] px-3 py-1 text-[#8d6748] text-xs dark:border-white/10 dark:bg-white/6 dark:text-[#e2bc96]">
-                    ID #{subscription.id}
-                  </div>
-                </div>
-                <div className="grid gap-3 sm:grid-cols-3">
-                  <MetricBadge
-                    label="流量"
-                    value={
-                      <Display
-                        type="traffic"
-                        unlimited
-                        value={subscription.traffic}
-                      />
-                    }
-                  />
-                  <MetricBadge
-                    label="速率"
-                    value={
-                      <Display
-                        type="trafficSpeed"
-                        unlimited
-                        value={subscription.speed_limit}
-                      />
-                    }
-                  />
-                  <MetricBadge
-                    label="设备"
-                    value={
-                      <Display
-                        type="number"
-                        unlimited
-                        value={subscription.device_limit}
-                      />
-                    }
-                  />
-                </div>
-              </div>
-            ) : (
-              <p className="mt-5 text-[#7d6b5e] text-sm leading-7 dark:text-white/60">
-                先从下方选择一个套餐，右侧订单摘要会自动切换到当前套餐。
-              </p>
-            )}
           </div>
         </div>
       </section>
 
       <section className="space-y-5">
-        <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-          <div className="space-y-2">
+        <div className="space-y-2">
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
             <StepHeader index="01" title={t("choosePlan", "选择套餐")} />
-            <p className="max-w-2xl text-[#7a695c] text-sm leading-7 dark:text-white/60">
-              根据你的使用频率、设备数量和带宽需求完成选择。选中后，下方购买区域会自动同步。
+            <p className="max-w-2xl text-[#7a695c] text-sm leading-7 dark:text-[#c7b3a2]">
+              先根据你的使用频率和设备数量选择套餐。选中后，下面的账户创建、订单试算和支付区域会自动同步。
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
-            <MiniPill label="匿名购买" value="无需先登录" />
-            <MiniPill label="订阅交付" value="支付成功后自动生成" />
-            <MiniPill label="订单同步" value="右侧摘要实时更新" />
+          <div className="rounded-full border border-[#e3d5c8] bg-[#fffaf6] px-4 py-2 text-[#7b6859] text-xs shadow-[0_10px_24px_-22px_rgba(111,78,55,0.35)] dark:border-[#4f3d31] dark:bg-[#241b16]/88 dark:text-[#cab6a4]">
+            当前商品与手续费已接入真实接口，页面显示为本地临时预览效果
           </div>
         </div>
 
-        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
           {filteredData.map((item, index) => {
             const parsedDescription = parseSubscribeDescription(
               item.description
@@ -229,17 +170,17 @@ export default function Purchasing() {
             return (
               <Card
                 className={cn(
-                  "group hover:-translate-y-1 relative overflow-hidden rounded-[30px] border border-[#efe5db] bg-white shadow-[0_24px_64px_-48px_rgba(121,93,67,0.18)] transition-all duration-300 hover:shadow-[0_34px_78px_-52px_rgba(121,93,67,0.22)] dark:border-white/10 dark:bg-[#171412]",
+                  "group hover:-translate-y-1.5 relative overflow-hidden rounded-[26px] border border-[#eadfd4] bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(252,247,242,0.98))] shadow-[0_22px_56px_-46px_rgba(111,78,55,0.18)] transition-all duration-300 hover:border-[#cfb49a] hover:shadow-[0_34px_70px_-48px_rgba(111,78,55,0.26)] dark:border-[#4e3c31] dark:bg-[linear-gradient(180deg,#241b17_0%,#1c1511_100%)] dark:hover:border-[#8f6b50] dark:hover:shadow-[0_34px_70px_-48px_rgba(0,0,0,0.55)]",
                   selected &&
-                    "border-[#d8bfaa] shadow-[0_30px_80px_-52px_rgba(145,102,68,0.32)]"
+                    "border-[#9b6c44] shadow-[0_34px_80px_-50px_rgba(111,78,55,0.28)]"
                 )}
                 key={item.id}
               >
-                <div className="pointer-events-none absolute inset-x-0 top-0 h-28 bg-[linear-gradient(180deg,rgba(248,238,227,0.95),rgba(255,255,255,0))] dark:bg-[linear-gradient(180deg,rgba(111,78,55,0.2),rgba(23,20,18,0))]" />
-                <CardHeader className="relative space-y-5 p-6">
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-[linear-gradient(180deg,rgba(241,224,207,0.55),rgba(255,255,255,0))] opacity-80 transition-opacity duration-300 group-hover:opacity-100 dark:bg-[linear-gradient(180deg,rgba(111,78,55,0.3),rgba(20,15,12,0))]" />
+                <CardHeader className="space-y-5 p-6">
                   <div className="flex items-start justify-between gap-4">
                     <div className="space-y-2">
-                      <div className="inline-flex items-center rounded-full border border-[#e5d4c4] bg-[#fffaf5] px-3 py-1 text-[#9b6c44] text-xs uppercase tracking-[0.14em] dark:border-white/10 dark:bg-white/6 dark:text-[#e2bc96]">
+                      <div className="inline-flex items-center rounded-full border border-[#e1cfbf] bg-[#fff7ef] px-3 py-1 text-[#8b6447] text-xs uppercase tracking-[0.14em] dark:border-[#5c4738] dark:bg-[#2b211b]/88 dark:text-[#f0ceb0]">
                         {selected
                           ? t("selected", "已选择")
                           : index === 0
@@ -248,16 +189,16 @@ export default function Purchasing() {
                               ? "Recommend"
                               : "Plan"}
                       </div>
-                      <div className="font-semibold text-[#2f241d] text-[1.45rem] tracking-tight dark:text-white">
+                      <div className="font-semibold text-[#2f241d] text-[1.3rem] tracking-tight dark:text-[#fff3e8]">
                         {item.name}
                       </div>
                     </div>
 
                     <div
                       className={cn(
-                        "flex size-11 items-center justify-center rounded-2xl border border-[#eadfd3] bg-white/80 text-[#8f6442] dark:border-white/10 dark:bg-white/6 dark:text-[#e2bc96]",
+                        "flex size-10 items-center justify-center rounded-2xl border border-[#e8d8c9] bg-[#fff8f1] text-[#8f6442] transition-all duration-300 group-hover:scale-105 dark:border-[#5c4739] dark:bg-[#2e231c] dark:text-[#f0c9a4]",
                         selected &&
-                          "border-[#d0b59d] bg-[#f7efe7] text-[#7a5538] dark:bg-white/10"
+                          "border-[#b78960] bg-[#f5e9dd] text-[#7a5538] dark:bg-[#3a2b22]"
                       )}
                     >
                       <Icon
@@ -267,7 +208,7 @@ export default function Purchasing() {
                     </div>
                   </div>
 
-                  <p className="min-h-[48px] text-[#7d6b5e] text-sm leading-7 dark:text-white/60">
+                  <p className="min-h-[40px] text-[#7d6b5e] text-sm leading-6 dark:text-[#c4af9d]">
                     {parsedDescription.description ||
                       "适合稳定使用场景，支付成功后可直接生成订阅信息与客户端导入配置。"}
                   </p>
@@ -306,7 +247,7 @@ export default function Purchasing() {
                   </div>
                 </CardHeader>
 
-                <CardContent className="relative flex h-full flex-col gap-5 px-6 pb-5">
+                <CardContent className="flex h-full flex-col gap-5 px-6 pb-5">
                   <ul className="space-y-3 text-sm">
                     {parsedDescription.features.length > 0 ? (
                       parsedDescription.features
@@ -315,7 +256,7 @@ export default function Purchasing() {
                           (feature: SubscribeFeature, featureIndex: number) => (
                             <li
                               className={cn(
-                                "flex items-start gap-2 text-[#5f5146] leading-6 dark:text-white/70",
+                                "flex items-start gap-2 text-[#5f5146] leading-6 dark:text-[#d7c4b5]",
                                 feature.type === "destructive" &&
                                   "line-through opacity-50"
                               )}
@@ -336,13 +277,13 @@ export default function Purchasing() {
                           )
                         )
                     ) : (
-                      <li className="text-[#7d6b5e] leading-7 dark:text-white/60">
+                      <li className="text-[#7d6b5e] leading-7 dark:text-[#c4af9d]">
                         当前套餐暂无额外说明，可直接选择后在下方继续完成购买。
                       </li>
                     )}
                   </ul>
 
-                  <div className="rounded-[24px] border border-[#efe4d8] bg-[#fcf8f3] p-4 dark:border-white/10 dark:bg-white/5">
+                  <div className="rounded-[20px] border border-[#ede1d6] bg-[#fdf9f4] p-4 dark:border-[#4f3d31] dark:bg-[#201815]">
                     <SubscribeDetail
                       subscribe={{
                         ...item,
@@ -352,14 +293,14 @@ export default function Purchasing() {
                   </div>
                 </CardContent>
 
-                <Separator className="bg-[#efe5db] dark:bg-white/10" />
+                <Separator className="bg-[#ede2d8] dark:bg-[#4a392e]" />
 
                 <CardFooter className="flex items-end justify-between gap-4 p-6 pt-5">
                   <div>
-                    <h2 className="font-semibold text-[#2f241d] text-[2rem] tracking-tight dark:text-white">
+                    <h2 className="font-semibold text-[#2f241d] text-[2rem] tracking-tight dark:text-[#fff4ea]">
                       <Display type="currency" value={item.unit_price} />
                     </h2>
-                    <div className="text-[#7d6b5e] text-sm dark:text-white/60">
+                    <div className="text-[#7d6b5e] text-sm dark:text-[#bfa998]">
                       /
                       {unitTimeMap[item.unit_time || "Month"] || item.unit_time}
                     </div>
@@ -367,10 +308,10 @@ export default function Purchasing() {
 
                   <Button
                     className={cn(
-                      "rounded-2xl px-6",
+                      "rounded-2xl px-6 transition-all duration-300",
                       selected
-                        ? "bg-[#6f4e37] text-white hover:bg-[#5d4330]"
-                        : "bg-[#f6ebe0] text-[#6f4e37] hover:bg-[#eedfce] dark:bg-white/8 dark:text-white"
+                        ? "bg-[#6f4e37] text-white shadow-[0_18px_38px_-26px_rgba(111,78,55,0.5)] hover:bg-[#5d4330]"
+                        : "bg-[#f6ede4] text-[#6f4e37] hover:bg-[#f0e1d1] dark:bg-[#2d231c] dark:text-[#f3e4d8] dark:hover:bg-[#3a2c23]"
                     )}
                     onClick={() => selectSubscription(item.id)}
                   >
@@ -401,53 +342,66 @@ export default function Purchasing() {
 function StepHeader({ index, title }: { index: string; title: string }) {
   return (
     <div className="flex items-center gap-3">
-      <div className="flex size-9 items-center justify-center rounded-full bg-[#63baa9] font-semibold text-sm text-white shadow-[0_12px_24px_-16px_rgba(99,186,169,0.7)]">
+      <div className="flex size-9 items-center justify-center rounded-full bg-[linear-gradient(180deg,#9b6c44_0%,#7a5538_100%)] font-semibold text-sm text-white shadow-[0_14px_28px_-18px_rgba(111,78,55,0.8)]">
         {index}
       </div>
-      <h2 className="font-semibold text-[#2f241d] text-[1.55rem] tracking-tight dark:text-white">
+      <h2 className="font-semibold text-[#2f241d] text-[1.55rem] tracking-tight dark:text-[#fff4ea]">
         {title}
       </h2>
     </div>
   );
 }
 
-function HeroPill({
-  icon,
-  label,
-  value,
-}: {
-  icon: string;
-  label: string;
-  value: string;
-}) {
+function HeroListItem({ text }: { text: string }) {
   return (
-    <div className="rounded-[22px] border border-[#eadfd3] bg-white/82 px-4 py-4 shadow-sm dark:border-white/10 dark:bg-white/6">
-      <div className="flex items-center gap-2 text-[#9b6c44] text-xs uppercase tracking-[0.14em] dark:text-[#e2bc96]">
-        <Icon className="size-4" icon={icon} />
-        {label}
-      </div>
-      <div className="mt-2 font-medium text-[#2f241d] text-sm dark:text-white">
-        {value}
+    <div className="hover:-translate-y-0.5 rounded-[20px] border border-[#ead9cb] bg-white/55 px-4 py-3 text-[#5f5247] text-sm leading-6 shadow-[0_14px_34px_-28px_rgba(111,78,55,0.22)] backdrop-blur-sm transition-all duration-300 hover:bg-white/80 dark:border-[#4f3d31] dark:bg-[#261d18]/88 dark:text-[#dcc9ba] dark:hover:bg-[#2f241d]">
+      <div className="flex items-start gap-3">
+        <div className="mt-1 flex size-5 items-center justify-center rounded-full bg-[#9b6c44] text-white shadow-[0_10px_22px_-16px_rgba(111,78,55,0.8)]">
+          <Icon className="size-3" icon="uil:check" />
+        </div>
+        <span>{text}</span>
       </div>
     </div>
   );
 }
 
-function MiniPill({ label, value }: { label: string; value: string }) {
+function FlowPill({ index, text }: { index: string; text: string }) {
   return (
-    <div className="rounded-full border border-[#e6d7c8] bg-[#fffaf5] px-3 py-1 text-[#7d6b5e] text-xs dark:border-white/10 dark:bg-white/6 dark:text-white/60">
-      {label} · {value}
+    <div className="inline-flex items-center gap-2 rounded-full border border-[#e5d5c7] bg-white/72 px-3 py-1.5 text-[#765842] text-xs shadow-[0_10px_26px_-24px_rgba(111,78,55,0.4)] backdrop-blur-sm dark:border-[#554133] dark:bg-[#2a201a]/88 dark:text-[#d9c3b1]">
+      <span className="flex size-5 items-center justify-center rounded-full bg-[#f2e1d2] font-semibold text-[#8b6447] dark:bg-[#473429] dark:text-[#f0ceb0]">
+        {index}
+      </span>
+      <span>{text}</span>
+    </div>
+  );
+}
+
+function FloatingChip({
+  className,
+  text,
+}: {
+  className?: string;
+  text: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "group-hover:-translate-y-1 absolute rounded-full border border-[#ead8c7] bg-white/84 px-3 py-1.5 text-[#785b44] text-xs shadow-[0_16px_34px_-26px_rgba(111,78,55,0.35)] backdrop-blur-md transition-all duration-500 dark:border-[#5b4537] dark:bg-[#2b211b]/88 dark:text-[#e0cab8]",
+        className
+      )}
+    >
+      {text}
     </div>
   );
 }
 
 function MetricBadge({ label, value }: { label: string; value: ReactNode }) {
   return (
-    <div className="rounded-[20px] border border-[#eee3d8] bg-white/72 px-4 py-3 dark:border-white/10 dark:bg-white/6">
-      <div className="text-[#9b8b7d] text-[11px] uppercase tracking-[0.14em] dark:text-white/40">
+    <div className="group-hover:-translate-y-0.5 rounded-[20px] border border-[#ece0d4] bg-white/82 px-4 py-3 shadow-[0_12px_30px_-28px_rgba(111,78,55,0.22)] transition-transform duration-300 dark:border-[#4f3d31] dark:bg-[#281f19]">
+      <div className="text-[#9b8b7d] text-[11px] uppercase tracking-[0.14em] dark:text-[#a99280]">
         {label}
       </div>
-      <div className="mt-1 font-medium text-[#2f241d] text-sm dark:text-white">
+      <div className="mt-1 font-medium text-[#2f241d] text-sm dark:text-[#f5e7da]">
         {value}
       </div>
     </div>

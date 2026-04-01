@@ -15,6 +15,7 @@ import { preCreateOrder, purchase } from "@workspace/ui/services/user/order";
 import { LoaderCircle } from "lucide-react";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
+import { getLoginPromoCoupon } from "@/lib/login-promo";
 import CouponInput from "@/sections/subscribe/coupon-input";
 import DurationSelector from "@/sections/subscribe/duration-selector";
 import PaymentMethods from "@/sections/subscribe/payment-methods";
@@ -32,7 +33,7 @@ export default function Purchase({
   setSubscribe,
 }: Readonly<PurchaseProps>) {
   const { t } = useTranslation("subscribe");
-  const { getUserInfo } = useGlobalStore();
+  const { getUserInfo, user } = useGlobalStore();
   const router = useRouter();
   const [params, setParams] = useState<Partial<API.PurchaseOrderRequest>>({
     quantity: 1,
@@ -74,6 +75,7 @@ export default function Purchase({
 
   useEffect(() => {
     if (subscribe) {
+      const promoCoupon = getLoginPromoCoupon(user?.id);
       const defaultQuantity =
         subscribe.show_original_price === false && subscribe.discount?.[0]
           ? subscribe.discount[0].quantity
@@ -82,9 +84,10 @@ export default function Purchase({
         ...prev,
         quantity: defaultQuantity,
         subscribe_id: subscribe?.id,
+        coupon: prev.coupon || promoCoupon,
       }));
     }
-  }, [subscribe]);
+  }, [subscribe, user?.id]);
 
   const handleChange = useCallback(
     (field: keyof typeof params, value: string | number) => {
@@ -110,6 +113,20 @@ export default function Purchase({
       }
     });
   }, [params, router, getUserInfo]);
+
+  const couponStatus = params.coupon
+    ? order?.coupon_discount
+      ? {
+          text: `登录礼券已生效，预计优惠 ¥${Number(
+            order.coupon_discount || 0
+          ).toFixed(2)}`,
+          tone: "success" as const,
+        }
+      : {
+          text: "优惠码已带入，订单试算后会显示实际减免；若后台未创建同名优惠券则不会生效。",
+          tone: "default" as const,
+        }
+    : undefined;
 
   return (
     <Dialog
@@ -156,6 +173,7 @@ export default function Purchase({
               <CouponInput
                 coupon={params.coupon}
                 onChange={(value) => handleChange("coupon", value)}
+                status={couponStatus}
               />
               <PaymentMethods
                 onChange={(value) => {

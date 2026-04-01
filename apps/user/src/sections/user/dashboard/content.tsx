@@ -45,6 +45,10 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Display } from "@/components/display";
+import {
+  LOGIN_PROMO_COUPON_CODE,
+  storeLoginPromoCoupon,
+} from "@/lib/login-promo";
 import { useGlobalStore } from "@/stores/global";
 import { getPlatform } from "@/utils/common";
 import Renewal from "../../subscribe/renewal";
@@ -282,6 +286,7 @@ export default function Content() {
   };
 
   const handlePromoClaim = () => {
+    storeLoginPromoCoupon(user?.id, LOGIN_PROMO_COUPON_CODE);
     setPromoOpen(false);
     setStoredPromoState("claimed");
   };
@@ -318,15 +323,48 @@ export default function Content() {
                 </DialogDescription>
               </DialogHeader>
               <div className="rounded-[28px] bg-white/16 p-5 backdrop-blur">
-                <div className="text-sm text-white/80">
-                  {t("promoCountdown", "剩余领取时间")}
-                </div>
-                <div className="mt-3 flex items-baseline gap-3 font-semibold">
-                  <span className="text-[2.5rem]">{countdown.hours}</span>
-                  <span className="text-white/55">:</span>
-                  <span className="text-[2.5rem]">{countdown.minutes}</span>
-                  <span className="text-white/55">:</span>
-                  <span className="text-[2.5rem]">{countdown.seconds}</span>
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                  <div>
+                    <div className="text-sm text-white/80">
+                      {t("promoCountdown", "剩余领取时间")}
+                    </div>
+                    <div className="mt-3 flex items-baseline gap-3 font-semibold">
+                      <span className="text-[2.5rem]">{countdown.hours}</span>
+                      <span className="text-white/55">:</span>
+                      <span className="text-[2.5rem]">{countdown.minutes}</span>
+                      <span className="text-white/55">:</span>
+                      <span className="text-[2.5rem]">{countdown.seconds}</span>
+                    </div>
+                  </div>
+
+                  <div className="rounded-[24px] border border-white/20 bg-white/12 px-4 py-3">
+                    <div className="text-[11px] text-white/65 uppercase tracking-[0.16em]">
+                      登录礼券码
+                    </div>
+                    <div className="mt-2 flex items-center gap-2">
+                      <code className="font-semibold text-[1.05rem] text-white tracking-[0.12em]">
+                        {LOGIN_PROMO_COUPON_CODE}
+                      </code>
+                      <CopyToClipboard
+                        onCopy={(_, copied) => {
+                          if (copied) {
+                            toast.success("优惠码已复制");
+                          }
+                        }}
+                        text={LOGIN_PROMO_COUPON_CODE}
+                      >
+                        <button
+                          className="inline-flex h-8 items-center justify-center rounded-full border border-white/20 bg-white/10 px-3 text-white/90 transition hover:bg-white/15"
+                          type="button"
+                        >
+                          <Icon className="size-4" icon="uil:copy" />
+                        </button>
+                      </CopyToClipboard>
+                    </div>
+                    <div className="mt-2 text-white/72 text-xs leading-6">
+                      领取后会自动带入套餐页，下单时按后台同名优惠券真实试算。
+                    </div>
+                  </div>
                 </div>
               </div>
               <DialogFooter className="flex-col-reverse gap-3 sm:flex-row sm:justify-between">
@@ -822,11 +860,11 @@ export default function Content() {
                 <div className="mt-2 font-medium text-[1.25rem] text-white/90">
                   -{countdown.hours}:{countdown.minutes}:{countdown.seconds}
                 </div>
-                <div className="mt-4 font-semibold text-[3.7rem] leading-none">
-                  0.00元
+                <div className="mt-4 font-semibold text-[2.2rem] leading-none tracking-[0.14em]">
+                  {LOGIN_PROMO_COUPON_CODE}
                 </div>
                 <div className="mt-4 font-medium text-[1.15rem]">
-                  EveryOne 收下这份礼物吧！
+                  领券后自动带入套餐页，真实优惠以下单试算为准。
                 </div>
               </div>
 
