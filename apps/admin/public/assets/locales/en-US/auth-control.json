@@ -39,6 +39,10 @@
   "deviceAuthMethods": "Device Authentication Methods",
   "email": {
     "basicSettings": "Basic Settings",
+    "basicSettingsDescription": "Control email login, email verification, and which email domains can register.",
+    "deliveryProvider": "Email Provider",
+    "deliveryProviderDescription": "The available provider list is returned by the backend API.",
+    "deliveryProviderPlaceholder": "Select a provider",
     "description": "Configure email authentication and templates",
     "emailSuffixWhitelist": "Email Suffix Whitelist",
     "emailSuffixWhitelistDescription": "Only allow emails from whitelisted domains",
@@ -51,6 +55,7 @@
     "inputPlaceholder": "Please enter",
     "maintenanceEmailTemplate": "Maintenance Email Template",
     "maintenanceTemplate": "Maintenance Template",
+    "providerDocs": "Provider Docs",
     "senderAddress": "Sender Address",
     "senderAddressDescription": "The email address that appears in the From field",
     "sendFailure": "Email send failed",
@@ -63,11 +68,14 @@
     "smtpEncryptionMethodDescription": "Enable SSL/TLS encryption for SMTP connection",
     "smtpPassword": "SMTP Password",
     "smtpPasswordDescription": "The SMTP authentication password",
+    "smtpPasswordPlaceholder": "Enter SMTP password or API key",
     "smtpServerAddress": "SMTP Server Address",
     "smtpServerAddressDescription": "The SMTP server hostname",
     "smtpServerPort": "SMTP Server Port",
     "smtpServerPortDescription": "The SMTP server port (usually 25, 465, or 587)",
     "smtpSettings": "SMTP Settings",
+    "smtpSettingsDescription": "Fill in delivery parameters for the selected provider. Platform switching and field requirements follow the backend API response.",
+    "templateSettingsDescription": "Template editors keep variable hints while reducing repetitive field descriptions.",
     "templateVariables": {
       "code": {
         "description": "Verification code"
