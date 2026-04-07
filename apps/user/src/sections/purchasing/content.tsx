@@ -73,7 +73,8 @@ export default function Content({
       params.payment !== null &&
       params.payment !== -1,
     queryKey: [
-      "preCreateOrder",
+      "prePurchaseOrder",
+      subscription?.id,
       params.coupon,
       params.quantity,
       params.payment,
