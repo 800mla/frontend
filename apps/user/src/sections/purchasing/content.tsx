@@ -188,6 +188,14 @@ export default function Content({
     ) : (
       selectedPaymentFeeRule
     );
+  const checkoutHint = getCheckoutHint({
+    hasIdentifier: Boolean(params.identifier),
+    isEmailValid: isEmailValid.valid,
+    emailMessage: isEmailValid.message,
+    loading,
+    payment: params.payment,
+    paymentMethods,
+  });
 
   return (
     <section className="space-y-6">
@@ -506,20 +514,52 @@ export default function Content({
                       />
                     </div>
                   </div>
+                  <div className="max-w-[360px] flex-1">
+                    <div
+                      className={cn(
+                        "mb-3 rounded-[20px] border px-4 py-3 text-sm leading-6 shadow-[0_14px_30px_-28px_rgba(111,78,55,0.24)]",
+                        checkoutHint.tone === "success"
+                          ? "border-emerald-500/25 bg-emerald-500/8 text-emerald-700 dark:text-emerald-300"
+                          : "border-amber-500/25 bg-amber-500/10 text-amber-800 dark:text-amber-300"
+                      )}
+                    >
+                      <div className="flex items-start gap-3">
+                        <Icon
+                          className="mt-0.5 size-4 shrink-0"
+                          icon={
+                            checkoutHint.tone === "success"
+                              ? "uil:check-circle"
+                              : "uil:exclamation-circle"
+                          }
+                        />
+                        <div>
+                          <div className="font-medium">
+                            {checkoutHint.title}
+                          </div>
+                          <p className="mt-1 opacity-90">
+                            {checkoutHint.description}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
 
-                  <Button
-                    className="hover:-translate-y-0.5 h-12 rounded-2xl bg-[linear-gradient(180deg,#7d5a40_0%,#65472f_100%)] px-6 text-white shadow-[0_18px_40px_-24px_rgba(111,78,55,0.55)] transition-all duration-300 hover:brightness-105"
-                    disabled={
-                      !isEmailValid.valid ||
-                      loading ||
-                      paymentMethods.length === 0
-                    }
-                    onClick={handleSubmit}
-                    size="lg"
-                  >
-                    {loading && <LoaderCircle className="mr-2 animate-spin" />}
-                    {t("buyNow", "Buy Now")}
-                  </Button>
+                    <Button
+                      className="hover:-translate-y-0.5 h-12 w-full rounded-2xl bg-[linear-gradient(180deg,#7d5a40_0%,#65472f_100%)] px-6 text-white shadow-[0_18px_40px_-24px_rgba(111,78,55,0.55)] transition-all duration-300 hover:brightness-105"
+                      disabled={
+                        !isEmailValid.valid ||
+                        loading ||
+                        paymentMethods.length === 0
+                      }
+                      onClick={handleSubmit}
+                      size="lg"
+                    >
+                      {loading && (
+                        <LoaderCircle className="mr-2 animate-spin" />
+                      )}
+                      {t("buyNow", "Buy Now")}
+                    </Button>
+                  </div>
+
                 </div>
               </CardContent>
             </Card>
@@ -610,4 +650,68 @@ function formatPaymentFeeRule(
   }
 
   return "平台免手续费";
+}
+
+function getCheckoutHint({
+  hasIdentifier,
+  isEmailValid,
+  emailMessage,
+  loading,
+  payment,
+  paymentMethods,
+}: {
+  hasIdentifier: boolean;
+  isEmailValid: boolean;
+  emailMessage?: string;
+  loading: boolean;
+  payment: number;
+  paymentMethods: API.PaymentMethod[];
+}) {
+  if (loading) {
+    return {
+      description: "订单正在创建中，请稍候，成功后会自动跳转到支付页。",
+      title: "正在为你生成订单",
+      tone: "success" as const,
+    };
+  }
+
+  if (!hasIdentifier) {
+    return {
+      description:
+        "先填写一个可用邮箱，系统会用它创建账户并同步本次购买记录，按钮随后会自动变为可点击。",
+      title: "按钮未点亮：先填写邮箱",
+      tone: "warning" as const,
+    };
+  }
+
+  if (!isEmailValid) {
+    return {
+      description: emailMessage || "请改成有效邮箱地址后再继续购买。",
+      title: "按钮未点亮：邮箱还没有通过校验",
+      tone: "warning" as const,
+    };
+  }
+
+  if (paymentMethods.length === 0) {
+    return {
+      description:
+        "当前站点还没有启用可用的在线支付通道，所以暂时无法继续购买。启用外部支付后，这里会自动恢复可下单状态。",
+      title: "按钮未点亮：当前暂无可用支付方式",
+      tone: "warning" as const,
+    };
+  }
+
+  if (!paymentMethods.some((method) => String(method.id) === String(payment))) {
+    return {
+      description: "选择一个支付方式后，页面会同步试算实际支付金额。",
+      title: "下一步：请选择支付方式",
+      tone: "warning" as const,
+    };
+  }
+
+  return {
+    description: "信息已填写完成，可以直接提交订单并进入支付流程。",
+    title: "已准备就绪，可以立即购买",
+    tone: "success" as const,
+  };
 }
