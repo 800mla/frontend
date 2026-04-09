@@ -524,6 +524,7 @@ declare namespace API {
     auth_type: string;
     identifier: string;
     password?: string;
+    portal_verification_ticket?: string;
     payment: number;
     subscribe_id: number;
     quantity: number;
@@ -566,6 +567,24 @@ declare namespace API {
     fee_amount: number;
     can_purchase: boolean;
     purchase_block_reason: string;
+    next_action?: string;
+    verification_type?: string;
+  };
+
+  type PortalVerificationTicketRequest = {
+    auth_type?: string;
+    identifier: string;
+    code: string;
+    scene?: string;
+    turnstile_token?: string;
+  };
+
+  type PortalVerificationTicketResponse = {
+    portal_verification_ticket: string;
+    expires_at?: number;
+    verification_type?: string;
+    account_mode?: string;
+    verified?: boolean;
   };
 
   type PreRenewalOrderResponse = {

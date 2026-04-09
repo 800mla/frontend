@@ -8,7 +8,11 @@ import { Separator } from "@workspace/ui/components/separator";
 import { EnhancedInput } from "@workspace/ui/composed/enhanced-input";
 import { Icon } from "@workspace/ui/composed/icon";
 import { cn } from "@workspace/ui/lib/utils";
-import { prePurchaseOrder, purchase } from "@workspace/ui/services/user/portal";
+import {
+  createPortalVerificationTicket,
+  prePurchaseOrder,
+  purchase,
+} from "@workspace/ui/services/user/portal";
 import { LoaderCircle } from "lucide-react";
 import {
   type ReactNode,
@@ -21,6 +25,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Display } from "@/components/display";
 import { getLoginPromoCoupon } from "@/lib/login-promo";
+import SendCode from "@/sections/auth/send-code";
 import { SubscribeBilling } from "@/sections/subscribe/billing";
 import CouponInput from "@/sections/subscribe/coupon-input";
 import { SubscribeDetail } from "@/sections/subscribe/detail";
@@ -60,11 +65,14 @@ export default function Content({
     password: "",
   });
   const [loading, startTransition] = useTransition();
+  const [isVerifyingPortalEmail, startVerifyPortalEmail] = useTransition();
   const [isEmailValid, setIsEmailValid] = useState({
     valid: false,
     message: "",
   });
   const [paymentMethods, setPaymentMethods] = useState<API.PaymentMethod[]>([]);
+  const [verificationCode, setVerificationCode] = useState("");
+  const [portalVerificationTicket, setPortalVerificationTicket] = useState("");
   const hasSelectedPayment =
     params.payment !== undefined &&
     params.payment !== null &&
@@ -100,6 +108,25 @@ export default function Content({
       return data.data;
     },
   });
+  const nextAction = order?.next_action || "none";
+  const verificationType = order?.verification_type || "";
+  const requiresEmailVerification = nextAction === "verify_email";
+  const requiresPassword =
+    nextAction === "input_password" || requiresEmailVerification;
+  const hasPassword = Boolean(params.password?.trim());
+  const hasVerificationTicket = Boolean(portalVerificationTicket);
+  const verificationCodeType: 1 | 2 = verificationType === "security" ? 2 : 1;
+  const isPurchaseBlocked = order?.can_purchase === false;
+  const canSubmitPurchase =
+    isEmailValid.valid &&
+    paymentMethods.length > 0 &&
+    hasSelectedPayment &&
+    !loading &&
+    !isCheckingPurchaseAvailability &&
+    (!requiresPassword || hasPassword) &&
+    (!requiresEmailVerification || hasVerificationTicket) &&
+    (order?.can_purchase === true ||
+      (requiresEmailVerification && hasVerificationTicket));
 
   useEffect(() => {
     if (subscription) {
@@ -113,6 +140,18 @@ export default function Content({
     }
   }, [subscription, user?.id]);
 
+  useEffect(() => {
+    setVerificationCode("");
+    setPortalVerificationTicket("");
+  }, [params.identifier, params.auth_type]);
+
+  useEffect(() => {
+    if (nextAction !== "verify_email" && portalVerificationTicket) {
+      setPortalVerificationTicket("");
+      setVerificationCode("");
+    }
+  }, [nextAction, portalVerificationTicket]);
+
   const handleChange = useCallback(
     (field: keyof typeof params, value: string | number) => {
       setParams((prev) => ({
@@ -122,6 +161,44 @@ export default function Content({
     },
     []
   );
+
+  const handleVerifyPortalEmail = useCallback(async () => {
+    if (!(params.identifier && isEmailValid.valid)) {
+      toast.error("请先填写有效邮箱后再继续。");
+      return;
+    }
+    if (!verificationCode.trim()) {
+      toast.error("请先填写邮箱验证码。");
+      return;
+    }
+
+    startVerifyPortalEmail(async () => {
+      try {
+        const { data } = await createPortalVerificationTicket({
+          auth_type: params.auth_type,
+          identifier: params.identifier,
+          code: verificationCode.trim(),
+          scene: "portal_checkout",
+        });
+        const ticket = data.data?.portal_verification_ticket;
+        if (!ticket) {
+          toast.error("验证码已校验，但未返回购买授权，请稍后再试。");
+          return;
+        }
+        setPortalVerificationTicket(ticket);
+        toast.success("邮箱验证已通过，现在可以继续下单。");
+      } catch (error) {
+        console.log(error);
+        setPortalVerificationTicket("");
+      }
+    });
+  }, [
+    params.auth_type,
+    params.identifier,
+    isEmailValid.valid,
+    verificationCode,
+    startVerifyPortalEmail,
+  ]);
 
   const handleSubmit = useCallback(async () => {
     if (!(params.identifier && isEmailValid.valid)) {
@@ -144,14 +221,36 @@ export default function Content({
       toast.error("正在检查当前购买资格，请稍候再试。");
       return;
     }
-    if (order?.can_purchase === false) {
+    if (requiresPassword && !hasPassword) {
+      toast.error(
+        requiresEmailVerification
+          ? verificationType === "security"
+            ? "请先确认当前账号密码后继续购买。"
+            : "请先设置登录密码后继续购买。"
+          : "请先输入账号密码后继续购买。"
+      );
+      return;
+    }
+    if (requiresEmailVerification && !hasVerificationTicket) {
+      toast.error("请先完成邮箱验证后再继续下单。");
+      return;
+    }
+    if (
+      order?.can_purchase === false &&
+      nextAction !== "verify_email" &&
+      nextAction !== "input_password"
+    ) {
       toast.error(order?.purchase_block_reason || "当前条件下暂时无法购买。");
       return;
     }
 
     startTransition(async () => {
       try {
-        const { data } = await purchase(params);
+        const { data } = await purchase({
+          ...params,
+          portal_verification_ticket:
+            portalVerificationTicket || params.portal_verification_ticket,
+        });
         const { order_no, payable_amount } = data.data!;
         if (order_no) {
           localStorage.setItem(
@@ -171,12 +270,19 @@ export default function Content({
       }
     });
   }, [
+    hasPassword,
+    hasVerificationTicket,
     params,
     navigate,
     isCheckingPurchaseAvailability,
     isEmailValid.valid,
+    nextAction,
     paymentMethods,
     order,
+    portalVerificationTicket,
+    requiresEmailVerification,
+    requiresPassword,
+    verificationType,
   ]);
 
   if (!subscription) {
@@ -218,18 +324,21 @@ export default function Content({
     ) : (
       selectedPaymentFeeRule
     );
-  const isPurchaseBlocked = order?.can_purchase === false;
   const checkoutHint = getCheckoutHint({
     hasIdentifier: Boolean(params.identifier),
+    hasPassword,
+    hasVerificationTicket,
     isEmailValid: isEmailValid.valid,
     emailMessage: isEmailValid.message,
     isReadyForPrecheck,
     isCheckingPurchaseAvailability,
     loading,
+    nextAction,
     purchaseBlockReason: order?.purchase_block_reason,
     isPurchaseBlocked,
     payment: params.payment,
     paymentMethods,
+    verificationType,
   });
 
   return (
@@ -238,7 +347,7 @@ export default function Content({
         <div className="space-y-6">
           <div className="space-y-3">
             <StepHeader
-              description="填写邮箱和密码后，系统会用这组信息为你创建账户并关联本次订单。"
+              description="填写邮箱后，系统会自动判断你是直接输入密码购买，还是先在当前页完成邮箱验证再下单。"
               index="02"
               title="创建你的账户"
             />
@@ -268,11 +377,11 @@ export default function Content({
                   />
                   <SoftHintPill
                     icon="uil:keyhole-circle"
-                    text="密码可留空自动生成"
+                    text="老用户可直接输入密码购买"
                   />
                   <SoftHintPill
                     icon="uil:shield-check"
-                    text="购买后可直接登录查看订阅"
+                    text="新邮箱可在此页验证后直接下单"
                   />
                 </div>
 
@@ -351,7 +460,7 @@ export default function Content({
                     </div>
 
                     {params.identifier && isEmailValid.valid && (
-                      <div className="grid gap-2">
+                      <div className="grid gap-4">
                         <EnhancedInput
                           className="h-12 rounded-2xl border-[#dccab9] bg-white/95 px-4 text-[0.98rem] shadow-none transition-colors duration-200 focus-visible:border-[#9b6c44] dark:border-[#5a4638] dark:bg-[#2b211b] dark:text-[#f4e7db] dark:focus-visible:border-[#c89a72]"
                           onValueChange={(value: string) =>
@@ -362,8 +471,85 @@ export default function Content({
                           value={params.password || ""}
                         />
                         <p className="text-[#8b7b6f] text-xs leading-6 dark:text-[#af9886]">
-                          已有账号请输入密码后再购买；新邮箱需先完成邮箱验证。
+                          {getPasswordHelperText({
+                            hasVerificationTicket,
+                            nextAction,
+                            verificationType,
+                          })}
                         </p>
+
+                        {requiresEmailVerification && (
+                          <div className="rounded-[22px] border border-[#eadccf] bg-white/70 p-4 dark:border-[#4f3d31] dark:bg-[#241b17]">
+                            <div className="mb-2 flex items-center gap-2 font-medium text-[#7d5a40] text-sm dark:text-[#efc7a2]">
+                              <Icon
+                                className="size-4"
+                                icon="uil:shield-check"
+                              />
+                              {verificationType === "security"
+                                ? "验证当前邮箱后继续购买"
+                                : "验证邮箱后立即创建账号并下单"}
+                            </div>
+                            <p className="mb-3 text-[#8b7b6f] text-xs leading-6 dark:text-[#af9886]">
+                              {verificationType === "security"
+                                ? "检测到该邮箱账号尚未完成验证，请先获取验证码确认邮箱归属，再继续完成购买。"
+                                : "这是首次使用该邮箱购买，请先收取验证码完成邮箱验证，之后可以直接创建订单。"}
+                            </p>
+                            <div className="flex items-center gap-2">
+                              <EnhancedInput
+                                className="h-12 rounded-2xl border-[#dccab9] bg-white/95 px-4 text-[0.98rem] shadow-none transition-colors duration-200 focus-visible:border-[#9b6c44] dark:border-[#5a4638] dark:bg-[#2b211b] dark:text-[#f4e7db] dark:focus-visible:border-[#c89a72]"
+                                onValueChange={(value: string) => {
+                                  setVerificationCode(value);
+                                  if (portalVerificationTicket) {
+                                    setPortalVerificationTicket("");
+                                  }
+                                }}
+                                placeholder="输入邮箱验证码"
+                                type="text"
+                                value={verificationCode}
+                              />
+                              <SendCode
+                                className="h-12 rounded-[20px] px-4"
+                                params={{
+                                  email: params.identifier,
+                                  type: verificationCodeType,
+                                }}
+                                size="default"
+                                type="email"
+                              />
+                              <Button
+                                className="h-12 rounded-[20px] px-4"
+                                disabled={
+                                  !verificationCode.trim() ||
+                                  isVerifyingPortalEmail
+                                }
+                                onClick={handleVerifyPortalEmail}
+                                type="button"
+                                variant={
+                                  hasVerificationTicket ? "outline" : "default"
+                                }
+                              >
+                                {isVerifyingPortalEmail && (
+                                  <LoaderCircle className="mr-2 size-4 animate-spin" />
+                                )}
+                                {hasVerificationTicket
+                                  ? "验证已通过"
+                                  : "校验验证码"}
+                              </Button>
+                            </div>
+                            <p
+                              className={cn(
+                                "mt-3 text-xs leading-6",
+                                hasVerificationTicket
+                                  ? "text-emerald-600 dark:text-emerald-400"
+                                  : "text-[#8b7b6f] dark:text-[#af9886]"
+                              )}
+                            >
+                              {hasVerificationTicket
+                                ? "验证码已通过，可直接继续下单。"
+                                : "验证码通过后，页面会直接解锁当前邮箱的下单资格，不需要跳转注册页。"}
+                            </p>
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -577,13 +763,7 @@ export default function Content({
 
                     <Button
                       className="hover:-translate-y-0.5 h-12 w-full rounded-2xl bg-[linear-gradient(180deg,#7d5a40_0%,#65472f_100%)] px-6 text-white shadow-[0_18px_40px_-24px_rgba(111,78,55,0.55)] transition-all duration-300 hover:brightness-105"
-                      disabled={
-                        !isEmailValid.valid ||
-                        loading ||
-                        paymentMethods.length === 0 ||
-                        isCheckingPurchaseAvailability ||
-                        isPurchaseBlocked
-                      }
+                      disabled={!canSubmitPurchase}
                       onClick={handleSubmit}
                       size="lg"
                     >
@@ -688,26 +868,34 @@ function formatPaymentFeeRule(
 
 function getCheckoutHint({
   hasIdentifier,
+  hasPassword,
+  hasVerificationTicket,
   isEmailValid,
   emailMessage,
   isReadyForPrecheck,
   isCheckingPurchaseAvailability,
   loading,
+  nextAction,
   purchaseBlockReason,
   isPurchaseBlocked,
   payment,
   paymentMethods,
+  verificationType,
 }: {
   hasIdentifier: boolean;
+  hasPassword: boolean;
+  hasVerificationTicket: boolean;
   isEmailValid: boolean;
   emailMessage?: string;
   isReadyForPrecheck: boolean;
   isCheckingPurchaseAvailability: boolean;
   loading: boolean;
+  nextAction: string;
   purchaseBlockReason?: string;
   isPurchaseBlocked: boolean;
   payment: number;
   paymentMethods: API.PaymentMethod[];
+  verificationType: string;
 }) {
   if (loading) {
     return {
@@ -754,7 +942,7 @@ function getCheckoutHint({
   if (!isReadyForPrecheck) {
     return {
       description:
-        "填写可用邮箱后，如为已有账号请继续输入密码，系统会自动检查是否允许直接下单。",
+        "填写可用邮箱并选择支付方式后，系统会自动判断你是直接输入密码购买，还是先完成邮箱验证。",
       title: "下一步：完善购买信息",
       tone: "warning" as const,
     };
@@ -765,6 +953,55 @@ function getCheckoutHint({
       description: "正在根据当前邮箱、密码和支付方式检查是否可以直接创建订单。",
       title: "正在检查购买资格",
       tone: "warning" as const,
+    };
+  }
+
+  if (nextAction === "input_password") {
+    return hasPassword
+      ? {
+          description:
+            purchaseBlockReason || "当前密码校验未通过，请重新输入后再试。",
+          title: "请检查账号密码",
+          tone: "warning" as const,
+        }
+      : {
+          description:
+            purchaseBlockReason ||
+            "检测到这是已注册账户，请输入密码后继续购买。",
+          title: "下一步：请输入密码",
+          tone: "warning" as const,
+        };
+  }
+
+  if (nextAction === "verify_email") {
+    if (!hasVerificationTicket) {
+      return {
+        description:
+          purchaseBlockReason ||
+          (verificationType === "security"
+            ? "该邮箱账号尚未完成验证，请先收取验证码并完成校验。"
+            : "这是首次使用该邮箱购买，请先收取验证码并完成邮箱验证。"),
+        title: "下一步：请先完成邮箱验证",
+        tone: "warning" as const,
+      };
+    }
+
+    if (!hasPassword) {
+      return {
+        description:
+          verificationType === "security"
+            ? "邮箱验证已经通过，再确认当前账号密码后即可提交订单。"
+            : "邮箱验证已经通过，再设置一个登录密码后即可直接下单。",
+        title: "验证码已通过，请补充密码",
+        tone: "warning" as const,
+      };
+    }
+
+    return {
+      description:
+        "邮箱验证码已通过，当前页已经具备下单所需信息，可以直接提交订单并进入支付流程。",
+      title: "验证码已通过，可直接下单",
+      tone: "success" as const,
     };
   }
 
@@ -783,4 +1020,32 @@ function getCheckoutHint({
     title: "已准备就绪，可以立即购买",
     tone: "success" as const,
   };
+}
+
+function getPasswordHelperText({
+  nextAction,
+  verificationType,
+  hasVerificationTicket,
+}: {
+  nextAction: string;
+  verificationType: string;
+  hasVerificationTicket: boolean;
+}) {
+  if (nextAction === "input_password") {
+    return "检测到这是已注册账户，请输入当前登录密码后继续购买。";
+  }
+
+  if (nextAction === "verify_email") {
+    if (hasVerificationTicket) {
+      return verificationType === "security"
+        ? "邮箱验证已通过，请确认当前账号密码后继续购买。"
+        : "邮箱验证已通过，请设置一个登录密码后继续购买。";
+    }
+
+    return verificationType === "security"
+      ? "该邮箱账号尚未完成验证，请先收取验证码并验证邮箱，再确认密码完成购买。"
+      : "这是首次使用该邮箱购买，请先收取验证码完成邮箱验证，并设置登录密码。";
+  }
+
+  return "如果这是你的已有账号，请输入密码；如果是首次使用，也可以在当前页面完成邮箱验证后直接购买。";
 }

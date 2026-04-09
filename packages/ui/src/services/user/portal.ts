@@ -71,6 +71,28 @@ export async function prePurchaseOrder(
   );
 }
 
+/** Create portal verification ticket POST /v1/public/portal/verification/ticket */
+export async function createPortalVerificationTicket(
+  body: API.PortalVerificationTicketRequest,
+  options?: { [key: string]: any }
+) {
+  return request<
+    API.Response & { data?: API.PortalVerificationTicketResponse }
+  >(
+    `${
+      import.meta.env.VITE_API_PREFIX || ""
+    }/v1/public/portal/verification/ticket`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: body,
+      ...(options || {}),
+    }
+  );
+}
+
 /** Purchase subscription POST /v1/public/portal/purchase */
 export async function purchase(
   body: API.PortalPurchaseRequest,
