@@ -69,9 +69,14 @@ export default function Content({
     params.payment !== undefined &&
     params.payment !== null &&
     params.payment !== -1;
+  const isReadyForPrecheck =
+    !!subscription?.id &&
+    hasSelectedPayment &&
+    Boolean(params.identifier) &&
+    isEmailValid.valid;
 
   const { data: order, isFetching: isCheckingPurchaseAvailability } = useQuery({
-    enabled: !!subscription?.id && hasSelectedPayment,
+    enabled: isReadyForPrecheck,
     queryKey: [
       "prePurchaseOrder",
       subscription?.id,
@@ -135,7 +140,11 @@ export default function Content({
       toast.error("请选择有效的支付方式后再提交。");
       return;
     }
-    if (!order?.can_purchase) {
+    if (isCheckingPurchaseAvailability) {
+      toast.error("正在检查当前购买资格，请稍候再试。");
+      return;
+    }
+    if (order?.can_purchase === false) {
       toast.error(order?.purchase_block_reason || "当前条件下暂时无法购买。");
       return;
     }
@@ -161,7 +170,14 @@ export default function Content({
         console.log(error);
       }
     });
-  }, [params, navigate, isEmailValid.valid, paymentMethods, order]);
+  }, [
+    params,
+    navigate,
+    isCheckingPurchaseAvailability,
+    isEmailValid.valid,
+    paymentMethods,
+    order,
+  ]);
 
   if (!subscription) {
     return (
@@ -202,15 +218,16 @@ export default function Content({
     ) : (
       selectedPaymentFeeRule
     );
-  const canPurchase = order?.can_purchase === true;
+  const isPurchaseBlocked = order?.can_purchase === false;
   const checkoutHint = getCheckoutHint({
     hasIdentifier: Boolean(params.identifier),
     isEmailValid: isEmailValid.valid,
     emailMessage: isEmailValid.message,
+    isReadyForPrecheck,
     isCheckingPurchaseAvailability,
     loading,
     purchaseBlockReason: order?.purchase_block_reason,
-    canPurchase,
+    isPurchaseBlocked,
     payment: params.payment,
     paymentMethods,
   });
@@ -564,7 +581,8 @@ export default function Content({
                         !isEmailValid.valid ||
                         loading ||
                         paymentMethods.length === 0 ||
-                        !canPurchase
+                        isCheckingPurchaseAvailability ||
+                        isPurchaseBlocked
                       }
                       onClick={handleSubmit}
                       size="lg"
@@ -672,20 +690,22 @@ function getCheckoutHint({
   hasIdentifier,
   isEmailValid,
   emailMessage,
+  isReadyForPrecheck,
   isCheckingPurchaseAvailability,
   loading,
   purchaseBlockReason,
-  canPurchase,
+  isPurchaseBlocked,
   payment,
   paymentMethods,
 }: {
   hasIdentifier: boolean;
   isEmailValid: boolean;
   emailMessage?: string;
+  isReadyForPrecheck: boolean;
   isCheckingPurchaseAvailability: boolean;
   loading: boolean;
   purchaseBlockReason?: string;
-  canPurchase: boolean;
+  isPurchaseBlocked: boolean;
   payment: number;
   paymentMethods: API.PaymentMethod[];
 }) {
@@ -731,6 +751,15 @@ function getCheckoutHint({
     };
   }
 
+  if (!isReadyForPrecheck) {
+    return {
+      description:
+        "填写可用邮箱后，如为已有账号请继续输入密码，系统会自动检查是否允许直接下单。",
+      title: "下一步：完善购买信息",
+      tone: "warning" as const,
+    };
+  }
+
   if (isCheckingPurchaseAvailability) {
     return {
       description: "正在根据当前邮箱、密码和支付方式检查是否可以直接创建订单。",
@@ -739,7 +768,7 @@ function getCheckoutHint({
     };
   }
 
-  if (!canPurchase) {
+  if (isPurchaseBlocked) {
     return {
       description:
         purchaseBlockReason ||
