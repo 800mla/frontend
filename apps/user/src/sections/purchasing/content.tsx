@@ -65,24 +65,32 @@ export default function Content({
     message: "",
   });
   const [paymentMethods, setPaymentMethods] = useState<API.PaymentMethod[]>([]);
+  const hasSelectedPayment =
+    params.payment !== undefined &&
+    params.payment !== null &&
+    params.payment !== -1;
 
-  const { data: order } = useQuery({
-    enabled:
-      !!subscription?.id &&
-      params.payment !== undefined &&
-      params.payment !== null &&
-      params.payment !== -1,
+  const { data: order, isFetching: isCheckingPurchaseAvailability } = useQuery({
+    enabled: !!subscription?.id && hasSelectedPayment,
     queryKey: [
       "prePurchaseOrder",
       subscription?.id,
+      params.auth_type,
+      params.identifier,
+      params.password,
       params.coupon,
       params.quantity,
       params.payment,
     ],
     queryFn: async () => {
       const { data } = await prePurchaseOrder({
-        ...params,
+        auth_type: params.auth_type,
+        identifier: params.identifier,
+        password: params.password,
+        payment: params.payment,
         subscribe_id: subscription?.id as number,
+        quantity: params.quantity,
+        coupon: params.coupon,
       } as API.PrePurchaseOrderRequest);
       return data.data;
     },
@@ -127,17 +135,22 @@ export default function Content({
       toast.error("请选择有效的支付方式后再提交。");
       return;
     }
+    if (!order?.can_purchase) {
+      toast.error(order?.purchase_block_reason || "当前条件下暂时无法购买。");
+      return;
+    }
 
     startTransition(async () => {
       try {
         const { data } = await purchase(params);
-        const { order_no } = data.data!;
+        const { order_no, payable_amount } = data.data!;
         if (order_no) {
           localStorage.setItem(
             order_no,
             JSON.stringify({
               auth_type: params.auth_type,
               identifier: params.identifier,
+              payable_amount,
             })
           );
           navigate({ to: "/purchasing/order", search: { order_no } });
@@ -148,7 +161,7 @@ export default function Content({
         console.log(error);
       }
     });
-  }, [params, navigate, isEmailValid.valid, paymentMethods]);
+  }, [params, navigate, isEmailValid.valid, paymentMethods, order]);
 
   if (!subscription) {
     return (
@@ -189,11 +202,15 @@ export default function Content({
     ) : (
       selectedPaymentFeeRule
     );
+  const canPurchase = order?.can_purchase === true;
   const checkoutHint = getCheckoutHint({
     hasIdentifier: Boolean(params.identifier),
     isEmailValid: isEmailValid.valid,
     emailMessage: isEmailValid.message,
+    isCheckingPurchaseAvailability,
     loading,
+    purchaseBlockReason: order?.purchase_block_reason,
+    canPurchase,
     payment: params.payment,
     paymentMethods,
   });
@@ -328,10 +345,7 @@ export default function Content({
                           value={params.password || ""}
                         />
                         <p className="text-[#8b7b6f] text-xs leading-6 dark:text-[#af9886]">
-                          {t(
-                            "passwordHint",
-                            "If you do not enter a password, we will automatically generate one and send it to your email."
-                          )}
+                          已有账号请输入密码后再购买；新邮箱需先完成邮箱验证。
                         </p>
                       </div>
                     )}
@@ -549,7 +563,8 @@ export default function Content({
                       disabled={
                         !isEmailValid.valid ||
                         loading ||
-                        paymentMethods.length === 0
+                        paymentMethods.length === 0 ||
+                        !canPurchase
                       }
                       onClick={handleSubmit}
                       size="lg"
@@ -657,14 +672,20 @@ function getCheckoutHint({
   hasIdentifier,
   isEmailValid,
   emailMessage,
+  isCheckingPurchaseAvailability,
   loading,
+  purchaseBlockReason,
+  canPurchase,
   payment,
   paymentMethods,
 }: {
   hasIdentifier: boolean;
   isEmailValid: boolean;
   emailMessage?: string;
+  isCheckingPurchaseAvailability: boolean;
   loading: boolean;
+  purchaseBlockReason?: string;
+  canPurchase: boolean;
   payment: number;
   paymentMethods: API.PaymentMethod[];
 }) {
@@ -706,6 +727,24 @@ function getCheckoutHint({
     return {
       description: "选择一个支付方式后，页面会同步试算实际支付金额。",
       title: "下一步：请选择支付方式",
+      tone: "warning" as const,
+    };
+  }
+
+  if (isCheckingPurchaseAvailability) {
+    return {
+      description: "正在根据当前邮箱、密码和支付方式检查是否可以直接创建订单。",
+      title: "正在检查购买资格",
+      tone: "warning" as const,
+    };
+  }
+
+  if (!canPurchase) {
+    return {
+      description:
+        purchaseBlockReason ||
+        "当前条件下暂时无法直接创建订单，请先按提示完成处理。",
+      title: "暂时无法提交订单",
       tone: "warning" as const,
     };
   }

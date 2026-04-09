@@ -534,6 +534,7 @@ declare namespace API {
 
   type PortalPurchaseResponse = {
     order_no: string;
+    payable_amount: number;
   };
 
   type PreOrderResponse = {
@@ -547,6 +548,9 @@ declare namespace API {
   };
 
   type PrePurchaseOrderRequest = {
+    auth_type?: string;
+    identifier?: string;
+    password?: string;
     payment?: number;
     subscribe_id: number;
     quantity: number;
@@ -560,6 +564,8 @@ declare namespace API {
     coupon: string;
     coupon_discount: number;
     fee_amount: number;
+    can_purchase: boolean;
+    purchase_block_reason: string;
   };
 
   type PreRenewalOrderResponse = {
@@ -744,6 +750,7 @@ declare namespace API {
     quantity: number;
     price: number;
     amount: number;
+    payable_amount: number;
     discount: number;
     coupon: string;
     coupon_discount: number;

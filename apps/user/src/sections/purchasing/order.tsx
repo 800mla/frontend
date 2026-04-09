@@ -21,7 +21,7 @@ import { formatDate } from "@workspace/ui/utils/formatting";
 import { useCountDown } from "ahooks";
 import { addMinutes, format } from "date-fns";
 import { QRCodeCanvas } from "qrcode.react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Display } from "@/components/display";
 import { SubscribeBilling } from "@/sections/subscribe/billing";
@@ -37,17 +37,41 @@ export default function Order() {
   const [enabled, setEnabled] = useState<boolean>(false);
   const search = useSearch({ from: "/(main)/purchasing/order/" });
   const plansLink = "/purchasing";
+  const cachedOrderContext = useMemo(() => {
+    if (!orderNo) return {};
+
+    const raw = localStorage.getItem(orderNo);
+    if (!raw) return {};
+
+    try {
+      return JSON.parse(raw) as {
+        auth_type?: string;
+        identifier?: string;
+        payable_amount?: number;
+      };
+    } catch {
+      return {};
+    }
+  }, [orderNo]);
 
   const { data } = useQuery({
     enabled,
-    queryKey: ["queryPurchaseOrder", orderNo],
+    queryKey: [
+      "queryPurchaseOrder",
+      orderNo,
+      cachedOrderContext.auth_type,
+      cachedOrderContext.identifier,
+    ],
     queryFn: async () => {
       if (!orderNo) return;
-      const params = localStorage.getItem(orderNo);
-      const authParams = params ? JSON.parse(params) : {};
       const { data } = await queryPurchaseOrder({
         order_no: orderNo,
-        ...authParams,
+        ...(cachedOrderContext.auth_type
+          ? { auth_type: cachedOrderContext.auth_type }
+          : {}),
+        ...(cachedOrderContext.identifier
+          ? { identifier: cachedOrderContext.identifier }
+          : {}),
       });
       if (data?.data?.status !== 1) {
         setEnabled(false);
@@ -61,6 +85,8 @@ export default function Order() {
     },
     refetchInterval: 3000,
   });
+  const payableAmount =
+    data?.payable_amount ?? cachedOrderContext.payable_amount ?? data?.amount;
 
   const { data: payment } = useQuery({
     enabled: !!orderNo && data?.status === 1,
@@ -177,7 +203,8 @@ export default function Order() {
             <Separator />
             <SubscribeBilling
               order={{
-                ...data,
+                ...(data || {}),
+                amount: payableAmount,
                 unit_price: data?.subscribe?.unit_price,
                 show_original_price: data?.subscribe?.show_original_price,
               }}
