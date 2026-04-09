@@ -8,10 +8,12 @@ import { Separator } from "@workspace/ui/components/separator";
 import { EnhancedInput } from "@workspace/ui/composed/enhanced-input";
 import { Icon } from "@workspace/ui/composed/icon";
 import { cn } from "@workspace/ui/lib/utils";
+import { sendEmailCode } from "@workspace/ui/services/common/common";
 import {
   createPortalVerificationTicket,
   prePurchaseOrder,
   purchase,
+  sendPortalCode,
 } from "@workspace/ui/services/user/portal";
 import { LoaderCircle } from "lucide-react";
 import {
@@ -25,7 +27,6 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Display } from "@/components/display";
 import { getLoginPromoCoupon } from "@/lib/login-promo";
-import SendCode from "@/sections/auth/send-code";
 import { SubscribeBilling } from "@/sections/subscribe/billing";
 import CouponInput from "@/sections/subscribe/coupon-input";
 import { SubscribeDetail } from "@/sections/subscribe/detail";
@@ -65,6 +66,7 @@ export default function Content({
     password: "",
   });
   const [loading, startTransition] = useTransition();
+  const [isSendingPortalCode, startSendPortalCode] = useTransition();
   const [isVerifyingPortalEmail, startVerifyPortalEmail] = useTransition();
   const [isEmailValid, setIsEmailValid] = useState({
     valid: false,
@@ -73,6 +75,7 @@ export default function Content({
   const [paymentMethods, setPaymentMethods] = useState<API.PaymentMethod[]>([]);
   const [verificationCode, setVerificationCode] = useState("");
   const [portalVerificationTicket, setPortalVerificationTicket] = useState("");
+  const [portalCodeTargetDate, setPortalCodeTargetDate] = useState<number>();
   const hasSelectedPayment =
     params.payment !== undefined &&
     params.payment !== null &&
@@ -108,15 +111,20 @@ export default function Content({
       return data.data;
     },
   });
+  const accountMode = order?.account_mode || "";
   const nextAction = order?.next_action || "none";
   const verificationType = order?.verification_type || "";
   const requiresEmailVerification = nextAction === "verify_email";
   const requiresPassword =
-    nextAction === "input_password" || requiresEmailVerification;
+    order?.require_password ??
+    (nextAction === "input_password" || requiresEmailVerification);
   const hasPassword = Boolean(params.password?.trim());
   const hasVerificationTicket = Boolean(portalVerificationTicket);
   const verificationCodeType: 1 | 2 = verificationType === "security" ? 2 : 1;
   const isPurchaseBlocked = order?.can_purchase === false;
+  const portalCodeSeconds = portalCodeTargetDate
+    ? Math.max(0, Math.ceil((portalCodeTargetDate - Date.now()) / 1000))
+    : 0;
   const canSubmitPurchase =
     isEmailValid.valid &&
     paymentMethods.length > 0 &&
@@ -146,11 +154,37 @@ export default function Content({
   }, [params.identifier, params.auth_type]);
 
   useEffect(() => {
+    const storedEndTime = localStorage.getItem("portal_verify_code_email");
+    if (!storedEndTime) return;
+
+    const endTime = Number.parseInt(storedEndTime, 10);
+    if (endTime > Date.now()) {
+      setPortalCodeTargetDate(endTime);
+      return;
+    }
+
+    localStorage.removeItem("portal_verify_code_email");
+  }, []);
+
+  useEffect(() => {
     if (nextAction !== "verify_email" && portalVerificationTicket) {
       setPortalVerificationTicket("");
       setVerificationCode("");
     }
   }, [nextAction, portalVerificationTicket]);
+
+  useEffect(() => {
+    if (!portalCodeTargetDate) return;
+
+    const interval = setInterval(() => {
+      if (portalCodeTargetDate <= Date.now()) {
+        setPortalCodeTargetDate(undefined);
+        localStorage.removeItem("portal_verify_code_email");
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [portalCodeTargetDate]);
 
   const handleChange = useCallback(
     (field: keyof typeof params, value: string | number) => {
@@ -161,6 +195,52 @@ export default function Content({
     },
     []
   );
+
+  const setPortalCodeTimer = useCallback(() => {
+    const endTime = Date.now() + common.verify_code.verify_code_interval * 1000;
+    setPortalCodeTargetDate(endTime);
+    localStorage.setItem("portal_verify_code_email", endTime.toString());
+  }, [common.verify_code.verify_code_interval]);
+
+  const handleSendPortalCode = useCallback(async () => {
+    if (!(params.identifier && isEmailValid.valid)) {
+      toast.error("请先填写有效邮箱后再继续。");
+      return;
+    }
+
+    startSendPortalCode(async () => {
+      try {
+        await sendPortalCode({
+          auth_type: params.auth_type,
+          identifier: params.identifier,
+        });
+        setPortalCodeTimer();
+      } catch (error: any) {
+        const status = error?.status || error?.response?.status;
+        if (status !== 404) {
+          console.log(error);
+          return;
+        }
+
+        try {
+          await sendEmailCode({
+            email: params.identifier,
+            type: verificationCodeType,
+          });
+          setPortalCodeTimer();
+        } catch (fallbackError) {
+          console.log(fallbackError);
+        }
+      }
+    });
+  }, [
+    params.identifier,
+    params.auth_type,
+    isEmailValid.valid,
+    setPortalCodeTimer,
+    verificationCodeType,
+    startSendPortalCode,
+  ]);
 
   const handleVerifyPortalEmail = useCallback(async () => {
     if (!(params.identifier && isEmailValid.valid)) {
@@ -325,6 +405,7 @@ export default function Content({
       selectedPaymentFeeRule
     );
   const checkoutHint = getCheckoutHint({
+    accountMode,
     hasIdentifier: Boolean(params.identifier),
     hasPassword,
     hasVerificationTicket,
@@ -338,6 +419,7 @@ export default function Content({
     isPurchaseBlocked,
     payment: params.payment,
     paymentMethods,
+    requirePassword: requiresPassword,
     verificationType,
   });
 
@@ -472,8 +554,10 @@ export default function Content({
                         />
                         <p className="text-[#8b7b6f] text-xs leading-6 dark:text-[#af9886]">
                           {getPasswordHelperText({
+                            accountMode,
                             hasVerificationTicket,
                             nextAction,
+                            requirePassword: requiresPassword,
                             verificationType,
                           })}
                         </p>
@@ -507,15 +591,24 @@ export default function Content({
                                 type="text"
                                 value={verificationCode}
                               />
-                              <SendCode
+                              <Button
                                 className="h-12 rounded-[20px] px-4"
-                                params={{
-                                  email: params.identifier,
-                                  type: verificationCodeType,
-                                }}
-                                size="default"
-                                type="email"
-                              />
+                                disabled={
+                                  !(params.identifier && isEmailValid.valid) ||
+                                  isSendingPortalCode ||
+                                  portalCodeSeconds > 0
+                                }
+                                onClick={handleSendPortalCode}
+                                type="button"
+                                variant="outline"
+                              >
+                                {isSendingPortalCode && (
+                                  <LoaderCircle className="mr-2 size-4 animate-spin" />
+                                )}
+                                {portalCodeSeconds > 0
+                                  ? `${portalCodeSeconds}s`
+                                  : "发送验证码"}
+                              </Button>
                               <Button
                                 className="h-12 rounded-[20px] px-4"
                                 disabled={
@@ -867,6 +960,7 @@ function formatPaymentFeeRule(
 }
 
 function getCheckoutHint({
+  accountMode,
   hasIdentifier,
   hasPassword,
   hasVerificationTicket,
@@ -880,8 +974,10 @@ function getCheckoutHint({
   isPurchaseBlocked,
   payment,
   paymentMethods,
+  requirePassword,
   verificationType,
 }: {
+  accountMode: string;
   hasIdentifier: boolean;
   hasPassword: boolean;
   hasVerificationTicket: boolean;
@@ -895,6 +991,7 @@ function getCheckoutHint({
   isPurchaseBlocked: boolean;
   payment: number;
   paymentMethods: API.PaymentMethod[];
+  requirePassword: boolean;
   verificationType: string;
 }) {
   if (loading) {
@@ -978,15 +1075,13 @@ function getCheckoutHint({
       return {
         description:
           purchaseBlockReason ||
-          (verificationType === "security"
-            ? "该邮箱账号尚未完成验证，请先收取验证码并完成校验。"
-            : "这是首次使用该邮箱购买，请先收取验证码并完成邮箱验证。"),
+          getVerificationPrompt({ accountMode, verificationType }),
         title: "下一步：请先完成邮箱验证",
         tone: "warning" as const,
       };
     }
 
-    if (!hasPassword) {
+    if (requirePassword && !hasPassword) {
       return {
         description:
           verificationType === "security"
@@ -1023,29 +1118,52 @@ function getCheckoutHint({
 }
 
 function getPasswordHelperText({
+  accountMode,
   nextAction,
   verificationType,
   hasVerificationTicket,
+  requirePassword,
 }: {
+  accountMode: string;
   nextAction: string;
   verificationType: string;
   hasVerificationTicket: boolean;
+  requirePassword: boolean;
 }) {
   if (nextAction === "input_password") {
     return "检测到这是已注册账户，请输入当前登录密码后继续购买。";
   }
 
   if (nextAction === "verify_email") {
+    if (!requirePassword) {
+      return "当前邮箱需要先完成验证码验证，通过后就可以继续购买。";
+    }
+
     if (hasVerificationTicket) {
       return verificationType === "security"
         ? "邮箱验证已通过，请确认当前账号密码后继续购买。"
         : "邮箱验证已通过，请设置一个登录密码后继续购买。";
     }
 
-    return verificationType === "security"
-      ? "该邮箱账号尚未完成验证，请先收取验证码并验证邮箱，再确认密码完成购买。"
-      : "这是首次使用该邮箱购买，请先收取验证码完成邮箱验证，并设置登录密码。";
+    return getVerificationPrompt({ accountMode, verificationType });
   }
 
   return "如果这是你的已有账号，请输入密码；如果是首次使用，也可以在当前页面完成邮箱验证后直接购买。";
+}
+
+function getVerificationPrompt({
+  accountMode,
+  verificationType,
+}: {
+  accountMode: string;
+  verificationType: string;
+}) {
+  if (
+    verificationType === "security" ||
+    accountMode === "existing_unverified"
+  ) {
+    return "该邮箱账号尚未完成验证，请先收取验证码并验证邮箱，再确认密码完成购买。";
+  }
+
+  return "这是首次使用该邮箱购买，请先收取验证码完成邮箱验证，并设置登录密码。";
 }

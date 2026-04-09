@@ -567,8 +567,25 @@ declare namespace API {
     fee_amount: number;
     can_purchase: boolean;
     purchase_block_reason: string;
+    account_mode?: string;
     next_action?: string;
     verification_type?: string;
+    require_password?: boolean;
+  };
+
+  type PortalSendCodeRequest = {
+    auth_type?: string;
+    identifier: string;
+    turnstile_token?: string;
+  };
+
+  type PortalSendCodeResponse = {
+    status: boolean;
+    account_mode?: string;
+    verification_type?: string;
+    next_action?: string;
+    resend_after?: number;
+    expires_in?: number;
   };
 
   type PortalVerificationTicketRequest = {

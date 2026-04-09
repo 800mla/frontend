@@ -71,6 +71,24 @@ export async function prePurchaseOrder(
   );
 }
 
+/** Send portal verification code POST /v1/public/portal/send_code */
+export async function sendPortalCode(
+  body: API.PortalSendCodeRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.Response & { data?: API.PortalSendCodeResponse }>(
+    `${import.meta.env.VITE_API_PREFIX || ""}/v1/public/portal/send_code`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: body,
+      ...(options || {}),
+    }
+  );
+}
+
 /** Create portal verification ticket POST /v1/public/portal/verification/ticket */
 export async function createPortalVerificationTicket(
   body: API.PortalVerificationTicketRequest,
