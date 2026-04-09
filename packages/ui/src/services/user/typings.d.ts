@@ -733,14 +733,14 @@ declare namespace API {
   };
 
   type QueryPurchaseOrderParams = {
-    auth_type: string;
-    identifier: string;
+    auth_type?: string;
+    identifier?: string;
     order_no: string;
   };
 
   type QueryPurchaseOrderRequest = {
-    auth_type: string;
-    identifier: string;
+    auth_type?: string;
+    identifier?: string;
     order_no: string;
   };
 
