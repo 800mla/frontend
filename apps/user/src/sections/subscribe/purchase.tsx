@@ -15,7 +15,6 @@ import { preCreateOrder, purchase } from "@workspace/ui/services/user/order";
 import { LoaderCircle } from "lucide-react";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
-import { getLoginPromoCoupon } from "@/lib/login-promo";
 import CouponInput from "@/sections/subscribe/coupon-input";
 import DurationSelector from "@/sections/subscribe/duration-selector";
 import PaymentMethods from "@/sections/subscribe/payment-methods";
@@ -33,7 +32,7 @@ export default function Purchase({
   setSubscribe,
 }: Readonly<PurchaseProps>) {
   const { t } = useTranslation("subscribe");
-  const { getUserInfo, user } = useGlobalStore();
+  const { getUserInfo } = useGlobalStore();
   const router = useRouter();
   const [params, setParams] = useState<Partial<API.PurchaseOrderRequest>>({
     quantity: 1,
@@ -71,11 +70,12 @@ export default function Purchase({
         throw error;
       }
     },
+    retry: false,
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
     if (subscribe) {
-      const promoCoupon = getLoginPromoCoupon(user?.id);
       const defaultQuantity =
         subscribe.show_original_price === false && subscribe.discount?.[0]
           ? subscribe.discount[0].quantity
@@ -84,10 +84,9 @@ export default function Purchase({
         ...prev,
         quantity: defaultQuantity,
         subscribe_id: subscribe?.id,
-        coupon: prev.coupon || promoCoupon,
       }));
     }
-  }, [subscribe, user?.id]);
+  }, [subscribe]);
 
   const handleChange = useCallback(
     (field: keyof typeof params, value: string | number) => {

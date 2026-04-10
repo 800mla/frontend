@@ -26,10 +26,6 @@ import {
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Display } from "@/components/display";
-import {
-  getLoginPromoCoupon,
-  LOGIN_PROMO_COUPON_CODE,
-} from "@/lib/login-promo";
 import { SubscribeBilling } from "@/sections/subscribe/billing";
 import CouponInput from "@/sections/subscribe/coupon-input";
 import { SubscribeDetail } from "@/sections/subscribe/detail";
@@ -57,7 +53,7 @@ export default function Content({
     NoLimit: t("NoLimit", "No Limit"),
     Year: t("Year", "Year"),
   };
-  const { common, user } = useGlobalStore();
+  const { common } = useGlobalStore();
   const navigate = useNavigate();
   const [params, setParams] = useState<API.PortalPurchaseRequest>({
     quantity: 1,
@@ -79,6 +75,7 @@ export default function Content({
   const [verificationCode, setVerificationCode] = useState("");
   const [portalVerificationTicket, setPortalVerificationTicket] = useState("");
   const [portalCodeTargetDate, setPortalCodeTargetDate] = useState<number>();
+  const [portalCodeSeconds, setPortalCodeSeconds] = useState(0);
   const hasSelectedPayment =
     params.payment !== undefined &&
     params.payment !== null &&
@@ -113,6 +110,8 @@ export default function Content({
       } as API.PrePurchaseOrderRequest);
       return data.data;
     },
+    retry: false,
+    refetchOnWindowFocus: false,
   });
   const accountMode = order?.account_mode || "";
   const nextAction = order?.next_action || "none";
@@ -125,9 +124,6 @@ export default function Content({
   const hasVerificationTicket = Boolean(portalVerificationTicket);
   const verificationCodeType: 1 | 2 = verificationType === "security" ? 2 : 1;
   const isPurchaseBlocked = order?.can_purchase === false;
-  const portalCodeSeconds = portalCodeTargetDate
-    ? Math.max(0, Math.ceil((portalCodeTargetDate - Date.now()) / 1000))
-    : 0;
   const canSubmitPurchase =
     isEmailValid.valid &&
     paymentMethods.length > 0 &&
@@ -140,16 +136,14 @@ export default function Content({
       (requiresEmailVerification && hasVerificationTicket));
 
   useEffect(() => {
-    if (subscription) {
-      const promoCoupon = getLoginPromoCoupon(user?.id);
-      setParams((prev) => ({
-        ...prev,
-        quantity: 1,
-        subscribe_id: subscription?.id,
-        coupon: prev.coupon || promoCoupon,
-      }));
-    }
-  }, [subscription, user?.id]);
+    if (!subscription) return;
+
+    setParams((prev) => ({
+      ...prev,
+      quantity: 1,
+      subscribe_id: subscription.id,
+    }));
+  }, [subscription]);
 
   useEffect(() => {
     setVerificationCode("");
@@ -163,6 +157,9 @@ export default function Content({
     const endTime = Number.parseInt(storedEndTime, 10);
     if (endTime > Date.now()) {
       setPortalCodeTargetDate(endTime);
+      setPortalCodeSeconds(
+        Math.max(0, Math.ceil((endTime - Date.now()) / 1000))
+      );
       return;
     }
 
@@ -179,12 +176,22 @@ export default function Content({
   useEffect(() => {
     if (!portalCodeTargetDate) return;
 
-    const interval = setInterval(() => {
-      if (portalCodeTargetDate <= Date.now()) {
+    const updateCountdown = () => {
+      const remaining = Math.max(
+        0,
+        Math.ceil((portalCodeTargetDate - Date.now()) / 1000)
+      );
+      setPortalCodeSeconds(remaining);
+
+      if (remaining === 0) {
         setPortalCodeTargetDate(undefined);
+        setPortalCodeSeconds(0);
         localStorage.removeItem("portal_verify_code_email");
       }
-    }, 1000);
+    };
+
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
 
     return () => clearInterval(interval);
   }, [portalCodeTargetDate]);
@@ -269,16 +276,6 @@ export default function Content({
           return;
         }
         setPortalVerificationTicket(ticket);
-        if (accountMode === "new_email" && !params.coupon?.trim()) {
-          setParams((prev) => ({
-            ...prev,
-            coupon: prev.coupon || LOGIN_PROMO_COUPON_CODE,
-          }));
-          toast.success(
-            "邮箱验证已通过，新用户礼券已自动带入，可直接继续下单。"
-          );
-          return;
-        }
         toast.success("邮箱验证已通过，现在可以继续下单。");
       } catch (error) {
         console.log(error);
@@ -286,9 +283,7 @@ export default function Content({
       }
     });
   }, [
-    accountMode,
     params.auth_type,
-    params.coupon,
     params.identifier,
     isEmailValid.valid,
     verificationCode,
@@ -401,11 +396,7 @@ export default function Content({
           tone: "success" as const,
         }
       : {
-          text:
-            params.coupon === LOGIN_PROMO_COUPON_CODE &&
-            accountMode === "new_email"
-              ? "新用户礼券已自动带入，本单会按后台同名优惠券真实试算；若后台未创建同名优惠券则不会生效。"
-              : "优惠码已自动带入，下方订单试算会显示真实减免；若后台未创建同名优惠券则不会生效。",
+          text: "优惠码已自动带入，下方订单试算会显示真实减免；若后台未创建同名优惠券则不会生效。",
           tone: "default" as const,
         }
     : undefined;
