@@ -26,7 +26,10 @@ import {
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Display } from "@/components/display";
-import { getLoginPromoCoupon } from "@/lib/login-promo";
+import {
+  getLoginPromoCoupon,
+  LOGIN_PROMO_COUPON_CODE,
+} from "@/lib/login-promo";
 import { SubscribeBilling } from "@/sections/subscribe/billing";
 import CouponInput from "@/sections/subscribe/coupon-input";
 import { SubscribeDetail } from "@/sections/subscribe/detail";
@@ -266,6 +269,16 @@ export default function Content({
           return;
         }
         setPortalVerificationTicket(ticket);
+        if (accountMode === "new_email" && !params.coupon?.trim()) {
+          setParams((prev) => ({
+            ...prev,
+            coupon: prev.coupon || LOGIN_PROMO_COUPON_CODE,
+          }));
+          toast.success(
+            "邮箱验证已通过，新用户礼券已自动带入，可直接继续下单。"
+          );
+          return;
+        }
         toast.success("邮箱验证已通过，现在可以继续下单。");
       } catch (error) {
         console.log(error);
@@ -273,7 +286,9 @@ export default function Content({
       }
     });
   }, [
+    accountMode,
     params.auth_type,
+    params.coupon,
     params.identifier,
     isEmailValid.valid,
     verificationCode,
@@ -386,7 +401,11 @@ export default function Content({
           tone: "success" as const,
         }
       : {
-          text: "优惠码已自动带入，下方订单试算会显示真实减免；若后台未创建同名优惠券则不会生效。",
+          text:
+            params.coupon === LOGIN_PROMO_COUPON_CODE &&
+            accountMode === "new_email"
+              ? "新用户礼券已自动带入，本单会按后台同名优惠券真实试算；若后台未创建同名优惠券则不会生效。"
+              : "优惠码已自动带入，下方订单试算会显示真实减免；若后台未创建同名优惠券则不会生效。",
           tone: "default" as const,
         }
     : undefined;
@@ -577,6 +596,9 @@ export default function Content({
                               {verificationType === "security"
                                 ? "检测到该邮箱账号尚未完成验证，请先获取验证码确认邮箱归属，再继续完成购买。"
                                 : "这是首次使用该邮箱购买，请先收取验证码完成邮箱验证，之后可以直接创建订单。"}
+                            </p>
+                            <p className="mb-3 text-[#8b7b6f] text-xs leading-6 dark:text-[#af9886]">
+                              如果收件箱里暂时找不到验证码邮件，请到垃圾邮件中查看。
                             </p>
                             <div className="flex items-center gap-2">
                               <EnhancedInput
@@ -866,7 +888,6 @@ export default function Content({
                       {t("buyNow", "Buy Now")}
                     </Button>
                   </div>
-
                 </div>
               </CardContent>
             </Card>

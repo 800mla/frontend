@@ -192,7 +192,7 @@ export default function RegisterForm({
                 render={({ field }) => (
                   <FormItem className="gap-2.5">
                     <AuthFieldHeading
-                      description="验证码会发送到上方邮箱，请在有效时间内完成填写。"
+                      description="验证码会发送到上方邮箱，请在有效时间内完成填写；如果收件箱里暂时找不到，请到垃圾邮件中查看。"
                       icon="uil:message"
                       title="邮箱验证"
                     />
