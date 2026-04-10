@@ -45,10 +45,6 @@ import CopyToClipboard from "react-copy-to-clipboard";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import { Display } from "@/components/display";
-import {
-  LOGIN_PROMO_COUPON_CODE,
-  storeLoginPromoCoupon,
-} from "@/lib/login-promo";
 import { useGlobalStore } from "@/stores/global";
 import { getPlatform } from "@/utils/common";
 import Renewal from "../../subscribe/renewal";
@@ -286,7 +282,6 @@ export default function Content() {
   };
 
   const handlePromoClaim = () => {
-    storeLoginPromoCoupon(user?.id, LOGIN_PROMO_COUPON_CODE);
     setPromoOpen(false);
     setStoredPromoState("claimed");
   };
@@ -309,16 +304,16 @@ export default function Content() {
             <div className="relative space-y-5">
               <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] uppercase tracking-[0.16em]">
                 <Icon className="size-4" icon="uil:gift" />
-                {t("promoBadge", "限时秒杀")}
+                {t("promoBadge", "首单限时资格")}
               </div>
               <DialogHeader className="space-y-3 text-left">
                 <DialogTitle className="font-semibold text-[1.9rem] tracking-tight">
-                  {t("promoTitle", "登录专享限时礼券")}
+                  {t("promoTitle", "首单优惠资格已为你保留")}
                 </DialogTitle>
                 <DialogDescription className="max-w-md text-sm text-white/85 leading-7">
                   {t(
                     "promoDescription",
-                    "活动窗口开启中，先把优惠直接给到你。现在领取，下单时会更轻一点。"
+                    "系统已为当前账号保留首单优惠资格，进入套餐页后会自动参与试算，不需要额外输入优惠码。"
                   )}
                 </DialogDescription>
               </DialogHeader>
@@ -326,7 +321,7 @@ export default function Content() {
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                   <div>
                     <div className="text-sm text-white/80">
-                      {t("promoCountdown", "剩余领取时间")}
+                      {t("promoCountdown", "资格保留时间")}
                     </div>
                     <div className="mt-3 flex items-baseline gap-3 font-semibold">
                       <span className="text-[2.5rem]">{countdown.hours}</span>
@@ -339,30 +334,13 @@ export default function Content() {
 
                   <div className="rounded-[24px] border border-white/20 bg-white/12 px-4 py-3">
                     <div className="text-[11px] text-white/65 uppercase tracking-[0.16em]">
-                      登录礼券码
+                      当前权益
                     </div>
-                    <div className="mt-2 flex items-center gap-2">
-                      <code className="font-semibold text-[1.05rem] text-white tracking-[0.12em]">
-                        {LOGIN_PROMO_COUPON_CODE}
-                      </code>
-                      <CopyToClipboard
-                        onCopy={(_, copied) => {
-                          if (copied) {
-                            toast.success("优惠码已复制");
-                          }
-                        }}
-                        text={LOGIN_PROMO_COUPON_CODE}
-                      >
-                        <button
-                          className="inline-flex h-8 items-center justify-center rounded-full border border-white/20 bg-white/10 px-3 text-white/90 transition hover:bg-white/15"
-                          type="button"
-                        >
-                          <Icon className="size-4" icon="uil:copy" />
-                        </button>
-                      </CopyToClipboard>
+                    <div className="mt-2 font-semibold text-[1.05rem] text-white tracking-[0.02em]">
+                      首单优惠将自动应用
                     </div>
                     <div className="mt-2 text-white/72 text-xs leading-6">
-                      领取后会自动带入套餐页，下单时按后台同名优惠券真实试算。
+                      去套餐页后系统会按照当前账号状态实时试算，最终抵扣和金额以后端返回为准。
                     </div>
                   </div>
                 </div>
@@ -381,7 +359,7 @@ export default function Content() {
                   size="lg"
                 >
                   <Link onClick={handlePromoClaim} to="/subscribe">
-                    {t("promoAction", "立即去选套餐")}
+                    {t("promoAction", "去套餐页查看优惠")}
                   </Link>
                 </Button>
               </DialogFooter>
@@ -856,15 +834,15 @@ export default function Content() {
               </div>
 
               <div className="mt-5 rounded-[36px] bg-[linear-gradient(180deg,#ff6f8d_0%,#ff7b8b_34%,#ffa898_100%)] px-5 py-6 text-center text-white shadow-[0_28px_70px_-40px_rgba(255,120,142,0.55)]">
-                <div className="font-semibold text-[1.3rem]">超级秒杀</div>
+                <div className="font-semibold text-[1.3rem]">首单优惠资格</div>
                 <div className="mt-2 font-medium text-[1.25rem] text-white/90">
-                  -{countdown.hours}:{countdown.minutes}:{countdown.seconds}
+                  {countdown.hours}:{countdown.minutes}:{countdown.seconds}
                 </div>
-                <div className="mt-4 font-semibold text-[2.2rem] leading-none tracking-[0.14em]">
-                  {LOGIN_PROMO_COUPON_CODE}
+                <div className="mt-4 font-semibold text-[1.5rem] leading-none">
+                  下单时自动参与试算
                 </div>
                 <div className="mt-4 font-medium text-[1.15rem]">
-                  领券后自动带入套餐页，真实优惠以下单试算为准。
+                  不再需要复制优惠码，系统会按当前账号资格自动计算首单优惠。
                 </div>
               </div>
 
@@ -874,17 +852,17 @@ export default function Content() {
                   className="h-12 w-full rounded-full bg-[linear-gradient(90deg,#ffd6e7,#fff0d8)] text-[#f46b8d] shadow-[0_20px_46px_-32px_rgba(255,128,160,0.55)] hover:opacity-95"
                 >
                   <Link onClick={handlePromoClaim} to="/subscribe">
-                    点击领券下单
+                    去套餐页下单
                   </Link>
                 </Button>
               </div>
 
               <div className="mt-5 text-[#818791] text-sm leading-7 dark:text-[#aa9d92]">
                 {showPinnedOffer
-                  ? "优惠窗口仍在倒计时中，越往后越容易错过。建议直接在上方领取后再去套餐页。"
+                  ? "当前账号的首单优惠资格仍在保留中，建议直接进入套餐页查看实时抵扣。"
                   : pinnedAnnouncement?.content
                     ? getAnnouncementExcerpt(pinnedAnnouncement.content)
-                    : "当前没有额外公告时，这里只保留最重要的优惠提醒。"}
+                    : "当前没有额外公告时，这里只保留最重要的账户优惠提醒。"}
               </div>
 
               {pinnedAnnouncement?.title && (
