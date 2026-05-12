@@ -6,12 +6,15 @@ import {
   RadioGroup,
   RadioGroupItem,
 } from "@workspace/ui/components/radio-group";
+import { formatSubscriptionDurationWithQuantity } from "@workspace/ui/utils";
 import type React from "react";
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
 
 interface DurationSelectorProps {
   quantity: number;
+  durationValue?: number;
+  durationUnit?: string;
   unitTime?: string;
   discounts?: Array<{ quantity: number; discount: number }>;
   onChange: (value: number) => void;
@@ -20,12 +23,14 @@ interface DurationSelectorProps {
 
 const DurationSelector: React.FC<DurationSelectorProps> = ({
   quantity,
+  durationValue,
+  durationUnit,
   unitTime = "Month",
   discounts = [],
   onChange,
   showOriginalPrice = true,
 }) => {
-  const { t } = useTranslation("subscribe");
+  const { t, i18n } = useTranslation("subscribe");
   const handleChange = useCallback(
     (value: string) => {
       onChange(Number(value));
@@ -52,6 +57,12 @@ const DurationSelector: React.FC<DurationSelectorProps> = ({
     (item) => item.quantity === quantity
   )?.discount;
   const discountPercentage = currentDiscount ? 100 - currentDiscount : 0;
+  const resolvedUnit = durationUnit || unitTime;
+  const durationSource = {
+    duration_value: durationValue,
+    duration_unit: durationUnit,
+    unit_time: unitTime,
+  };
 
   return (
     <>
@@ -63,13 +74,30 @@ const DurationSelector: React.FC<DurationSelectorProps> = ({
         onValueChange={handleChange}
         value={String(quantity)}
       >
-        {showOriginalPrice && unitTime !== "Minute" && (
-          <DurationOption label={`1 / ${t(unitTime)}`} value="1" />
+        {showOriginalPrice && resolvedUnit !== "Minute" && (
+          <DurationOption
+            label={formatSubscriptionDurationWithQuantity(
+              1,
+              durationSource,
+              t,
+              {
+                locale: i18n.language,
+              }
+            )}
+            value="1"
+          />
         )}
         {discounts?.map((item) => (
           <DurationOption
             key={item.quantity}
-            label={`${item.quantity} / ${t(unitTime)}`}
+            label={formatSubscriptionDurationWithQuantity(
+              item.quantity,
+              durationSource,
+              t,
+              {
+                locale: i18n.language,
+              }
+            )}
             value={String(item.quantity)}
           />
         ))}

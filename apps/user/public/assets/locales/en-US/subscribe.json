@@ -6,7 +6,7 @@
     "duration": "Duration",
     "fee": "Fee",
     "gift": "gift Deduction",
-    "originalPrice": "Original Price (Monthly)",
+    "originalPrice": "Base Price",
     "price": "Price",
     "productDiscount": "Product Discount",
     "total": "Total"

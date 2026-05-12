@@ -1,12 +1,15 @@
 "use client";
 
 import { Separator } from "@workspace/ui/components/separator";
+import { formatSubscriptionDurationWithQuantity } from "@workspace/ui/utils";
 import { useTranslation } from "react-i18next";
 import { Display } from "@/components/display";
 
 interface SubscribeBillingProps {
   order?: Partial<
     API.OrderDetail & {
+      duration_value?: number;
+      duration_unit?: string;
       unit_price: number;
       unit_time: string;
       subscribe_discount: number;
@@ -16,7 +19,13 @@ interface SubscribeBillingProps {
 }
 
 export function SubscribeBilling({ order }: Readonly<SubscribeBillingProps>) {
-  const { t } = useTranslation("subscribe");
+  const { t, i18n } = useTranslation("subscribe");
+  const durationLabel = formatSubscriptionDurationWithQuantity(
+    order?.quantity || 1,
+    order,
+    t,
+    { locale: i18n.language }
+  );
 
   return (
     <>
@@ -29,10 +38,7 @@ export function SubscribeBilling({ order }: Readonly<SubscribeBillingProps>) {
             <span className="text-muted-foreground">
               {t("billing.duration", "Duration")}
             </span>
-            <span>
-              {order?.quantity || 1}{" "}
-              {t(order?.unit_time || "Month", order?.unit_time || "Month")}
-            </span>
+            <span>{durationLabel}</span>
           </li>
         )}{" "}
         {order?.show_original_price !== false &&
@@ -40,7 +46,7 @@ export function SubscribeBilling({ order }: Readonly<SubscribeBillingProps>) {
           [1, 2].includes(order?.type) && (
             <li>
               <span className="text-muted-foreground">
-                {t("billing.originalPrice", "Original Price (Monthly)")}
+                {t("billing.originalPrice", "Base Price")}
               </span>
               <span>
                 <Display type="currency" value={order?.unit_price} />

@@ -1012,6 +1012,8 @@ declare namespace API {
     description: string;
     unit_price: number;
     unit_time: string;
+    duration_value?: number;
+    duration_unit?: string;
     discount: SubscribeDiscount[];
     replacement: number;
     inventory: number;

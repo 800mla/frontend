@@ -15,6 +15,7 @@ import {
   purchase,
   sendPortalCode,
 } from "@workspace/ui/services/user/portal";
+import { formatSubscriptionDurationWithQuantity } from "@workspace/ui/utils";
 import { LoaderCircle } from "lucide-react";
 import {
   type ReactNode,
@@ -44,15 +45,7 @@ export default function Content({
 }: {
   subscription?: API.Subscribe;
 }) {
-  const { t } = useTranslation("subscribe");
-  const unitTimeMap: Record<string, string> = {
-    Day: t("Day", "Day"),
-    Hour: t("Hour", "Hour"),
-    Minute: t("Minute", "Minute"),
-    Month: t("Month", "Month"),
-    NoLimit: t("NoLimit", "No Limit"),
-    Year: t("Year", "Year"),
-  };
+  const { t, i18n } = useTranslation("subscribe");
   const { common } = useGlobalStore();
   const navigate = useNavigate();
   const [params, setParams] = useState<API.PortalPurchaseRequest>({
@@ -400,8 +393,12 @@ export default function Content({
           tone: "default" as const,
         }
     : undefined;
-  const unitTimeLabel =
-    unitTimeMap[subscription.unit_time || "Month"] || subscription.unit_time;
+  const selectedDurationLabel = formatSubscriptionDurationWithQuantity(
+    params.quantity || 1,
+    subscription,
+    t,
+    { locale: i18n.language }
+  );
   const selectedPaymentFeeRule = selectedPaymentMethod
     ? formatPaymentFeeRule(
         selectedPaymentMethod,
@@ -675,11 +672,13 @@ export default function Content({
                 <div className="rounded-[26px] border border-[#ecddd0] bg-[#fffaf5] p-5 dark:border-[#4f3d31] dark:bg-[#201815]">
                   <DurationSelector
                     discounts={subscription.discount}
+                    durationUnit={subscription.duration_unit}
+                    durationValue={subscription.duration_value}
                     onChange={(value: number) =>
                       handleChange("quantity", value)
                     }
                     quantity={params.quantity!}
-                    unitTime={unitTimeLabel}
+                    unitTime={subscription.unit_time}
                   />
                 </div>
 
@@ -729,10 +728,7 @@ export default function Content({
                 </div>
 
                 <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
-                  <SummaryPill
-                    label="当前周期"
-                    value={`${params.quantity || 1} ${unitTimeLabel}`}
-                  />
+                  <SummaryPill label="当前周期" value={selectedDurationLabel} />
                   <SummaryPill
                     label="支付方式"
                     value={selectedPaymentMethod?.name || "待选择"}
@@ -808,6 +804,8 @@ export default function Content({
                   <SubscribeBilling
                     order={{
                       ...order,
+                      duration_value: subscription.duration_value,
+                      duration_unit: subscription.duration_unit,
                       quantity: params.quantity,
                       unit_price: subscription.unit_price,
                       unit_time: subscription.unit_time,

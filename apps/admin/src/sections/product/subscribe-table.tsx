@@ -16,6 +16,7 @@ import {
   subscribeSort,
   updateSubscribe,
 } from "@workspace/ui/services/admin/subscribe";
+import { formatSubscriptionDuration } from "@workspace/ui/utils";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -24,7 +25,7 @@ import { useSubscribe } from "@/stores/subscribe";
 import SubscribeForm from "./subscribe-form";
 
 export default function SubscribeTable() {
-  const { t } = useTranslation("product");
+  const { t, i18n } = useTranslation("product");
   const [loading, setLoading] = useState(false);
   const ref = useRef<ProTableActions>(null);
   const { fetchSubscribes } = useSubscribe();
@@ -181,10 +182,10 @@ export default function SubscribeTable() {
           cell: ({ row }) => (
             <>
               <Display type="currency" value={row.getValue("unit_price")} />/
-              {t(
-                row.original.unit_time
-                  ? `form.${row.original.unit_time}`
-                  : "form.Month"
+              {formatSubscriptionDuration(
+                row.original,
+                (key, fallback) => t(`form.${key}`, fallback),
+                { locale: i18n.language }
               )}
             </>
           ),

@@ -1,4 +1,5 @@
 export const isBrowser = () => typeof window !== "undefined";
+export * from "./subscription-duration";
 
 /**
  * Extracts the full domain or root domain from a URL.

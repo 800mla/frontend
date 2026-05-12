@@ -40,13 +40,14 @@ import { ArrayInput } from "@workspace/ui/composed/dynamic-Inputs";
 import { JSONEditor } from "@workspace/ui/composed/editor/index";
 import { EnhancedInput } from "@workspace/ui/composed/enhanced-input";
 import { Icon } from "@workspace/ui/composed/icon";
+import { formatSubscriptionDuration } from "@workspace/ui/utils";
 import {
   evaluateWithPrecision,
   unitConversion,
 } from "@workspace/ui/utils/unit-conversions";
 import { CreditCard, Server, Settings } from "lucide-react";
-import { assign, shake } from "radash";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { shake } from "radash";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
@@ -72,6 +73,8 @@ const defaultValues = {
   language: "",
   node_tags: [],
   nodes: [],
+  duration_value: 1,
+  duration_unit: "Month",
   unit_time: "Month",
   deduction_ratio: 0,
   purchase_with_discount: false,
@@ -80,6 +83,29 @@ const defaultValues = {
   show_original_price: false,
   deduction_mode: "auto",
 };
+
+const primaryDurationUnits = ["NoLimit", "Year", "Month", "Day"] as const;
+const legacyDurationUnits = ["Hour", "Minute"] as const;
+
+function normalizeSubscribeValues<T extends Record<string, any>>(values?: T) {
+  const normalized = {
+    ...defaultValues,
+    ...(shake(values, (value) => value === null) as Record<string, any>),
+  };
+  const durationUnit =
+    normalized.duration_unit || normalized.unit_time || defaultValues.unit_time;
+  const rawDurationValue = Number(normalized.duration_value);
+
+  return {
+    ...normalized,
+    duration_unit: durationUnit,
+    duration_value:
+      Number.isFinite(rawDurationValue) && rawDurationValue > 0
+        ? rawDurationValue
+        : 1,
+    unit_time: normalized.unit_time || durationUnit,
+  };
+}
 
 export default function SubscribeForm<T extends Record<string, any>>({
   onSubmit,
@@ -91,7 +117,7 @@ export default function SubscribeForm<T extends Record<string, any>>({
   const { common } = useGlobalStore();
   const { currency } = common;
 
-  const { t } = useTranslation("product");
+  const { t, i18n } = useTranslation("product");
   const [open, setOpen] = useState(false);
   const updateTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -99,6 +125,8 @@ export default function SubscribeForm<T extends Record<string, any>>({
     name: z.string(),
     description: z.string().optional(),
     unit_price: z.number(),
+    duration_value: z.number().min(1),
+    duration_unit: z.string(),
     unit_time: z.string(),
     replacement: z.number().optional(),
     discount: z
@@ -126,10 +154,7 @@ export default function SubscribeForm<T extends Record<string, any>>({
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: assign(
-      defaultValues,
-      shake(initialValues, (value) => value === null) as Record<string, any>
-    ),
+    defaultValues: normalizeSubscribeValues(initialValues),
   });
 
   const debouncedCalculateDiscount = useCallback(
@@ -234,12 +259,7 @@ export default function SubscribeForm<T extends Record<string, any>>({
   );
 
   useEffect(() => {
-    form?.reset(
-      assign(
-        defaultValues,
-        shake(initialValues, (value) => value === null) as Record<string, any>
-      )
-    );
+    form?.reset(normalizeSubscribeValues(initialValues));
     const discount = form.getValues("discount") || [];
     if (discount.length > 0) {
       debouncedCalculateDiscount(discount, "discount");
@@ -256,7 +276,16 @@ export default function SubscribeForm<T extends Record<string, any>>({
   );
 
   async function handleSubmit(data: { [x: string]: any }) {
-    const bool = await onSubmit(data as T);
+    const durationUnit = data.duration_unit || data.unit_time || "Month";
+    const durationValue =
+      Number(data.duration_value) > 0 ? data.duration_value : 1;
+
+    const bool = await onSubmit({
+      ...data,
+      duration_value: durationValue,
+      duration_unit: durationUnit,
+      unit_time: durationUnit,
+    } as unknown as T);
     if (bool) setOpen(false);
   }
 
@@ -264,7 +293,34 @@ export default function SubscribeForm<T extends Record<string, any>>({
 
   const tagGroups = getAllAvailableTags();
 
-  const unit_time = form.watch("unit_time");
+  const durationValue = form.watch("duration_value");
+  const durationUnit = form.watch("duration_unit");
+  const durationLabel = formatSubscriptionDuration(
+    {
+      duration_value: durationValue,
+      duration_unit: durationUnit,
+      unit_time: durationUnit,
+    },
+    (key, fallback) => t(`form.${key}`, fallback),
+    { locale: i18n.language }
+  );
+  const durationOptions = useMemo(() => {
+    const optionValues = [...primaryDurationUnits] as string[];
+    if (
+      durationUnit &&
+      !optionValues.includes(durationUnit) &&
+      legacyDurationUnits.includes(
+        durationUnit as (typeof legacyDurationUnits)[number]
+      )
+    ) {
+      optionValues.push(durationUnit);
+    }
+
+    return optionValues.map((value) => ({
+      label: t(`form.${value}`),
+      value,
+    }));
+  }, [durationUnit, t]);
 
   return (
     <Sheet onOpenChange={setOpen} open={open}>
@@ -272,7 +328,7 @@ export default function SubscribeForm<T extends Record<string, any>>({
         <Button
           className="rounded-2xl bg-[#6f4e37] text-white hover:bg-[#5d4330] dark:bg-[#8f6442] dark:text-[#1a130f] dark:hover:bg-[#a6754f]"
           onClick={() => {
-            form.reset();
+            form.reset(normalizeSubscribeValues(initialValues));
             setOpen(true);
           }}
         >
@@ -597,32 +653,53 @@ export default function SubscribeForm<T extends Record<string, any>>({
 
                       <FormField
                         control={form.control}
-                        name="unit_time"
+                        name="duration_value"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>{t("form.unitTime")}</FormLabel>
+                            <FormLabel>{t("form.durationValue")}</FormLabel>
                             <FormControl>
-                              <Combobox
-                                placeholder={t("form.selectUnitTime")}
+                              <EnhancedInput
+                                min={1}
                                 {...field}
-                                onChange={(value) => {
-                                  if (value) {
-                                    form.setValue(field.name, value);
-                                  }
+                                onValueChange={(value) => {
+                                  form.setValue(field.name, value);
                                 }}
-                                options={[
-                                  {
-                                    label: t("form.NoLimit"),
-                                    value: "NoLimit",
-                                  },
-                                  { label: t("form.Year"), value: "Year" },
-                                  { label: t("form.Month"), value: "Month" },
-                                  { label: t("form.Day"), value: "Day" },
-                                  { label: t("form.Hour"), value: "Hour" },
-                                  { label: t("form.Minute"), value: "Minute" },
-                                ]}
+                                placeholder={t("form.durationValuePlaceholder")}
+                                step={1}
+                                type="number"
                               />
                             </FormControl>
+                            <FormDescription>
+                              {t("form.durationValueDescription")}
+                            </FormDescription>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="duration_unit"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>{t("form.durationUnit")}</FormLabel>
+                            <FormControl>
+                              <Combobox<string>
+                                placeholder={t("form.selectDurationUnit")}
+                                {...field}
+                                onChange={(value) => {
+                                  if (typeof value === "string" && value) {
+                                    form.setValue(field.name, value);
+                                    form.setValue("unit_time", value);
+                                  }
+                                }}
+                                options={durationOptions}
+                                value={field.value || ""}
+                              />
+                            </FormControl>
+                            <FormDescription>
+                              {t("form.durationUnitDescription")}
+                            </FormDescription>
                             <FormMessage />
                           </FormItem>
                         )}
@@ -698,7 +775,9 @@ export default function SubscribeForm<T extends Record<string, any>>({
                                   type: "number",
                                   step: 1,
                                   min: 1,
-                                  suffix: unit_time && t(`form.${unit_time}`),
+                                  suffix: durationLabel
+                                    ? `× ${durationLabel}`
+                                    : undefined,
                                 },
                                 {
                                   name: "discount",

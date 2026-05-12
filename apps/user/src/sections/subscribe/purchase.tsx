@@ -151,6 +151,8 @@ export default function Purchase({
               <SubscribeBilling
                 order={{
                   ...order,
+                  duration_value: subscribe?.duration_value,
+                  duration_unit: subscribe?.duration_unit,
                   quantity: params.quantity,
                   unit_price: subscribe?.unit_price,
                   show_original_price: subscribe?.show_original_price,
@@ -162,6 +164,8 @@ export default function Purchase({
             <div className="mb-6 grid gap-3">
               <DurationSelector
                 discounts={subscribe?.discount}
+                durationUnit={subscribe?.duration_unit}
+                durationValue={subscribe?.duration_value}
                 onChange={(value) => {
                   handleChange("quantity", value);
                 }}

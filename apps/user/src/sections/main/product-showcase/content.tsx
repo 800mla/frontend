@@ -9,6 +9,7 @@ import {
 import { Separator } from "@workspace/ui/components/separator";
 import { Icon } from "@workspace/ui/composed/icon";
 import { cn } from "@workspace/ui/lib/utils";
+import { formatSubscriptionDurationWithQuantity } from "@workspace/ui/utils";
 import { motion } from "framer-motion";
 import type { Key, ReactNode } from "react";
 import { useTranslation } from "react-i18next";
@@ -21,17 +22,8 @@ interface ProductShowcaseProps {
 }
 
 export function Content({ subscriptionData }: ProductShowcaseProps) {
-  const { t } = useTranslation("main");
+  const { t, i18n } = useTranslation("main");
   const { user } = useGlobalStore();
-
-  const unitTimeMap: Record<string, string> = {
-    Day: t("Day", "Day"),
-    Hour: t("Hour", "Hour"),
-    Minute: t("Minute", "Minute"),
-    Month: t("Month", "Month"),
-    NoLimit: t("NoLimit", "No Limit"),
-    Year: t("Year", "Year"),
-  };
 
   return (
     <motion.section
@@ -162,9 +154,12 @@ export function Content({ subscriptionData }: ProductShowcaseProps) {
                       ? 1
                       : (item.discount?.[0]?.quantity ?? 1);
 
-                  const unitTime =
-                    unitTimeMap[item.unit_time!] ||
-                    t(item.unit_time || "Month", item.unit_time || "Month");
+                  const durationLabel = formatSubscriptionDurationWithQuantity(
+                    displayQuantity,
+                    item,
+                    t,
+                    { locale: i18n.language }
+                  );
 
                   return (
                     <motion.h2
@@ -175,9 +170,7 @@ export function Content({ subscriptionData }: ProductShowcaseProps) {
                     >
                       <Display type="currency" value={displayPrice} />
                       <span className="font-medium text-base">
-                        {displayQuantity === 1
-                          ? `/${unitTime}`
-                          : `/${displayQuantity} ${unitTime}`}
+                        /{durationLabel}
                       </span>
                     </motion.h2>
                   );

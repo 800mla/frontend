@@ -12,6 +12,7 @@ import Empty from "@workspace/ui/composed/empty";
 import { Icon } from "@workspace/ui/composed/icon";
 import { cn } from "@workspace/ui/lib/utils";
 import { getSubscription } from "@workspace/ui/services/user/portal";
+import { formatSubscriptionDuration } from "@workspace/ui/utils";
 import { type ReactNode, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Display } from "@/components/display";
@@ -70,15 +71,6 @@ export default function Purchasing() {
       to: "/purchasing",
     });
   }, [activeId, filteredData, navigate]);
-
-  const unitTimeMap: Record<string, string> = {
-    Day: t("Day", "Day"),
-    Hour: t("Hour", "Hour"),
-    Minute: t("Minute", "Minute"),
-    Month: t("Month", "Month"),
-    NoLimit: t("NoLimit", "No Limit"),
-    Year: t("Year", "Year"),
-  };
 
   const selectSubscription = async (itemId: number) => {
     setSelectedId(itemId);
@@ -302,7 +294,9 @@ export default function Purchasing() {
                     </h2>
                     <div className="text-[#7d6b5e] text-sm dark:text-[#bfa998]">
                       /
-                      {unitTimeMap[item.unit_time || "Month"] || item.unit_time}
+                      {formatSubscriptionDuration(item, t, {
+                        locale: i18n.language,
+                      })}
                     </div>
                   </div>
 

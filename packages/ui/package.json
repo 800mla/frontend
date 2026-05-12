@@ -98,6 +98,7 @@
     "./globals.css": "./src/styles/globals.css",
     "./postcss.config": "./postcss.config.mjs",
     "./lib/*": "./src/lib/*.ts",
+    "./utils": "./src/utils/index.ts",
     "./utils/*": "./src/utils/*.ts",
     "./components/*": "./src/components/*.tsx",
     "./composed/*": "./src/composed/*.tsx",

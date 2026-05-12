@@ -13,6 +13,7 @@ import Empty from "@workspace/ui/composed/empty";
 import { Icon } from "@workspace/ui/composed/icon";
 import { cn } from "@workspace/ui/lib/utils";
 import { querySubscribeList } from "@workspace/ui/services/user/subscribe";
+import { formatSubscriptionDurationWithQuantity } from "@workspace/ui/utils";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Display } from "@/components/display";
@@ -96,7 +97,12 @@ export default function Subscribe() {
                   ? 1
                   : (item.discount?.[0]?.quantity ?? 1);
 
-              const unitTime = getUnitTimeLabel(item.unit_time, t);
+              const unitTime = formatSubscriptionDurationWithQuantity(
+                displayQuantity,
+                item,
+                t,
+                { locale: i18n.language }
+              );
 
               return (
                 <Card
@@ -201,9 +207,7 @@ export default function Subscribe() {
                             <Display type="currency" value={displayPrice} />
                           </div>
                           <div className="text-[#7d6b5e] text-sm dark:text-white/60">
-                            {displayQuantity === 1
-                              ? `/${unitTime}`
-                              : `/${displayQuantity} ${unitTime}`}
+                            /{unitTime}
                           </div>
                         </div>
 
@@ -271,22 +275,6 @@ function InfoBadge({
       </div>
     </div>
   );
-}
-
-function getUnitTimeLabel(
-  value: string | undefined,
-  t: (key: string, defaultValue: string) => string
-) {
-  const unitTimeMap: Record<string, string> = {
-    Day: t("Day", "Day"),
-    Hour: t("Hour", "Hour"),
-    Minute: t("Minute", "Minute"),
-    Month: t("Month", "Month"),
-    NoLimit: t("NoLimit", "No Limit"),
-    Year: t("Year", "Year"),
-  };
-
-  return unitTimeMap[value || "Month"] || value || "Month";
 }
 
 function parseSubscribeDescription(description: string) {

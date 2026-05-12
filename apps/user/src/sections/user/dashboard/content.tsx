@@ -38,6 +38,7 @@ import {
   queryUserSubscribe,
   resetUserSubscribeToken,
 } from "@workspace/ui/services/user/user";
+import { formatSubscriptionDuration } from "@workspace/ui/utils";
 import { formatDate } from "@workspace/ui/utils/formatting";
 import { QRCodeCanvas } from "qrcode.react";
 import { useEffect, useMemo, useState } from "react";
@@ -463,7 +464,12 @@ export default function Content() {
                                 value={recommendedPlan.unit_price}
                               />
                               <span className="font-medium text-[#8b7464] text-sm dark:text-[#c5ae99]">
-                                /{getUnitTimeLabel(recommendedPlan.unit_time)}
+                                /
+                                {formatSubscriptionDuration(
+                                  recommendedPlan,
+                                  (_key, fallback) => fallback,
+                                  { locale: i18n.language }
+                                )}
                               </span>
                             </>
                           ) : (
@@ -920,18 +926,6 @@ function getAnnouncementExcerpt(content: string) {
 
   if (plainText.length <= 84) return plainText;
   return `${plainText.slice(0, 84)}...`;
-}
-
-function getUnitTimeLabel(value?: string) {
-  const map: Record<string, string> = {
-    Day: "天",
-    Hour: "小时",
-    Minute: "分钟",
-    Month: "月",
-    NoLimit: "不限期",
-    Year: "年",
-  };
-  return map[value || "Month"] || value || "月";
 }
 
 function getTutorialTitle(index: number, fallbackName: string) {
